@@ -1,0 +1,21 @@
+{
+  "name": "wp-graphql",
+  "version": "0.1.0",
+  "description": "A client-side GraphQL wrapper for the WordPress REST API",
+  "main": "lib/index.js",
+  "repository": "https://github.com/aliemteam/wp-graphql.git",
+  "author": "Derek P Sifford <dereksifford@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/axios": "^0.9.35",
+    "@types/graphql": "^0.8.6",
+    "axios": "^0.15.3",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.5"
+  },
+  "dependencies": {
+    "graphql": "^0.9.1",
+    "lokka": "^1.7.0",
+    "lokka-transport-graphql-js": "^1.0.0"
+  }
+}
