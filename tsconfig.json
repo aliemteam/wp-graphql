@@ -2,7 +2,14 @@
     "compilerOptions": {
         "target": "es5",
         "outDir": "lib",
-        "sourceMap": false,
+        "inlineSourceMap": true,
+        "sourceMap": true,
+        "lib": [
+            "dom",
+            "es5",
+            "scripthost",
+            "es2015"
+        ],
         "experimentalDecorators": true,
         "declaration": true,
         "module": "commonjs",
@@ -10,7 +17,6 @@
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true
-        // "noImplicitAny": true
     },
     "include": [
         "src"

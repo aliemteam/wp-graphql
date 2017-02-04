@@ -7,8 +7,8 @@ transport.send(`
         post(id: 470) {
             slug
         }
-        posts(context: view) {
-            title
+        posts(context: view, orderby: "id", order: "asc", per_page: 1) {
+            id
         }
         pages {
             title
@@ -16,6 +16,13 @@ transport.send(`
         }
         page(id: 292) {
             title
+            id
+        }
+        users {
+            name
+        }
+        user(id: 1) {
+            name
             id
         }
     }

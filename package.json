@@ -9,7 +9,9 @@
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/graphql": "^0.8.6",
+    "ava": "^0.18.1",
     "axios": "^0.15.3",
+    "nyc": "^10.1.2",
     "tslint": "^4.4.2",
     "typescript": "rc"
   },
@@ -17,5 +19,8 @@
     "graphql": "^0.9.1",
     "lokka": "^1.7.0",
     "lokka-transport-graphql-js": "^1.0.0"
+  },
+  "scripts": {
+    "test": "tsc -p . && ava --verbose ./lib/**/*.spec.js"
   }
 }
