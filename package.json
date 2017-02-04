@@ -11,6 +11,8 @@
     "@types/graphql": "^0.8.6",
     "ava": "^0.18.1",
     "axios": "^0.15.3",
+    "codecov": "^1.0.1",
+    "nyc": "^10.1.2",
     "tslint": "^4.4.2",
     "typescript": "rc"
   },
@@ -20,6 +22,7 @@
     "lokka-transport-graphql-js": "^1.0.0"
   },
   "scripts": {
+    "travis": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "test": "tsc -p . && ava --verbose ./lib/**/*.spec.js"
   }
 }
