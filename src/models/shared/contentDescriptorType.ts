@@ -6,10 +6,10 @@ import {
 } from 'graphql';
 
 export interface ContentDescriptor {
-    /** The raw HTML for the rendered content. */
-    rendered: string;
     /** Boolean describing whether or not the content is protected. */
     protected: boolean;
+    /** The raw HTML for the rendered content. */
+    rendered: string;
 };
 
 type contentDescriptorConfig = GraphQLObjectTypeConfig<ContentDescriptor, {}>;
@@ -18,13 +18,13 @@ export const contentDescriptorType = new GraphQLObjectType(<contentDescriptorCon
     name: 'ContentDescriptor',
     description: 'Simple descriptor object for post content.',
     fields: () => ({
-        rendered: {
-            type: GraphQLString,
-            description: 'The raw HTML for the rendered content.',
-        },
         protected: {
             type: GraphQLBoolean,
             description: 'Boolean describing whether or not the content is protected.',
+        },
+        rendered: {
+            type: GraphQLString,
+            description: 'The raw HTML for the rendered content.',
         },
     }),
 });

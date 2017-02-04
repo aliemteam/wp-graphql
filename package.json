@@ -11,7 +11,7 @@
     "@types/graphql": "^0.8.6",
     "axios": "^0.15.3",
     "tslint": "^4.4.2",
-    "typescript": "^2.1.5"
+    "typescript": "rc"
   },
   "dependencies": {
     "graphql": "^0.9.1",
