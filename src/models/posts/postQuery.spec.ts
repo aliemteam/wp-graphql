@@ -45,3 +45,39 @@ test('Query /posts with several arguments', async t => {
     `);
     t.deepEqual(actual, expected);
 });
+
+test('Query /post/<id> with no arguments', async t => {
+    const expected = {
+        post: {
+            id: 1,
+            slug: 'hello-world',
+        },
+    };
+    const actual = await transport.send(`
+        {
+            post(id: 1) {
+                id
+                slug
+            }
+        }
+    `);
+    t.deepEqual(actual, expected);
+});
+
+test('Query /post/<id> with 1 argument', async t => {
+    const expected = {
+        post: {
+            id: 1,
+            slug: 'hello-world',
+        },
+    };
+    const actual = await transport.send(`
+        {
+            post(id: 1, context: view) {
+                id
+                slug
+            }
+        }
+    `);
+    t.deepEqual(actual, expected);
+});
