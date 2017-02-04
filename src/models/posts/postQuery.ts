@@ -98,7 +98,7 @@ const post: StrongTypedFieldConfig<PostArgs, any, any> = {
     resolve: (_root, { id, ...args }: PostArgs, context): PromiseLike<Post> => context.get(`/posts/${id}`, args),
 };
 
-export const postQuery = {
+export default {
     posts,
     post,
 };

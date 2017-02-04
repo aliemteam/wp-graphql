@@ -4,8 +4,9 @@ import schema from './models/schema';
 
 export default class WPGraphQL {
     private transport;
-    constructor(private hostUrl: string) {
+    constructor(hostUrl: string) {
         this.transport = new GraphqlJSTransport(schema, { context: this });
+        axios.defaults.baseURL = hostUrl;
     }
     public send(gql: string) {
         return this.transport.send(gql);
@@ -15,6 +16,6 @@ export default class WPGraphQL {
         for (const key of Object.keys(args)) {
             params += `${key}=` + encodeURIComponent(args[key]);
         }
-        return axios.get(`${this.hostUrl}${path}${params}`).then(res => res.data);
+        return axios.get(`${path}${params}`).then(res => res.data);
     }
 }

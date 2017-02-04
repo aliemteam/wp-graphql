@@ -94,7 +94,7 @@ const page: StrongTypedFieldConfig<PageArgs, any, any> = {
     resolve: (_root, { id, ...args }: PageArgs, context): PromiseLike<Page> => context.get(`/pages/${id}`, args),
 };
 
-export const pageQuery = {
+export default {
     pages,
     page,
 };
