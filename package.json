@@ -11,7 +11,6 @@
     "@types/graphql": "^0.8.6",
     "ava": "^0.18.1",
     "axios": "^0.15.3",
-    "nyc": "^10.1.2",
     "tslint": "^4.4.2",
     "typescript": "rc"
   },
