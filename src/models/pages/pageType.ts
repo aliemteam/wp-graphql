@@ -1,5 +1,6 @@
 import { GraphQLInt, GraphQLObjectType, GraphQLObjectTypeConfig } from 'graphql';
-import { basePostObject, BasePostObject, RawBasePostObject, TypedFields } from '../shared/';
+import { basePost, BasePost, RawBasePost } from '../../lib/abstract-types/';
+import { TypedFields } from '../../lib/strongTypes';
 
 export interface UniquePageFields {
     /** The order of the object in relation to other object of its type. */
@@ -8,13 +9,13 @@ export interface UniquePageFields {
     parent: number;
 }
 
-export interface Page extends BasePostObject, UniquePageFields {
+export interface Page extends BasePost, UniquePageFields {
     /** String literal. Will always be "page" for pages. */
     type: 'page';
 }
 
-type config = GraphQLObjectTypeConfig<(UniquePageFields & RawBasePostObject), {}>;
-type fields = TypedFields<UniquePageFields, (UniquePageFields & RawBasePostObject), {}>;
+type config = GraphQLObjectTypeConfig<(UniquePageFields & RawBasePost), {}>;
+type fields = TypedFields<UniquePageFields, (UniquePageFields & RawBasePost), {}>;
 
 const pageFields: fields = {
      menu_order: {
@@ -31,7 +32,7 @@ export const pageType = new GraphQLObjectType(<config>{
     name: 'Page',
     description: 'A WordPress Page Object.',
     fields: (): fields => ({
-       ...basePostObject,
+       ...basePost,
        ...pageFields,
     }),
 });

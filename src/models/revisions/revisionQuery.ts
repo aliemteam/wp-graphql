@@ -1,5 +1,5 @@
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
-import { StrongTypedFieldConfig } from '../shared/';
+import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import revisionType, { Revision } from './revisionType';
 
 export interface RevisionsArgs {

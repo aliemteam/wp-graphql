@@ -6,7 +6,7 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../shared/';
+import { TypedFields } from '../../lib/strongTypes';
 
 interface RawUserAvatarUrls {
     24: string;

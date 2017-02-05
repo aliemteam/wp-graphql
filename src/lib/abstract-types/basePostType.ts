@@ -4,8 +4,8 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
+import { TypedFields } from '../strongTypes';
 import { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
-import { TypedFields } from './strongTypes';
 
 export interface SharedFields {
     /** The ID for the author of the object. */
@@ -45,7 +45,7 @@ export interface SharedFields {
     // links: {}; TODO:
 };
 
-export interface RawBasePostObject extends SharedFields {
+export interface RawBasePost extends SharedFields {
     guid: {
         readonly rendered: string;
     };
@@ -54,14 +54,14 @@ export interface RawBasePostObject extends SharedFields {
     };
 }
 
-export interface BasePostObject extends SharedFields {
+export interface BasePost extends SharedFields {
     /** The globally unique identifier for the object. */
     readonly guid: string;
     /** The title for the object. */
     title: string;
 }
 
-export const basePostObject: TypedFields<RawBasePostObject, RawBasePostObject, {}> = {
+export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
     author: {
         type: GraphQLInt,
         description: 'The ID for the author of the object.',

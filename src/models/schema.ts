@@ -3,13 +3,15 @@ import {
     GraphQLSchema,
 } from 'graphql';
 import pageQuery from './pages/pageQuery';
+import postTypeQuery from './post-types/postTypeQuery';
 import postQuery from './posts/postQuery';
 import revisionQuery from './revisions/revisionQuery';
 import userQuery from './users/userQuery';
 
 const queries = {
-    ...postQuery,
     ...pageQuery,
+    ...postTypeQuery,
+    ...postQuery,
     ...revisionQuery,
     ...userQuery,
 };

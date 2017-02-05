@@ -4,7 +4,7 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../shared/strongTypes';
+import { TypedFields } from '../../lib/strongTypes';
 
 export interface RevisionBase {
     author: string;

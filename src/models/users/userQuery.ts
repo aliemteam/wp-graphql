@@ -4,7 +4,8 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { contextType, StrongTypedFieldConfig } from '../shared/';
+import { contextType } from '../../lib/abstract-types/';
+import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import userType, { User } from './userType';
 
 export interface UsersArgs {

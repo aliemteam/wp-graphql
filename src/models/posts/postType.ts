@@ -6,7 +6,8 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { basePostObject, BasePostObject, RawBasePostObject, TypedFields } from '../shared/';
+import { basePost, BasePost, RawBasePost } from '../../lib/abstract-types/';
+import { TypedFields } from '../../lib/strongTypes';
 
 export interface UniquePostFields {
     /** The terms assigned to the object in the category taxonomy. */
@@ -23,13 +24,13 @@ export interface UniquePostFields {
     tags: any[];
 }
 
-export interface Post extends BasePostObject, UniquePostFields {
+export interface Post extends BasePost, UniquePostFields {
     /** String literal. Will always be "post" for posts. */
     readonly type: 'post';
 }
 
-type config = GraphQLObjectTypeConfig<(UniquePostFields & RawBasePostObject), {}>;
-type fields = TypedFields<UniquePostFields, (UniquePostFields & RawBasePostObject), {}>;
+type config = GraphQLObjectTypeConfig<(UniquePostFields & RawBasePost), {}>;
+type fields = TypedFields<UniquePostFields, (UniquePostFields & RawBasePost), {}>;
 
 const postFields: fields = {
     categories: {
@@ -62,7 +63,7 @@ export const postType = new GraphQLObjectType(<config>{
     name: 'Post',
     description: 'A WordPress Post Object.',
     fields: () => ({
-        ...basePostObject,
+        ...basePost,
         ...postFields,
     }),
 });
