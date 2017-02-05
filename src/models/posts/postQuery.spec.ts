@@ -3,7 +3,7 @@ import WPGraphQL from '../../index';
 
 const transport = new WPGraphQL('http://demo.wp-api.org/wp-json/wp/v2');
 
-test('Query /posts with no arguments', async t => {
+test('/posts with no arguments', async t => {
     const expected = {
         posts: [
             { id: 470 },
@@ -28,7 +28,7 @@ test('Query /posts with no arguments', async t => {
     t.deepEqual(actual, expected);
 });
 
-test('Query /posts with several arguments', async t => {
+test('/posts with several arguments', async t => {
     const expected = {
         posts: [
             { id: 1, slug: 'hello-world', title: 'Hello world!' },
@@ -46,7 +46,7 @@ test('Query /posts with several arguments', async t => {
     t.deepEqual(actual, expected);
 });
 
-test('Query /post/<id> with no arguments', async t => {
+test('/post/<id> with no arguments', async t => {
     const expected = {
         post: {
             id: 1,
@@ -64,7 +64,7 @@ test('Query /post/<id> with no arguments', async t => {
     t.deepEqual(actual, expected);
 });
 
-test('Query /post/<id> with 1 argument', async t => {
+test('/post/<id> with 1 argument', async t => {
     const expected = {
         post: {
             id: 1,
