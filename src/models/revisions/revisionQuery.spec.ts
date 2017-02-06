@@ -44,17 +44,22 @@ test('/posts/<id>/revisions (without default)', async t => {
 });
 
 test('/posts/<parentId>/revisions/<id> (using default)', async t => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
     const expected = {
         revision: {
-            author: '0',
-            title: 'Hello world!',
+            content: '<p>Hello world!</p>\n',
+            excerpt: '',
+            guid: `http://localhost:8080/${year}/${month}/1-revision-v1`,
         },
     };
     const actual = await transport.send(`
         {
             revision(parentId: 1, id: 3) {
-                author
-                title
+                content
+                excerpt
+                guid
             }
         }
     `);
