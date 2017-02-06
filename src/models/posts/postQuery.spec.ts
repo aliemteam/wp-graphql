@@ -1,21 +1,12 @@
 import test from 'ava';
 import WPGraphQL from '../../index';
 
-const transport = new WPGraphQL('https://demo.wp-api.org/wp-json/wp/v2');
+const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTERNAL_TESTING__: true });
 
 test('/posts with no arguments', async t => {
     const expected = {
         posts: [
-            { id: 470 },
-            { id: 469 },
-            { id: 457 },
-            { id: 455 },
-            { id: 454 },
-            { id: 453 },
-            { id: 452 },
-            { id: 450 },
-            { id: 449 },
-            { id: 448 },
+            { id: 1 },
         ],
     };
     const actual = await transport.send(`

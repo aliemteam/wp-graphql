@@ -1,0 +1,26 @@
+version: '2'
+services:
+  wordpress:
+    image: dsifford/wp-api-test
+    ports:
+      - 8080:80
+      - 443:443
+    command: >
+      bash -c "while ! mysqladmin ping --host="db" --password="root" --silent; do sleep 1; done;
+      wp db create --allow-root &&
+      wp core install --allow-root &&
+      wp rewrite structure '/%year%/%monthnum%/%postname%' --allow-root &&
+      wp rewrite flush --hard --allow-root &&
+      wp plugin activate --all --allow-root &&
+      wp post update 1 --post_content='Hello world!' --allow-root &&
+      apache2-foreground"
+    depends_on:
+      - db
+  db:
+    image: mariadb:10
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+volumes:
+  data:

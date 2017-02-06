@@ -1,6 +1,6 @@
 import WPGraphQL from './index';
 
-const transport = new WPGraphQL('http://demo.wp-api.org/wp-json/wp/v2');
+const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2');
 
 transport.send(`
     {

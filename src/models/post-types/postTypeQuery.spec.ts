@@ -1,7 +1,7 @@
 import test from 'ava';
 import WPGraphQL from '../../index';
 
-const transport = new WPGraphQL('https://demo.wp-api.org/wp-json/wp/v2');
+const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTERNAL_TESTING__: true });
 
 test('/types with no arguments', async t => {
     const expected = {
