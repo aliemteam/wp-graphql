@@ -7,7 +7,7 @@ test('/posts/<id>/revisions (using default)', async t => {
     const expected = {
         revisions: [
             {
-                author: '0',
+                author: 0,
                 title: 'Hello world!',
             },
         ],
@@ -27,7 +27,7 @@ test('/posts/<id>/revisions (without default)', async t => {
     const expected = {
         revisions: [
             {
-                author: '0',
+                author: 0,
                 title: 'Hello world!',
             },
         ],

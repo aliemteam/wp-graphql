@@ -20,7 +20,10 @@ const postTypes: StrongTypedFieldConfig<PostTypesArgs, any, any> = {
     description: 'Retrieve an object of post types.',
     type: postTypeList,
     args: {
-        context: { type: contextType },
+        context: {
+            description: 'Scope under which the request is made; determines fields present in response.',
+            type: contextType,
+        },
     },
     resolve: (_root, args: PostTypesArgs, context): PromiseLike<PostTypeList> => context.get('/types', args),
 };
@@ -29,8 +32,14 @@ const postType: StrongTypedFieldConfig<PostTypeArgs, any, any> = {
     description: 'Retrieve a single post type.',
     type: typeOfPost,
     args: {
-        context: { type: contextType },
-        slug: { type: new GraphQLNonNull(GraphQLString) },
+        context: {
+            description: 'Scope under which the request is made; determines fields present in response.',
+            type: contextType,
+        },
+        slug: {
+            description: 'Slug of the post type being requested.',
+            type: new GraphQLNonNull(GraphQLString),
+        },
     },
     resolve: (_root, { slug, ...args }: PostTypeArgs, context): PromiseLike<PostType<string>> => (
         context.get(`/types/${slug}`, args)
