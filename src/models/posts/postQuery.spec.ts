@@ -6,13 +6,14 @@ const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTER
 test('/posts with no arguments', async t => {
     const expected = {
         posts: [
-            { id: 1 },
+            { id: 1, guid: 'http://localhost:8080/?p=1' },
         ],
     };
     const actual = await transport.send(`
         {
             posts {
                 id
+                guid
             }
         }
     `);
