@@ -7,6 +7,7 @@ import pageQuery from './pages/pageQuery';
 import postTypeQuery from './post-types/postTypeQuery';
 import postQuery from './posts/postQuery';
 import revisionQuery from './revisions/revisionQuery';
+import taxonomyQuery from './taxonomies/taxonomyQuery';
 import userQuery from './users/userQuery';
 
 const queries = {
@@ -15,6 +16,7 @@ const queries = {
     ...postTypeQuery,
     ...postQuery,
     ...revisionQuery,
+    ...taxonomyQuery,
     ...userQuery,
 };
 
