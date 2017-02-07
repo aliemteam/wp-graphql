@@ -13,6 +13,7 @@ services:
       wp rewrite flush --hard --allow-root &&
       wp plugin activate --all --allow-root &&
       wp post update 1 --post_content='Hello world!' --allow-root &&
+      wp term generate post_tag --count=10 --allow-root &&
       apache2-foreground"
     depends_on:
       - db
