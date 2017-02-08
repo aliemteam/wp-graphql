@@ -4,24 +4,18 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import {
-    Context,
-    contextType,
-    Order,
-    orderByFactory,
-    orderType,
-    PostStatus,
-    postStatus,
-} from '../../lib/abstract-types/';
+import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types'
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
-import { Page, pageType } from './pageType';
+import commentType, { Comment } from './commentType';
 
-export interface PagesArgs {
+export interface CommentsArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */
     after?: string;
-    /** Limit result set to posts assigned to specific authors. */
+    /** Limit result set to comments assigned to specific user ids. Requires authorization. */
     author?: number[];
-    /** Ensure result set excludes posts assigned to specific authors. */
+    /** Limit result set to that from a specific author email. Requires authorization. */
+    author_email?: string;
+    /** Ensure result set excludes comments assigned to specific user ids. Requires authorization. */
     author_exclude?: number[];
     /** Limit response to resources published before a given ISO8601 compliant date. */
     before?: string;
@@ -29,48 +23,52 @@ export interface PagesArgs {
     context?: Context;
     /** Ensure result set excludes specific ids. */
     exclude?: number[];
-    /** Use WP Query arguments to modify the response; private query vars require appropriate authorization. */
-    filter?: string; // TODO: Not sure how this works
     /** Limit result set to specific ids. */
     include?: number[];
-    /** Limit result set to resources with a specific menu_order value. */
-    menu_order?: number;
-    /** Offset the result set by a specific number of items. */
+    /** Limit result set to that of a particular comment karma. Requires authorization. */
+    karma?: number;
+    /** Offset the result set by a specific number of comments. */
     offset?: number;
     /** Order sort attribute ascending or descending. */
     order?: Order;
     /** Sort collection by object attribute. */
-    orderby?: 'date'|'relevance'|'id'|'include'|'title'|'slug'|'menu_order';
+    orderby?: 'date'|'date_gmt'|'id'|'include'|'post'|'parent'|'type';
     /** Current page of the collection. */
     page?: number;
-    /** Limit result set to those of particular parent ids. */
+    /** Limit result set to resources of specific parent ids. */
     parent?: number[];
-    /** Limit result set to all items except those of a particular parent id. */
+    /** Ensure result set excludes specific parent ids. */
     parent_exclude?: number[];
     /** Maximum number of items to be returned in result set. */
     per_page?: number;
+    /** Limit result set to resources assigned to specific post ids. */
+    post?: string;
     /** Limit results to those matching a string. */
     search?: string;
-    /** Limit result set to posts with a specific slug. */
-    slug?: string;
-    /** Limit result set to posts assigned a specific status. */
-    status?: PostStatus;
+    /** Limit result set to comments assigned a specific status. Requires authorization. */
+    status?: string;
+    /** Limit result set to comments assigned a specific type. Requires authorization. */
+    type?: string;
 }
 
-const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
-    description: 'Retrieve a list of posts.',
-    type: new GraphQLList(pageType),
+const comments: StrongTypedFieldConfig<CommentsArgs, any, any> = {
+    description: 'Fetch a list of comments.',
+    type: new GraphQLList(commentType),
     args: {
         after: {
             description: 'Limit response to resources published after a given ISO8601 compliant date.',
             type: GraphQLString,
         },
         author: {
-            description: 'Limit result set to posts assigned to specific authors.',
+            description: 'Limit result set to comments assigned to specific user ids. Requires authorization.',
             type: new GraphQLList(GraphQLInt),
         },
+        author_email: {
+            description: 'Limit result set to that from a specific author email. Requires authorization.',
+            type: GraphQLString,
+        },
         author_exclude: {
-            description: 'Ensure result set excludes posts assigned to specific authors.',
+            description: 'Ensure result set excludes comments assigned to specific user ids. Requires authorization.',
             type: new GraphQLList(GraphQLInt),
         },
         before: {
@@ -85,20 +83,16 @@ const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
             description: 'Ensure result set excludes specific ids.',
             type: new GraphQLList(GraphQLInt),
         },
-        filter: {
-            description: 'Use WP Query arguments to modify the response.',
-            type: GraphQLString,
-        },
         include: {
             description: 'Limit result set to specific ids.',
             type: new GraphQLList(GraphQLInt),
         },
-        menu_order: {
-            description: 'Limit result set to resources with a specific menu_order value.',
+        karma: {
+            description: 'Limit result set to that of a particular comment karma. Requires authorization.',
             type: GraphQLInt,
         },
         offset: {
-            description: 'Offset the result set by a specific number of items.',
+            description: 'Offset the result set by a specific number of comments.',
             type: GraphQLInt,
         },
         order: {
@@ -107,14 +101,14 @@ const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: orderByFactory('PageOrderBy', [
+            type: orderByFactory('CommentsOrderby', [
                 'date',
+                'date_gmt',
                 'id',
                 'include',
-                'menu_order',
-                'relevance',
-                'slug',
-                'title',
+                'parent',
+                'post',
+                'type',
             ]),
         },
         page: {
@@ -122,62 +116,61 @@ const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
             type: GraphQLInt,
         },
         parent: {
-            description: 'Limit result set to those of particular parent ids.',
+            description: 'Limit result set to resources of specific parent ids.',
             type: new GraphQLList(GraphQLInt),
         },
         parent_exclude: {
-            description: 'Limit result set to all items except those of a particular parent id.',
+            description: 'Ensure result set excludes specific parent ids.',
             type: new GraphQLList(GraphQLInt),
         },
         per_page: {
             description: 'Maximum number of items to be returned in result set.',
             type: GraphQLInt,
         },
+        post: {
+            description: 'Limit result set to resources assigned to specific post ids.',
+            type: GraphQLString,
+        },
         search: {
             description: 'Limit results to those matching a string.',
             type: GraphQLString,
         },
-        slug: {
-            description: 'Limit result set to posts with a specific slug.',
+        status: {
+            description: 'Limit result set to comments assigned a specific status. Requires authorization.',
             type: GraphQLString,
         },
-        status: {
-            description: 'Limit result set to posts assigned a specific status.',
-            type: new GraphQLList(postStatus),
+        type: {
+            description: 'Limit result set to comments assigned a specific type. Requires authorization.',
+            type: GraphQLString,
         },
     },
-    resolve: (_root, args: PagesArgs, context): PromiseLike<Page[]> => context.get('/pages', args),
+    resolve: (_root, args: CommentsArgs, context): Comment[] => context.get('/comments', args),
 };
 
-export interface PageArgs {
+export interface CommentArgs {
     /** Scope under which the request is made; determines fields present in response. */
     context?: Context;
-    /** The ID of the page. */
+    /** ID of the comment being requested. */
     id: number;
-    /** The password for the post if it is password protected. */
-    password?: string;
 }
 
-const page: StrongTypedFieldConfig<PageArgs, any, any> = {
-    type: pageType,
+const comment: StrongTypedFieldConfig<CommentArgs, any, any> = {
+    description: 'Fetch a single comment',
+    type: commentType,
     args: {
         context: {
             description: 'Scope under which the request is made; determines fields present in response.',
             type: contextType,
         },
         id: {
-            description: 'The ID of the page.',
+            description: 'ID of the comment being requested.',
             type: new GraphQLNonNull(GraphQLInt),
         },
-        password: {
-            description: 'The password for the post if it is password protected.',
-            type: GraphQLString,
-        },
     },
-    resolve: (_root, { id, ...args }: PageArgs, context): PromiseLike<Page> => context.get(`/pages/${id}`, args),
+    resolve: (_root, { id, ...args }: CommentArgs, context): Comment => context.get(`/comments/${id}`, args),
 };
 
 export default {
-    pages,
-    page,
+    comments,
+    comment,
 };

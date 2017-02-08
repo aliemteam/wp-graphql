@@ -2,13 +2,13 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { contextType } from '../../lib/abstract-types';
+import { Context, contextType } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import { PostType, postType as typeOfPost, PostTypeList, postTypeList } from './postTypeType';
 
 export interface PostTypesArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
 }
 
 export interface PostTypeArgs extends PostTypesArgs {

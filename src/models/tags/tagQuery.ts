@@ -5,35 +5,35 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { contextType } from '../../lib/abstract-types';
+import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import tagType, { Tag } from './tagType';
 
 export interface TagsArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context: 'view'|'embed'|'edit';
+    context?: Context;
     /** Ensure result set excludes specific IDs. */
-    exclude: string;
+    exclude?: number[];
     /** Whether to hide terms not assigned to any posts. */
-    hide_empty: boolean;
+    hide_empty?: boolean;
     /** Limit result set to specific IDs. */
-    include: string;
+    include?: number[];
     /** Offset the result set by a specific number of items. */
-    offset: number;
+    offset?: number;
     /** Order sort attribute ascending or descending. */
-    order: 'asc'|'desc';
+    order?: Order;
     /** Sort collection by term attribute. */
-    orderby: 'id'|'include'|'name'|'slug'|'term_group'|'description'|'count';
+    orderby?: 'id'|'include'|'name'|'slug'|'term_group'|'description'|'count';
     /** Current page of the collection. */
-    page: number;
+    page?: number;
     /** Maximum number of items to be returned in result set. */
-    per_page: number;
+    per_page?: number;
     /** Limit result set to terms assigned to a specific post. */
-    post: number;
+    post?: number;
     /** Limit results to those matching a string. */
-    search: string;
+    search?: string;
     /** Limit result set to terms with a specific slug. */
-    slug: string;
+    slug?: string;
 }
 
 const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
@@ -46,7 +46,7 @@ const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
         },
         exclude: {
             description: 'Ensure result set excludes specific IDs.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLInt),
         },
         hide_empty: {
             description: 'Whether to hide terms not assigned to any posts.',
@@ -54,7 +54,7 @@ const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
         },
         include: {
             description: 'Limit result set to specific IDs.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLInt),
         },
         offset: {
             description: 'Offset the result set by a specific number of items.',
@@ -62,11 +62,19 @@ const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
         },
         order: {
             description: 'Order sort attribute ascending or descending.',
-            type: GraphQLString, // TODO: This should be typed
+            type: orderType,
         },
         orderby: {
             description: 'Sort collection by term attribute.',
-            type: GraphQLString,
+            type: orderByFactory('TagOrderBy', [
+                'count',
+                'description',
+                'id',
+                'include',
+                'name',
+                'slug',
+                'term_group',
+            ]),
         },
         page: {
             description: 'Current page of the collection.',
@@ -94,7 +102,7 @@ const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
 
 export interface TagArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context: 'view'|'embed'|'edit';
+    context?: Context;
     /** ID of the tag of interest. */
     id: number;
 }

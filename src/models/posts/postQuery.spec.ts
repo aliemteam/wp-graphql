@@ -1,7 +1,7 @@
 import test from 'ava';
 import WPGraphQL from '../../index';
 
-const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2');
+const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTERNAL_TESTING__: true });
 
 test('/posts with no arguments', async t => {
     const expected = {
@@ -28,7 +28,7 @@ test('/posts with several arguments', async t => {
     };
     const actual = await transport.send(`
         {
-            posts(orderby: "id", order: "asc", per_page: 1) {
+            posts(orderby: id, order: asc, per_page: 1, status: [pending, publish]) {
                 id
                 slug
                 title

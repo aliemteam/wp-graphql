@@ -5,13 +5,13 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { contextType } from '../../lib/abstract-types';
+import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import { Category, categoryType } from './categoryType';
 
 export interface CategoriesArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
     /** Current page of the collection. */
     page?: number;
     /** Maximum number of items to be returned in result set. */
@@ -19,11 +19,11 @@ export interface CategoriesArgs {
     /** Limit results to those matching a string. */
     search?: string;
     /** Ensure result set excludes specific IDs. */
-    exclude?: string;
+    exclude?: number[];
     /** Limit result set to specific IDs. */
-    include?: string;
+    include?: number[];
     /** Order sort attribute ascending or descending. */
-    order?: 'asc'|'desc';
+    order?: Order;
     /** Sort collection by term attribute. */
     orderby?: 'id'|'name'|'slug'|'term_group'|'description'|'count';
     /** Whether to hide terms not assigned to any posts. */
@@ -58,19 +58,26 @@ const categories: StrongTypedFieldConfig<CategoriesArgs, any, any> = {
         },
         exclude: {
             description: 'Ensure result set excludes specific IDs.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLInt),
         },
         include: {
             description: 'Limit result set to specific IDs.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLInt),
         },
         order: {
             description: 'Order sort attribute ascending or descending.',
-            type: GraphQLString,
+            type: orderType,
         },
         orderby: {
             description: 'Sort collection by term attribute.',
-            type: GraphQLString,
+            type: orderByFactory('OrderByCategory', [
+                'count',
+                'description',
+                'id',
+                'name',
+                'slug',
+                'term_group',
+            ]),
         },
         hide_empty: {
             description: 'Whether to hide terms not assigned to any posts.',
@@ -94,7 +101,7 @@ const categories: StrongTypedFieldConfig<CategoriesArgs, any, any> = {
 
 export interface CategoryArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
     /** ID for the category. */
     id: number;
 }

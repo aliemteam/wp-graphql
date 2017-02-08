@@ -3,7 +3,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { contextType } from '../../lib/abstract-types';
+import { Context, contextType } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import taxonomyType, { Taxonomy } from './taxonomyType';
 
@@ -13,7 +13,7 @@ const transformTaxonomyObject = (obj: { [key: string]: Taxonomy }): Taxonomy[] =
 
 export interface TaxonomiesArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
     /** Limit results to taxonomies associated with a specific post type. */
     type?: string;
 }
@@ -38,7 +38,7 @@ const taxonomies: StrongTypedFieldConfig<TaxonomiesArgs, any, any> = {
 
 export interface TaxonomyArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
     /** Slug of the specific taxonomy being queried. */
     slug: string;
 }

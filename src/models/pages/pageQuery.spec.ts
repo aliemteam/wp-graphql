@@ -27,7 +27,7 @@ test('/pages with several arguments', async t => {
     };
     const actual = await transport.send(`
         {
-            pages(orderby: "id", per_page: 1, order: "asc") {
+            pages(orderby: id, per_page: 1, order: asc, status: publish) {
                 id
                 slug
             }

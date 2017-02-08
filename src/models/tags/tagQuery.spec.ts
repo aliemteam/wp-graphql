@@ -43,7 +43,7 @@ test('/tags with assorted arguments', async t => {
     };
     const actual = await transport.send(`
         {
-            tags(exclude: "1,2,11", orderby: "id") {
+            tags(exclude: [1, 2, 11], orderby: id) {
                 name
             }
         }

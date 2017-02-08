@@ -49,16 +49,24 @@ test('/posts/<parentId>/revisions/<id> (using default)', async t => {
     const month = ('0' + (today.getMonth() + 1)).slice(-2);
     const expected = {
         revision: {
-            content: '<p>Hello world!</p>\n',
-            excerpt: '',
+            content: {
+                raw: 'Hello world!',
+            },
+            excerpt: {
+                rendered: '',
+            },
             guid: `http://localhost:8080/${year}/${month}/1-revision-v1`,
         },
     };
     const actual = await transport.send(`
         {
-            revision(parentId: 1, id: 3) {
-                content
-                excerpt
+            revision(context: edit, parentId: 1, id: 3) {
+                content {
+                    raw
+                }
+                excerpt {
+                    rendered
+                }
                 guid
             }
         }

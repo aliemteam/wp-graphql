@@ -4,15 +4,20 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
+import { ContentDescriptor, contentDescriptorType } from '../../lib/abstract-types';
 import { TypedFields } from '../../lib/strongTypes';
 
 export interface RevisionBase {
     /** The id for the author of the object. */
     author: number;
+    /** Content for the object, as it exists in the database. */
+    content: ContentDescriptor;
     /** The date the object was published. */
     date: string;
     /** The date the object was published, as GMT. */
     date_gmt: string;
+    /** Excerpt for the object, as it exists in the database. */
+    excerpt: ContentDescriptor;
     /** Unique identifier for the object. */
     id: number;
     /** The date the object was last modified. */
@@ -34,20 +39,9 @@ export interface RawRevision extends RevisionBase {
     title: {
         rendered: string;
     };
-    /** Content for the object, as it exists in the database. */
-    content: {
-        rendered: string;
-    };
-    /** Excerpt for the object, as it exists in the database. */
-    excerpt: {
-        rendered: string;
-    };
 }
 
 export interface Revision extends RevisionBase {
-    /** Content for the object, as it exists in the database. */
-    content: string;
-    excerpt: string;
     /** GUID for the object, as it exists in the database. */
     guid: string;
     /** Title for the object, as it exists in the database. */
@@ -65,8 +59,7 @@ const revisionFields: fields = {
     },
     content: {
         description: 'Content for the object, as it exists in the database.',
-        type: GraphQLString,
-        resolve: revision => revision.content.rendered,
+        type: contentDescriptorType,
     },
     date: {
         description: 'The date the object was published. (ISO8601)',
@@ -78,8 +71,7 @@ const revisionFields: fields = {
     },
     excerpt: {
         description: 'Excerpt for the object, as it exists in the database.',
-        type: GraphQLString,
-        resolve: revision => revision.excerpt.rendered,
+        type: contentDescriptorType,
     },
     guid: {
         description: 'GUID for the object, as it exists in the database.',

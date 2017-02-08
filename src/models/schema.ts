@@ -3,6 +3,7 @@ import {
     GraphQLSchema,
 } from 'graphql';
 import categoryQuery from './categories/categoryQuery';
+import commentQuery from './comments/commentQuery';
 import pageQuery from './pages/pageQuery';
 import postTypeQuery from './post-types/postTypeQuery';
 import postQuery from './posts/postQuery';
@@ -13,6 +14,7 @@ import userQuery from './users/userQuery';
 
 const queries = {
     ...categoryQuery,
+    ...commentQuery,
     ...pageQuery,
     ...postTypeQuery,
     ...postQuery,

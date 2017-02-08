@@ -4,21 +4,21 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { contextType } from '../../lib/abstract-types/';
+import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import userType, { User } from './userType';
 
 export interface UsersArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
     /** Ensure result set excludes specific IDs. */
-    exclude?: string;
+    exclude?: number[];
     /** Limit result set to specific IDs. */
-    include?: string;
+    include?: number[];
     /** Offset the result set by a specific number of items. */
     offset?: number;
     /** Order sort attribute ascending or descending. */
-    order?: 'asc'|'desc';
+    order?: Order;
     /** Sort collection by object attribute. */
     orderby?: 'id'|'include'|'name'|'registered_date'|'slug'|'email'|'url';
     /** Current page of the collection. */
@@ -26,7 +26,7 @@ export interface UsersArgs {
     /** Maximum number of items to be returned in result set. */
     per_page?: number;
     /** Limit result set to users matching at least one specific role provided. Accepts csv list or single role. */
-    roles?: string;
+    roles?: string[];
     /** Limit results to those matching a string. */
     search?: string;
     /** Limit result set to users with a specific slug. */
@@ -43,11 +43,11 @@ const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
         },
         exclude: {
             description: 'Ensure result set excludes specific IDs.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLInt),
         },
         include: {
             description: 'Limit result set to specific IDs.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLInt),
         },
         offset: {
             description: 'Offset the result set by a specific number of items.',
@@ -55,11 +55,19 @@ const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
         },
         order: {
             description: 'Order sort attribute ascending or descending.',
-            type: GraphQLString,
+            type: orderType,
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: GraphQLString,
+            type: orderByFactory('UserOrderBy', [
+                'email',
+                'id',
+                'include',
+                'name',
+                'registered_date',
+                'slug',
+                'url',
+            ]),
         },
         page: {
             description: 'Current page of the collection.',
@@ -76,7 +84,7 @@ const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
         roles: {
             description: 'Limit result set to users matching at least one ' +
                 'specific role provided. Accepts csv list or single role.',
-            type: GraphQLString,
+            type: new GraphQLList(GraphQLString),
         },
         slug: {
             description: 'Limit result set to users with a specific slug.',
@@ -88,7 +96,7 @@ const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
 
 export interface UserArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'embed'|'edit';
+    context?: Context;
     /** ID for the user. */
     id: number;
 }

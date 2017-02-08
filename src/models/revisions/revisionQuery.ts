@@ -1,11 +1,11 @@
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
-import { contextType } from '../../lib/abstract-types';
+import { Context, contextType } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import revisionType, { Revision } from './revisionType';
 
 export interface RevisionsArgs {
     /** Scope under which the request is made; determines fields present in response. */
-    context?: 'view'|'edit'|'embed';
+    context?: Context;
     /** The ID of the post. */
     id: number;
     /** The type of post. */
@@ -45,7 +45,7 @@ const revision: StrongTypedFieldConfig<RevisionArgs, any, any> = {
     args: {
         context: {
             description: 'Scope under which the request is made; determines fields present in response.',
-            type: GraphQLString,
+            type: contextType,
         },
         id: {
             description: 'The ID of the revision.',

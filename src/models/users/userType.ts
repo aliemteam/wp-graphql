@@ -27,7 +27,7 @@ export interface UserAvatarUrls {
 }
 
 type avatarConfig = GraphQLObjectTypeConfig<RawUserAvatarUrls, {}>;
-const avatarObjectType = new GraphQLObjectType(<avatarConfig>{
+export const avatarObjectType = new GraphQLObjectType(<avatarConfig>{
     name: 'AvatarObject',
     description: 'Object containing user avatars.',
     fields: () => ({
