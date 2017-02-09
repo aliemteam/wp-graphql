@@ -4,17 +4,10 @@ const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2');
 
 transport.send(`
     {
-        post(id: 470) {
-            slug
-        }
-        posts(context: view, orderby: "id", order: "asc", per_page: 1) {
+        posts(context: view, orderby: id, order: asc, per_page: 1) {
             id
         }
         pages {
-            title
-            id
-        }
-        page(id: 292) {
             title
             id
         }

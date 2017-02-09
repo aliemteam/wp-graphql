@@ -5,6 +5,7 @@ import {
 import categoryQuery from './categories/categoryQuery';
 import commentQuery from './comments/commentQuery';
 import pageQuery from './pages/pageQuery';
+import postStatusQuery from './post-statuses/postStatusQuery';
 import postTypeQuery from './post-types/postTypeQuery';
 import postQuery from './posts/postQuery';
 import revisionQuery from './revisions/revisionQuery';
@@ -16,6 +17,7 @@ const queries = {
     ...categoryQuery,
     ...commentQuery,
     ...pageQuery,
+    ...postStatusQuery,
     ...postTypeQuery,
     ...postQuery,
     ...revisionQuery,

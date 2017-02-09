@@ -11,10 +11,9 @@ import {
     Order,
     orderByFactory,
     orderType,
-    PostStatus,
-    postStatus,
 } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
 import { Post, postType } from './postType';
 
 export interface PostsArgs {
@@ -139,7 +138,7 @@ const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
         },
         status: {
             description: 'Limit result set to posts assigned a specific status.',
-            type: new GraphQLList(postStatus),
+            type: new GraphQLList(postStatusType),
         },
         sticky: {
             description: 'Limit result set to items that are sticky.',

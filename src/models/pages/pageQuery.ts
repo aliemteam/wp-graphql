@@ -10,10 +10,9 @@ import {
     Order,
     orderByFactory,
     orderType,
-    PostStatus,
-    postStatus,
 } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
 import { Page, pageType } from './pageType';
 
 export interface PagesArgs {
@@ -143,7 +142,7 @@ const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
         },
         status: {
             description: 'Limit result set to posts assigned a specific status.',
-            type: new GraphQLList(postStatus),
+            type: new GraphQLList(postStatusType),
         },
     },
     resolve: (_root, args: PagesArgs, context): PromiseLike<Page[]> => context.get('/pages', args),

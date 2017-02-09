@@ -4,4 +4,3 @@ export { ContentDescriptor, contentDescriptorType } from './contentDescriptorTyp
 export { PostLabels, postLabelsType, TaxonomyLabels, taxonomyLabelsType } from './labelTypes';
 export { orderByFactory } from './orderByFactory';
 export { Order, orderType } from './orderType';
-export { PostStatus, postStatus } from './postStatusType';
