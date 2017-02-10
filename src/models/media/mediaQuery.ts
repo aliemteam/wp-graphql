@@ -12,7 +12,7 @@ import {
     orderType,
 } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
-import mediaType, { Media } from './mediaType';
+import mediaType, { Media } from './types/mediaType';
 
 export interface MediaListArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */

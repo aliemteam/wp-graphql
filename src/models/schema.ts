@@ -10,6 +10,7 @@ import postStatusQuery from './post-statuses/postStatusQuery';
 import postTypeQuery from './post-types/postTypeQuery';
 import postQuery from './posts/postQuery';
 import revisionQuery from './revisions/revisionQuery';
+import settingsQuery from './settings/settingsQuery';
 import tagQuery from './tags/tagQuery';
 import taxonomyQuery from './taxonomies/taxonomyQuery';
 import userQuery from './users/userQuery';
@@ -23,6 +24,7 @@ const queries = {
     ...postTypeQuery,
     ...postQuery,
     ...revisionQuery,
+    ...settingsQuery,
     ...tagQuery,
     ...taxonomyQuery,
     ...userQuery,
