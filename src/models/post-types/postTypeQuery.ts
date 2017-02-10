@@ -3,7 +3,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import { PostType, postType as typeOfPost, PostTypeList, postTypeList } from './postTypeType';
 
 export interface PostTypesArgs {
@@ -16,7 +16,7 @@ export interface PostTypeArgs extends PostTypesArgs {
     slug: string;
 }
 
-const postTypes: StrongTypedFieldConfig<PostTypesArgs, any, any> = {
+const postTypes: ArgumentField<PostTypesArgs, any, any> = {
     description: 'Retrieve an object of post types.',
     type: postTypeList,
     args: {
@@ -28,7 +28,7 @@ const postTypes: StrongTypedFieldConfig<PostTypesArgs, any, any> = {
     resolve: (_root, args: PostTypesArgs, context): PromiseLike<PostTypeList> => context.get('/types', args),
 };
 
-const postType: StrongTypedFieldConfig<PostTypeArgs, any, any> = {
+const postType: ArgumentField<PostTypeArgs, any, any> = {
     description: 'Retrieve a single post type.',
     type: typeOfPost,
     args: {

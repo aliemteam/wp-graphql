@@ -5,8 +5,8 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types';
+import { ArgumentField } from '../../lib/strongTypes';
 import { Category, categoryType } from './categoryType';
 
 export interface CategoriesArgs {
@@ -36,7 +36,7 @@ export interface CategoriesArgs {
     slug?: string;
 }
 
-const categories: StrongTypedFieldConfig<CategoriesArgs, any, any> = {
+const categories: ArgumentField<CategoriesArgs, any, any> = {
     description: 'List categories.',
     type: new GraphQLList(categoryType),
     args: {
@@ -106,7 +106,7 @@ export interface CategoryArgs {
     id: number;
 }
 
-const category: StrongTypedFieldConfig<CategoryArgs, any, any> = {
+const category: ArgumentField<CategoryArgs, any, any> = {
     description: 'Fetch a single category.',
     type: categoryType,
     args: {

@@ -11,7 +11,7 @@ import {
     Order,
     orderType,
 } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import mediaType, { Media } from './types/mediaType';
 
 export interface MediaListArgs {
@@ -59,7 +59,7 @@ export interface MediaListArgs {
 
 const mediaKindType = enumFactory('MediaKind', ['application', 'audio', 'image', 'text', 'video']);
 
-const mediaList: StrongTypedFieldConfig<MediaListArgs, any, any> = {
+const mediaList: ArgumentField<MediaListArgs, any, any> = {
     description: 'Fetch a list of media items.',
     type: new GraphQLList(mediaType),
     args: {
@@ -167,7 +167,7 @@ export interface MediaArgs {
     password?: string;
 }
 
-const media: StrongTypedFieldConfig<MediaArgs, any, any> = {
+const media: ArgumentField<MediaArgs, any, any> = {
     description: 'Retrieve a single media item by ID.',
     type: mediaType,
     args: {

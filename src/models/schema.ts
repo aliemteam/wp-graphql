@@ -8,6 +8,7 @@ import mediaQuery from './media/mediaQuery';
 import pageQuery from './pages/pageQuery';
 import postStatusQuery from './post-statuses/postStatusQuery';
 import postTypeQuery from './post-types/postTypeQuery';
+import postMutation from './posts/postMutation';
 import postQuery from './posts/postQuery';
 import revisionQuery from './revisions/revisionQuery';
 import settingsQuery from './settings/settingsQuery';
@@ -36,6 +37,17 @@ const query = new GraphQLObjectType({
     fields: () => queries,
 });
 
+const mutations = {
+    ...postMutation,
+};
+
+const mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    description: 'The root mutation.',
+    fields: () => mutations,
+});
+
 export default new GraphQLSchema({
     query,
+    mutation,
 });

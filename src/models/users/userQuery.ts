@@ -4,8 +4,8 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types/';
+import { ArgumentField } from '../../lib/strongTypes';
 import userType, { User } from './userType';
 
 export interface UsersArgs {
@@ -33,7 +33,7 @@ export interface UsersArgs {
     slug?: string;
 }
 
-const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
+const users: ArgumentField<UsersArgs, any, any> = {
     type: new GraphQLList(userType),
     description: 'Fetch a list of all users.',
     args: {
@@ -101,7 +101,7 @@ export interface UserArgs {
     id: number;
 }
 
-const user: StrongTypedFieldConfig<UserArgs, any, any> = {
+const user: ArgumentField<UserArgs, any, any> = {
     type: userType,
     description: 'Retrieve a single user.',
     args: {

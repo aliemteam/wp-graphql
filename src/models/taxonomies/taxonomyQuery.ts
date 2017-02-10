@@ -4,7 +4,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import taxonomyType, { Taxonomy } from './taxonomyType';
 
 const transformTaxonomyObject = (obj: { [key: string]: Taxonomy }): Taxonomy[] => (
@@ -18,7 +18,7 @@ export interface TaxonomiesArgs {
     type?: string;
 }
 
-const taxonomies: StrongTypedFieldConfig<TaxonomiesArgs, any, any> = {
+const taxonomies: ArgumentField<TaxonomiesArgs, any, any> = {
     description: 'List all taxonomies.',
     type: new GraphQLList(taxonomyType),
     args: {
@@ -43,7 +43,7 @@ export interface TaxonomyArgs {
     slug: string;
 }
 
-const taxonomy: StrongTypedFieldConfig<TaxonomyArgs, any, any> = {
+const taxonomy: ArgumentField<TaxonomyArgs, any, any> = {
     description: 'Fetch a single taxonomy.',
     type: taxonomyType,
     args: {

@@ -63,81 +63,81 @@ export interface BasePost extends SharedFields {
 
 export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
     author: {
-        type: GraphQLInt,
         description: 'The ID for the author of the object.',
+        type: GraphQLInt,
     },
     comment_status: {
-        type: GraphQLString,
         description: 'Whether or not comments are open on the object.',
+        type: GraphQLString,
     },
     content: {
-        type: contentDescriptorType,
         description: 'The content for the object.',
+        type: contentDescriptorType,
     },
     date: {
-        type: GraphQLString,
         description: "The date the object was published, in the site's timezone.",
+        type: GraphQLString,
     },
     date_gmt: {
-        type: GraphQLString,
         description: 'The date the object was published, as GMT.',
+        type: GraphQLString,
     },
     excerpt: {
-        type: contentDescriptorType,
         description: 'The excerpt for the object.',
+        type: contentDescriptorType,
     },
     featured_media: {
-        type: GraphQLInt,
         description: 'The ID of the featured media for the object.',
+        type: GraphQLInt,
     },
     guid: {
-        type: GraphQLString,
         description: 'The globally unique identifier for the object.',
+        type: GraphQLString,
         resolve: post => post.guid.rendered,
     },
     id: {
-        type: new GraphQLNonNull(GraphQLInt),
         description: 'Unique identifier for the object.',
+        type: new GraphQLNonNull(GraphQLInt),
     },
     link: {
-        type: GraphQLString,
         description: 'The URL to the object.',
+        type: GraphQLString,
     },
     meta: {
-        type: new GraphQLList(GraphQLString), // FIXME: Not sure what shape this is
         description: 'Meta fields.',
+        type: new GraphQLList(GraphQLString), // FIXME: Not sure what shape this is
     },
     modified: {
-        type: GraphQLString,
         description: "The date the object was last modified, in the site's timezone.",
+        type: GraphQLString,
     },
     modified_gmt: {
-        type: GraphQLString,
         description: 'The date the object was last modified, as GMT.',
+        type: GraphQLString,
     },
     ping_status: {
-        type: GraphQLString,
         description: 'Whether or not the object can be pinged.',
+        type: GraphQLString,
     },
     slug: {
-        type: GraphQLString,
         description: 'An alphanumeric identifier for the object unique to its type.',
+        type: GraphQLString,
     },
     status: {
-        type: GraphQLString,
         description: 'A named status for the object.',
+        type: GraphQLString,
     },
     template: {
-        type: GraphQLString,
         description: 'The theme file to use to display the object. Currently unused.',
+        type: GraphQLString,
     },
     title: {
-        type: GraphQLString,
         description: 'The title for the object.',
+        type: GraphQLString,
         resolve: post => post.title.rendered,
     },
     type: {
-        type: GraphQLString,
         description: 'Type of Post for the object.',
+        type: GraphQLString,
     },
 };

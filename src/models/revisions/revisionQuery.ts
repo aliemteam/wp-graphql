@@ -1,6 +1,6 @@
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import revisionType, { Revision } from './revisionType';
 
 export interface RevisionsArgs {
@@ -11,7 +11,7 @@ export interface RevisionsArgs {
     /** The type of post. */
     postType?: 'posts'|'pages';
 }
-const revisions: StrongTypedFieldConfig<RevisionsArgs, any, any> = {
+const revisions: ArgumentField<RevisionsArgs, any, any> = {
     description: 'List all revisions for an individual post.',
     type: new GraphQLList(revisionType),
     args: {
@@ -39,7 +39,7 @@ export interface RevisionArgs extends RevisionsArgs {
     /** The ID of the post. */
     parentId: number;
 }
-const revision: StrongTypedFieldConfig<RevisionArgs, any, any> = {
+const revision: ArgumentField<RevisionArgs, any, any> = {
     description: 'Get a single post revision.',
     type: revisionType,
     args: {

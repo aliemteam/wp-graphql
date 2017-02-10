@@ -16,11 +16,18 @@ export default class WPGraphQL {
             axios.defaults.auth = { username: 'root', password: 'root' };
         }
     }
-    public send(gql: string) {
-        return this.transport.send(gql);
+    public send(gql: string, vars?: object) {
+        return this.transport.send(gql, vars);
+    }
+    @queryString
+    protected delete(path: string, args: string): PromiseLike<any> {
+        return axios.delete(`${path}${args}`).then(res => res.data);
     }
     @queryString
     protected get(path: string, args: string): PromiseLike<any> {
         return axios.get(`${path}${args}`).then(res => res.data);
+    }
+    protected post(path: string, args: { [k: string]: any }): PromiseLike<any> {
+        return axios.post(path, args).then(res => res.data);
     }
 }

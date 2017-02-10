@@ -8,13 +8,13 @@ import {
 import {
     Context,
     contextType,
-    Order,
     enumFactory,
+    Order,
     orderType,
 } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
-import { Post, postType } from './postType';
+import postType, { Post } from './types/postType';
 
 export interface PostsArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */
@@ -59,7 +59,7 @@ export interface PostsArgs {
     tags_exclude?: number[];
 }
 
-const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
+const posts: ArgumentField<PostsArgs, any, any> = {
     description: 'Retrieve a list of posts.',
     type: new GraphQLList(postType),
     args: {
@@ -166,7 +166,7 @@ export interface PostArgs {
     password?: string;
 }
 
-const post: StrongTypedFieldConfig<PostArgs, any, any> = {
+const post: ArgumentField<PostArgs, any, any> = {
     type: postType,
     args: {
         context: {

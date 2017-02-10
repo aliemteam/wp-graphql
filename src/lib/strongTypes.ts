@@ -8,7 +8,7 @@ export interface FieldConfig<TSource, TContext> extends GraphQLFieldConfig<TSour
     description: string;
 }
 
-export interface StrongTypedFieldConfig<T, TSource, TContext> {
+export interface ArgumentField<T, TSource, TContext> {
     type: GraphQLOutputType;
     args?: {
         [P in keyof T]: ArgumentConfig;

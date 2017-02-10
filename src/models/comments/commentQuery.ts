@@ -4,8 +4,8 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types'
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types'
+import { ArgumentField } from '../../lib/strongTypes';
 import commentType, { Comment } from './commentType';
 
 export interface CommentsArgs {
@@ -51,7 +51,7 @@ export interface CommentsArgs {
     type?: string;
 }
 
-const comments: StrongTypedFieldConfig<CommentsArgs, any, any> = {
+const comments: ArgumentField<CommentsArgs, any, any> = {
     description: 'Fetch a list of comments.',
     type: new GraphQLList(commentType),
     args: {
@@ -154,7 +154,7 @@ export interface CommentArgs {
     id: number;
 }
 
-const comment: StrongTypedFieldConfig<CommentArgs, any, any> = {
+const comment: ArgumentField<CommentArgs, any, any> = {
     description: 'Fetch a single comment',
     type: commentType,
     args: {

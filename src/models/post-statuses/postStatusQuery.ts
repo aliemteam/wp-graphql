@@ -1,6 +1,6 @@
 import { GraphQLNonNull } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import {
     PostStatus,
     PostStatusObject,
@@ -15,7 +15,7 @@ export interface PostStatusesArgs {
     context?: Context;
 }
 
-const postStatuses: StrongTypedFieldConfig<PostStatusesArgs, any, any> = {
+const postStatuses: ArgumentField<PostStatusesArgs, any, any> = {
     description: 'Fetch all post statuses.',
     type: postStatusObjectType,
     args: {
@@ -32,7 +32,7 @@ export interface PostStatusArgs extends PostStatusesArgs {
     status: PostStatus;
 }
 
-const postStatus: StrongTypedFieldConfig<PostStatusArgs, any, any> = {
+const postStatus: ArgumentField<PostStatusArgs, any, any> = {
     description: 'Fetch a single post status.',
     type: singlePostStatusType,
     args: {

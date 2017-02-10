@@ -6,8 +6,8 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { basePost, BasePost, RawBasePost } from '../../lib/abstract-types/';
-import { TypedFields } from '../../lib/strongTypes';
+import { basePost, BasePost, RawBasePost } from '../../../lib/abstract-types/';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface UniquePostFields {
     /** The terms assigned to the object in the category taxonomy. */
@@ -34,32 +34,32 @@ type fields = TypedFields<UniquePostFields, (UniquePostFields & RawBasePost), {}
 
 const postFields: fields = {
     categories: {
-        type: new GraphQLList(GraphQLInt),
         description: 'The terms assigned to the object in the category taxonomy.',
+        type: new GraphQLList(GraphQLInt),
     },
     format: {
-        type: GraphQLString,
         description: 'The format for the object.',
+        type: GraphQLString,
     },
     liveblog_likes: {
-        type: GraphQLInt,
         description: 'The number of Liveblog Likes the post has.',
+        type: GraphQLInt,
     },
     password: {
-        type: GraphQLString,
         description: 'A password to protect access to the content and excerpt.',
+        type: GraphQLString,
     },
     sticky: {
-        type: GraphQLBoolean,
         description: 'Whether or not the object should be treated as sticky.',
+        type: GraphQLBoolean,
     },
     tags: {
-        type: new GraphQLList(GraphQLInt),
         description: 'The terms assigned to the object in the post_tag taxonomy.',
+        type: new GraphQLList(GraphQLInt),
     },
 };
 
-export const postType = new GraphQLObjectType(<config>{
+export default new GraphQLObjectType(<config>{
     name: 'Post',
     description: 'A WordPress Post Object.',
     fields: () => ({

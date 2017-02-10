@@ -7,11 +7,11 @@ import {
 import {
     Context,
     contextType,
-    Order,
     enumFactory,
+    Order,
     orderType,
 } from '../../lib/abstract-types/';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { ArgumentField } from '../../lib/strongTypes';
 import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
 import { Page, pageType } from './pageType';
 
@@ -56,7 +56,7 @@ export interface PagesArgs {
     status?: PostStatus;
 }
 
-const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
+const pages: ArgumentField<PagesArgs, any, any> = {
     description: 'Retrieve a list of posts.',
     type: new GraphQLList(pageType),
     args: {
@@ -157,7 +157,7 @@ export interface PageArgs {
     password?: string;
 }
 
-const page: StrongTypedFieldConfig<PageArgs, any, any> = {
+const page: ArgumentField<PageArgs, any, any> = {
     type: pageType,
     args: {
         context: {

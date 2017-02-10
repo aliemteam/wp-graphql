@@ -5,8 +5,8 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types';
-import { StrongTypedFieldConfig } from '../../lib/strongTypes';
+import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types';
+import { ArgumentField } from '../../lib/strongTypes';
 import tagType, { Tag } from './tagType';
 
 export interface TagsArgs {
@@ -36,7 +36,7 @@ export interface TagsArgs {
     slug?: string;
 }
 
-const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
+const tags: ArgumentField<TagsArgs, any, any> = {
     description: 'Fetch a list of tags.',
     type: new GraphQLList(tagType),
     args: {
@@ -107,7 +107,7 @@ export interface TagArgs {
     id: number;
 }
 
-const tag: StrongTypedFieldConfig<TagArgs, any, any> = {
+const tag: ArgumentField<TagArgs, any, any> = {
     description: 'Fetch a single tag.',
     type: tagType,
     args: {
