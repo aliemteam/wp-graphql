@@ -78,3 +78,33 @@ test.serial('deletePost', async t => {
     `, data);
     t.deepEqual(actual, expected);
 });
+
+test('createPost then deletePost (to trash)', async t => {
+    const data = await transport.send(`
+        mutation {
+            createPost(title: "My Post", content: "My post content.") {
+                id
+            }
+        }
+    `);
+    const { id } = data.createPost;
+    const expected = {
+        deletePost: {
+            id,
+            title: 'My Post',
+            status: 'trash',
+        },
+    };
+    const actual = await transport.send(`
+        mutation DeletePost($id: Int!) {
+            deletePost(id: $id) {
+                ... on Post {
+                    id
+                    title
+                    status
+                }
+            }
+        }
+    `, { id });
+    t.deepEqual(actual, expected);
+});
