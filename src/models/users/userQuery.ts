@@ -4,7 +4,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types/';
+import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import userType, { User } from './userType';
 
@@ -59,7 +59,7 @@ const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: orderByFactory('UserOrderBy', [
+            type: enumFactory('UserOrderBy', [
                 'email',
                 'id',
                 'include',
@@ -91,7 +91,7 @@ const users: StrongTypedFieldConfig<UsersArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: UsersArgs, context): User[] => context.get('/users', args),
+    resolve: (_root, args: UsersArgs, context): PromiseLike<User[]> => context.get('/users', args),
 };
 
 export interface UserArgs {
@@ -114,7 +114,7 @@ const user: StrongTypedFieldConfig<UserArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: UserArgs, context): User => context.get(`/users/${id}`, args),
+    resolve: (_root, { id, ...args }: UserArgs, context): PromiseLike<User> => context.get(`/users/${id}`, args),
 };
 
 export default {

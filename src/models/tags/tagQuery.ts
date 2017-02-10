@@ -5,7 +5,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types';
+import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import tagType, { Tag } from './tagType';
 
@@ -66,7 +66,7 @@ const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by term attribute.',
-            type: orderByFactory('TagOrderBy', [
+            type: enumFactory('TagOrderBy', [
                 'count',
                 'description',
                 'id',
@@ -97,7 +97,7 @@ const tags: StrongTypedFieldConfig<TagsArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: TagsArgs, context): Tag[] => context.get('/tags', args),
+    resolve: (_root, args: TagsArgs, context): PromiseLike<Tag[]> => context.get('/tags', args),
 };
 
 export interface TagArgs {
@@ -120,7 +120,7 @@ const tag: StrongTypedFieldConfig<TagArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: TagArgs, context): Tag => context.get(`/tags/${id}`, args),
+    resolve: (_root, { id, ...args }: TagArgs, context): PromiseLike<Tag> => context.get(`/tags/${id}`, args),
 };
 
 export default {

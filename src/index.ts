@@ -1,4 +1,4 @@
-import * as axios from 'axios';
+import axios from 'axios';
 import GraphqlJSTransport from 'lokka-transport-graphql-js';
 import queryString from './lib/queryString';
 import schema from './models/schema';
@@ -20,7 +20,7 @@ export default class WPGraphQL {
         return this.transport.send(gql);
     }
     @queryString
-    protected get(path: string, args: string) {
+    protected get(path: string, args: string): PromiseLike<any> {
         return axios.get(`${path}${args}`).then(res => res.data);
     }
 }

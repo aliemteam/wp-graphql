@@ -1,6 +1,6 @@
 import { GraphQLEnumType } from 'graphql';
 
-export const orderByFactory = (name: string, vals: string[]): GraphQLEnumType => new GraphQLEnumType({
+export const enumFactory = (name: string, vals: string[]): GraphQLEnumType => new GraphQLEnumType({
     name,
     description: `Accepts one of the following (unquoted) strings: ${vals.join(', ')}`,
     values: vals.reduce((prev, curr) => {

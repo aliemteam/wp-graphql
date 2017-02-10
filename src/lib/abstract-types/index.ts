@@ -2,5 +2,5 @@ export { basePost, BasePost, RawBasePost } from './basePostType';
 export { Context, contextType } from './contextType';
 export { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
 export { PostLabels, postLabelsType, TaxonomyLabels, taxonomyLabelsType } from './labelTypes';
-export { orderByFactory } from './orderByFactory';
+export { enumFactory } from './enumFactory';
 export { Order, orderType } from './orderType';

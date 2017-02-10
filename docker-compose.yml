@@ -15,6 +15,7 @@ services:
       wp post update 1 --post_content='Hello world!' --allow-root &&
       wp term generate post_tag --count=10 --allow-root &&
       wp media import https://s.wordpress.org/style/images/wp-header-logo.png --title='Test Image' --allow-root &&
+      wp media import https://stlab.adobe.com/wiki/images/d/d3/Test.pdf --title='test pdf' --allow-root &&
       apache2-foreground"
     depends_on:
       - db

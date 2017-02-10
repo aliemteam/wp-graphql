@@ -24,7 +24,7 @@ const postStatuses: StrongTypedFieldConfig<PostStatusesArgs, any, any> = {
             type: contextType,
         },
     },
-    resolve: (_root, args: PostStatusesArgs, context): PostStatusObject => context.get('/statuses', args),
+    resolve: (_root, args: PostStatusesArgs, context): PromiseLike<PostStatusObject> => context.get('/statuses', args),
 };
 
 export interface PostStatusArgs extends PostStatusesArgs {
@@ -45,7 +45,7 @@ const postStatus: StrongTypedFieldConfig<PostStatusArgs, any, any> = {
             type: new GraphQLNonNull(postStatusType),
         },
     },
-    resolve: (_root, { status, ...args }: PostStatusArgs, context): SinglePostStatus => (
+    resolve: (_root, { status, ...args }: PostStatusArgs, context): PromiseLike<SinglePostStatus> => (
         context.get(`/statuses/${status}`, args)
     ),
 };

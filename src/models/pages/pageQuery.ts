@@ -8,7 +8,7 @@ import {
     Context,
     contextType,
     Order,
-    orderByFactory,
+    enumFactory,
     orderType,
 } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
@@ -106,7 +106,7 @@ const pages: StrongTypedFieldConfig<PagesArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: orderByFactory('PageOrderBy', [
+            type: enumFactory('PageOrderBy', [
                 'date',
                 'id',
                 'include',

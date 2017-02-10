@@ -1,5 +1,4 @@
 import {
-    GraphQLBoolean,
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
@@ -8,41 +7,46 @@ import {
 import {
     Context,
     contextType,
-    Order,
     enumFactory,
+    Order,
     orderType,
 } from '../../lib/abstract-types/';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
-import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
-import { Post, postType } from './postType';
+import mediaType, { Media } from './mediaType';
 
-export interface PostsArgs {
+export interface MediaListArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */
     after?: string;
     /** Limit result set to posts assigned to specific authors. */
-    author?: number[];
+    author?: number|number[];
     /** Ensure result set excludes posts assigned to specific authors. */
-    author_exclude?: number[];
+    author_exclude?: number|number[];
     /** Limit response to resources published before a given ISO8601 compliant date. */
     before?: string;
-    /** Limit result set to all items that have the specified term assigned in the categories taxonomy. */
-    categories?: number[];
-    /** Limit result set to all items except those that have the specified term assigned in the categories taxonomy. */
-    categories_exclude?: number[];
     /** Scope under which the request is made; determines fields present in response. */
     context?: Context;
     /** Ensure result set excludes specific ids. */
-    exclude?: number[];
+    exclude?: number|number[];
+    /** Use WP Query arguments to modify the response; private query vars require appropriate authorization. */
+    filter?: string; // FIXME: what is this?
     /** Limit result set to specific ids. */
-    include?: number[];
+    include?: number|number[];
+    /** Limit result set to attachments of a particular media type. */
+    media_type?: 'application'|'audio'|'image'|'text'|'video';
+    /** Limit result set to attachments of a particular MIME type. */
+    mime_type?: string;
     /** Offset the result set by a specific number of items. */
     offset?: number;
     /** Order sort attribute ascending or descending. */
     order?: Order;
     /** Sort collection by object attribute. */
-    orderby?: 'date'|'relevance'|'id'|'include'|'title'|'slug';
+    orderby?: 'date'|'id'|'include'|'relevance'|'slug'|'title';
     /** Current page of the collection. */
     page?: number;
+    /** Limit result set to those of particular parent ids. */
+    parent?: number|number[];
+    /** Limit result set to all items except those of a particular parent id. */
+    parent_exclude?: number|number[];
     /** Maximum number of items to be returned in result set. */
     per_page?: number;
     /** Limit results to those matching a string. */
@@ -50,18 +54,14 @@ export interface PostsArgs {
     /** Limit result set to posts with a specific slug. */
     slug?: string;
     /** Limit result set to posts assigned a specific status. */
-    status?: PostStatus;
-    /** Limit result set to items that are sticky. */
-    sticky?: boolean;
-    /** Limit result set to all items that have the specified term assigned in the tags taxonomy. */
-    tags?: number[];
-    /** Limit result set to all items except those that have the specified term assigned in the tags taxonomy. */
-    tags_exclude?: number[];
+    status?: 'inherit'|'private'|'trash';
 }
 
-const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
-    description: 'Retrieve a list of posts.',
-    type: new GraphQLList(postType),
+const mediaKindType = enumFactory('MediaKind', ['application', 'audio', 'image', 'text', 'video']);
+
+const mediaList: StrongTypedFieldConfig<MediaListArgs, any, any> = {
+    description: 'Fetch a list of media items.',
+    type: new GraphQLList(mediaType),
     args: {
         after: {
             description: 'Limit response to resources published after a given ISO8601 compliant date.',
@@ -79,16 +79,6 @@ const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
             description: 'Limit response to resources published before a given ISO8601 compliant date.',
             type: GraphQLString,
         },
-        categories: {
-            description:
-                'Limit result set to all items that have the specified term assigned in the categories taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
-        categories_exclude: {
-            description: 'Limit result set to all items except those that have the specified term ' +
-                'assigned in the categories taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
         context: {
             description: 'Scope under which the request is made; determines fields present in response.',
             type: contextType,
@@ -97,9 +87,21 @@ const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
             description: 'Ensure result set excludes specific ids.',
             type: new GraphQLList(GraphQLInt),
         },
+        filter: {
+            description: 'Use WP Query arguments to modify the response.',
+            type: GraphQLString,
+        },
         include: {
             description: 'Limit result set to specific ids.',
             type: new GraphQLList(GraphQLInt),
+        },
+        media_type: {
+            description: 'Limit result set to attachments of a particular media type.',
+            type: mediaKindType,
+        },
+        mime_type: {
+            description: 'Limit result set to attachments of a particular MIME type.',
+            type: GraphQLString,
         },
         offset: {
             description: 'Offset the result set by a specific number of items.',
@@ -111,7 +113,7 @@ const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: enumFactory('PostOrderBy', [
+            type: enumFactory('MediaOrderBy', [
                 'date',
                 'id',
                 'include',
@@ -123,6 +125,14 @@ const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
         page: {
             description: 'Current page of the collection.',
             type: GraphQLInt,
+        },
+        parent: {
+            description: 'Limit result set to those of particular parent ids.',
+            type: new GraphQLList(GraphQLInt),
+        },
+        parent_exclude: {
+            description: 'Limit result set to all items except those of a particular parent id.',
+            type: new GraphQLList(GraphQLInt),
         },
         per_page: {
             description: 'Maximum number of items to be returned in result set.',
@@ -138,43 +148,35 @@ const posts: StrongTypedFieldConfig<PostsArgs, any, any> = {
         },
         status: {
             description: 'Limit result set to posts assigned a specific status.',
-            type: new GraphQLList(postStatusType),
-        },
-        sticky: {
-            description: 'Limit result set to items that are sticky.',
-            type: GraphQLBoolean,
-        },
-        tags: {
-            description: 'Limit result set to all items that have the specified term assigned in the tags taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
-        tags_exclude: {
-            description: 'Limit result set to all items except those that have the ' +
-                'specified term assigned in the tags taxonomy.',
-            type: new GraphQLList(GraphQLInt),
+            type: enumFactory('MediaStatusType', [
+                'inherit',
+                'private',
+                'trash',
+            ]),
         },
     },
-    resolve: (_root, args: PostsArgs, context): PromiseLike<Post[]> => context.get('/posts', args),
+    resolve: (_root, args: MediaListArgs, context): PromiseLike<Media[]> => context.get('/media', args),
 };
 
-export interface PostArgs {
+export interface MediaArgs {
     /** Scope under which the request is made; determines fields present in response. */
     context?: Context;
-    /** The ID of the post. */
+    /** ID of the media item being fetched. */
     id: number;
     /** The password for the post if it is password protected. */
     password?: string;
 }
 
-const post: StrongTypedFieldConfig<PostArgs, any, any> = {
-    type: postType,
+const media: StrongTypedFieldConfig<MediaArgs, any, any> = {
+    description: 'Retrieve a single media item by ID.',
+    type: mediaType,
     args: {
         context: {
             description: 'Scope under which the request is made; determines fields present in response.',
             type: contextType,
         },
         id: {
-            description: 'The ID of the post.',
+            description: 'ID of the media item being fetched.',
             type: new GraphQLNonNull(GraphQLInt),
         },
         password: {
@@ -182,10 +184,10 @@ const post: StrongTypedFieldConfig<PostArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: PostArgs, context): PromiseLike<Post> => context.get(`/posts/${id}`, args),
+    resolve: (_root, { id, ...args }: MediaArgs, context): PromiseLike<Media> => context.get(`/media/${id}`, args),
 };
 
 export default {
-    posts,
-    post,
+    mediaList,
+    media,
 };

@@ -4,7 +4,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types'
+import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types'
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import commentType, { Comment } from './commentType';
 
@@ -101,7 +101,7 @@ const comments: StrongTypedFieldConfig<CommentsArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: orderByFactory('CommentsOrderby', [
+            type: enumFactory('CommentsOrderby', [
                 'date',
                 'date_gmt',
                 'id',
@@ -144,7 +144,7 @@ const comments: StrongTypedFieldConfig<CommentsArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: CommentsArgs, context): Comment[] => context.get('/comments', args),
+    resolve: (_root, args: CommentsArgs, context): PromiseLike<Comment[]> => context.get('/comments', args),
 };
 
 export interface CommentArgs {
@@ -167,7 +167,9 @@ const comment: StrongTypedFieldConfig<CommentArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: CommentArgs, context): Comment => context.get(`/comments/${id}`, args),
+    resolve: (_root, { id, ...args }: CommentArgs, context): PromiseLike<Comment> => (
+        context.get(`/comments/${id}`, args)
+    ),
 };
 
 export default {

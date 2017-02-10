@@ -4,6 +4,7 @@ import {
 } from 'graphql';
 import categoryQuery from './categories/categoryQuery';
 import commentQuery from './comments/commentQuery';
+import mediaQuery from './media/mediaQuery';
 import pageQuery from './pages/pageQuery';
 import postStatusQuery from './post-statuses/postStatusQuery';
 import postTypeQuery from './post-types/postTypeQuery';
@@ -16,6 +17,7 @@ import userQuery from './users/userQuery';
 const queries = {
     ...categoryQuery,
     ...commentQuery,
+    ...mediaQuery,
     ...pageQuery,
     ...postStatusQuery,
     ...postTypeQuery,

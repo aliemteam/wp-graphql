@@ -6,8 +6,8 @@ import {
 } from 'graphql';
 import { TypedFields } from '../../lib/strongTypes';
 
-export type _status = 'draft'|'future'|'pending'|'private'|'publish'|'trash';
-export type PostStatus = _status|_status[];
+export type Status = 'draft'|'future'|'pending'|'private'|'publish'|'trash';
+export type PostStatus = Status|Status[];
 
 export const postStatusType = new GraphQLEnumType({
     name: 'PostStatusArg',
@@ -78,7 +78,7 @@ export const singlePostStatusType = new GraphQLObjectType({
     }),
 });
 
-export type PostStatusObject = { [k in _status]: SinglePostStatus };
+export type PostStatusObject = { [k in Status]: SinglePostStatus };
 const postStatusFields: TypedFields<PostStatusObject, PostStatusObject, {}> = {
     draft: {
         description: 'PostStatus for type "draft"',

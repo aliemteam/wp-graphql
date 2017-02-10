@@ -7,7 +7,6 @@
   "author": "Derek P Sifford <dereksifford@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/axios": "^0.9.36",
     "@types/graphql": "^0.8.6",
     "ava": "^0.18.1",
     "axios": "^0.15.3",

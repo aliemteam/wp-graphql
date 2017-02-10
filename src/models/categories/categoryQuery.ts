@@ -5,7 +5,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, Order, orderByFactory, orderType } from '../../lib/abstract-types';
+import { Context, contextType, Order, enumFactory, orderType } from '../../lib/abstract-types';
 import { StrongTypedFieldConfig } from '../../lib/strongTypes';
 import { Category, categoryType } from './categoryType';
 
@@ -70,7 +70,7 @@ const categories: StrongTypedFieldConfig<CategoriesArgs, any, any> = {
         },
         orderby: {
             description: 'Sort collection by term attribute.',
-            type: orderByFactory('OrderByCategory', [
+            type: enumFactory('OrderByCategory', [
                 'count',
                 'description',
                 'id',
@@ -96,7 +96,7 @@ const categories: StrongTypedFieldConfig<CategoriesArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: CategoriesArgs, context): Category[] => context.get('/categories', args),
+    resolve: (_root, args: CategoriesArgs, context): PromiseLike<Category[]> => context.get('/categories', args),
 };
 
 export interface CategoryArgs {
@@ -119,7 +119,9 @@ const category: StrongTypedFieldConfig<CategoryArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: CategoryArgs, context): Category => context.get(`/categories/${id}`, args),
+    resolve: (_root, { id, ...args }: CategoryArgs, context): PromiseLike<Category> => (
+        context.get(`/categories/${id}`, args)
+    ),
 };
 
 export default {
