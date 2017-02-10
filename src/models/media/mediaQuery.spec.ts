@@ -81,3 +81,37 @@ test('/media with several arguments', async t => {
     `);
     t.deepEqual(actual, expected);
 });
+
+test('/media/<id>', async t => {
+    const expected = {
+        media: {
+            title: {
+                rendered: 'Test Image',
+            },
+            media_type: 'image',
+            media_details: {
+                image_meta: {
+                    aperture: '0',
+                    focal_length: '0',
+                },
+            },
+        },
+    };
+    const actual = await transport.send(`
+        {
+            media(id: 4) {
+                title {
+                    rendered
+                }
+                media_type
+                media_details {
+                    image_meta {
+                        aperture
+                        focal_length
+                    }
+                }
+            }
+        }
+    `);
+    t.deepEqual(actual, expected);
+});
