@@ -5,6 +5,7 @@ import {
 import categoryQuery from './categories/categoryQuery';
 import commentQuery from './comments/commentQuery';
 import mediaQuery from './media/mediaQuery';
+import pageMutation from './pages/pageMutation';
 import pageQuery from './pages/pageQuery';
 import postStatusQuery from './post-statuses/postStatusQuery';
 import postTypeQuery from './post-types/postTypeQuery';
@@ -39,6 +40,7 @@ const query = new GraphQLObjectType({
 
 const mutations = {
     ...postMutation,
+    ...pageMutation,
 };
 
 const mutation = new GraphQLObjectType({

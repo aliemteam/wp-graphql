@@ -1,6 +1,6 @@
 import { GraphQLInt, GraphQLObjectType, GraphQLObjectTypeConfig } from 'graphql';
-import { basePost, BasePost, RawBasePost } from '../../lib/abstract-types/';
-import { TypedFields } from '../../lib/strongTypes';
+import { basePost, BasePost, RawBasePost } from '../../../lib/abstract-types/';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface UniquePageFields {
     /** The order of the object in relation to other object of its type. */
@@ -28,7 +28,7 @@ const pageFields: fields = {
     },
 };
 
-export const pageType = new GraphQLObjectType(<config>{
+export default new GraphQLObjectType(<config>{
     name: 'Page',
     description: 'A WordPress Page Object.',
     fields: (): fields => ({

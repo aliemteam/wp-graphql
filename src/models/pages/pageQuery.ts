@@ -13,7 +13,7 @@ import {
 } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
 import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
-import { Page, pageType } from './pageType';
+import pageType, { Page } from './types/pageType';
 
 export interface PagesArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */

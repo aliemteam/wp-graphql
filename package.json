@@ -22,6 +22,7 @@
   },
   "scripts": {
     "travis": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "test": "tsc -p . && ava --verbose ./lib/**/*.spec.js"
+    "test": "yarn lint && tsc -p . && ava --verbose ./lib/**/*.spec.js",
+    "lint": "tslint --project . -t codeFrame"
   }
 }

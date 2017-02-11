@@ -9,14 +9,12 @@ import {
 import { openClosedType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
 import { postStatusType, Status } from '../post-statuses/postStatusType';
-import deletedPostType, { DeletedPost } from './types/deletedPostType';
-import postType, { Post } from './types/postType';
+import deletedPageType, { DeletedPage } from './types/deletedPageType';
+import pageType, { Page } from './types/pageType';
 
-export interface PostMutationOptions {
+export interface PageMutationOptions {
     /** The ID for the author of the object. */
     author?: number;
-    /** The terms assigned to the object in the category taxonomy. */
-    categories?: number[]; // FIXME: Check this
     /** Whether or not comments are open on the object. */
     comment_status?: 'open'|'closed';
     /** The content for the object. */
@@ -29,45 +27,31 @@ export interface PostMutationOptions {
     excerpt?: string;
     /** The ID of the featured media for the object. */
     featured_media?: number;
-    /** The format for the object. */
-    // format?: 'standard'; Not used for now -- Irrelevant
-    /** The number of Liveblog Likes the post has. */
-    liveblog_likes?: number;
+    /** The order of the object in relation to other object of its type. */
+    menu_order: any;
     /** Meta fields. */
     meta?: any[]; // FIXME:
-    /** A password to protect access to the content and excerpt. */
-    password?: string;
+    /** The id for the parent of the object. */
+    parent?: number;
     /** Whether or not the object can be pinged. */
     ping_status?: 'open'|'closed';
     /** An alphanumeric identifier for the object unique to its type. */
     slug?: string;
     /** A named status for the object. */
     status?: Status;
-    /** Whether or not the object should be treated as sticky. */
-    sticky?: boolean;
-    /** The terms assigned to the object in the post_tag taxonomy. */
-    tags?: number[]; // FIXME: Check this
     /** The theme file to use to display the object. */
     template?: string;
     /** The title for the object. */
     title?: string;
 }
 
-type CreatePostArgs = PostMutationOptions & (
-    Pick<PostMutationOptions, 'content'> | Pick<PostMutationOptions, 'excerpt'> | Pick<PostMutationOptions, 'title'>
-);
-
-const createPost: ArgumentField<CreatePostArgs, any, any> = {
-    description: 'Create a post.',
-    type: postType,
+const createPage: ArgumentField<PageMutationOptions, any, any> = {
+    description: 'Create a page.',
+    type: pageType,
     args: {
         author: {
             description: 'The ID for the author of the object.',
             type: GraphQLInt,
-        },
-        categories: {
-            description: 'The terms assigned to the object in the category taxonomy.',
-            type: new GraphQLList(GraphQLInt),
         },
         comment_status: {
             description: 'Whether or not comments are open on the object.',
@@ -75,7 +59,7 @@ const createPost: ArgumentField<CreatePostArgs, any, any> = {
         },
         content: {
             description: 'The content for the object.',
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
         },
         date: {
             description: 'The date the object was published, in the site’s timezone.',
@@ -93,17 +77,17 @@ const createPost: ArgumentField<CreatePostArgs, any, any> = {
             description: 'The ID of the featured media for the object.',
             type: GraphQLInt,
         },
-        liveblog_likes: {
-            description: 'The number of Liveblog Likes the post has.',
+        menu_order: {
+            description: 'The order of the object in relation to other object of its type.',
             type: GraphQLInt,
         },
         meta: {
             description: 'Meta fields.',
             type: new GraphQLList(GraphQLString),
         },
-        password: {
-            description: 'A password to protect access to the content and excerpt.',
-            type: GraphQLString,
+        parent: {
+            description: 'The id for the parent of the object.',
+            type: GraphQLInt,
         },
         ping_status: {
             description: 'Whether or not the object can be pinged.',
@@ -117,38 +101,30 @@ const createPost: ArgumentField<CreatePostArgs, any, any> = {
             description: 'A named status for the object.',
             type: postStatusType,
         },
-        sticky: {
-            description: 'Whether or not the object should be treated as sticky.',
-            type: GraphQLBoolean,
-        },
-        tags: {
-            description: 'The terms assigned to the object in the post_tag taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
         template: {
             description: 'The theme file to use to display the object.',
             type: GraphQLString,
         },
         title: {
             description: 'The title for the object.',
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
         },
     },
-    resolve: (_root, args, context): PromiseLike<Post> => context.post('/posts', args),
+    resolve: (_root, args, context): PromiseLike<Page> => context.post('/pages', args),
 };
 
-type UpdatePostArgs = PostMutationOptions & { id: string };
-const updatePost: ArgumentField<UpdatePostArgs, any, any> = {
-    description: 'Update a post.',
-    type: postType,
+export interface UpdatePageArgs extends PageMutationOptions {
+    /** ID of the page being upadated. */
+    id: number;
+}
+
+const updatePage: ArgumentField<UpdatePageArgs, any, any> = {
+    description: 'Update a page.',
+    type: pageType,
     args: {
         author: {
-            description: '',
+            description: 'The ID for the author of the object.',
             type: GraphQLInt,
-        },
-        categories: {
-            description: 'The terms assigned to the object in the category taxonomy.',
-            type: new GraphQLList(GraphQLInt),
         },
         comment_status: {
             description: 'Whether or not comments are open on the object.',
@@ -175,20 +151,20 @@ const updatePost: ArgumentField<UpdatePostArgs, any, any> = {
             type: GraphQLInt,
         },
         id: {
-            description: 'The ID of the post being updated',
+            description: 'ID of the page being upadated.',
             type: new GraphQLNonNull(GraphQLInt),
         },
-        liveblog_likes: {
-            description: 'The number of Liveblog Likes the post has.',
+        menu_order: {
+            description: 'The order of the object in relation to other object of its type.',
             type: GraphQLInt,
         },
         meta: {
             description: 'Meta fields.',
             type: new GraphQLList(GraphQLString),
         },
-        password: {
-            description: 'A password to protect access to the content and excerpt.',
-            type: GraphQLString,
+        parent: {
+            description: 'The id for the parent of the object.',
+            type: GraphQLInt,
         },
         ping_status: {
             description: 'Whether or not the object can be pinged.',
@@ -202,14 +178,6 @@ const updatePost: ArgumentField<UpdatePostArgs, any, any> = {
             description: 'A named status for the object.',
             type: postStatusType,
         },
-        sticky: {
-            description: 'Whether or not the object should be treated as sticky.',
-            type: GraphQLBoolean,
-        },
-        tags: {
-            description: 'The terms assigned to the object in the post_tag taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
         template: {
             description: 'The theme file to use to display the object.',
             type: GraphQLString,
@@ -219,49 +187,49 @@ const updatePost: ArgumentField<UpdatePostArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdatePostArgs, context): PromiseLike<Post> => (
-        context.post(`/posts/${id}`, args)
+    resolve: (_root, { id, ...args }: UpdatePageArgs, context): PromiseLike<Page> => (
+        context.post(`/pages/${id}`, args)
     ),
 };
 
-const deletePostResponseUnion = new GraphQLUnionType({
-    name: 'DeletePostResponse',
-    types: [ deletedPostType, postType ],
+const deletePageResponseUnion = new GraphQLUnionType({
+    name: 'DeletePageResponse',
+    types: [ deletedPageType, pageType ],
     resolveType: res => {
         if (res.deleted) {
-            return deletedPostType;
+            return deletedPageType;
         }
-        return postType;
+        return pageType;
     },
 });
 
-export interface DeletePostArgs {
+export interface DeletePageArgs {
     /** Whether to bypass trash and force deletion. */
     force?: boolean;
-    /** The ID of the post being deleted. */
+    /** The ID of the page being deleted. */
     id: number;
 }
 
-const deletePost: ArgumentField<DeletePostArgs, any, any> = {
-    description: 'Delete a single post by ID.',
-    type: deletePostResponseUnion,
+const deletePage: ArgumentField<DeletePageArgs, any, any> = {
+    description: 'Delete a single page by ID.',
+    type: deletePageResponseUnion,
     args: {
         force: {
             description: 'Whether to bypass trash and force deletion.',
             type: GraphQLBoolean,
         },
         id: {
-            description: 'The ID of the post being deleted.',
+            description: 'The ID of the page being deleted.',
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeletePostArgs, context): PromiseLike<Post|DeletedPost> => (
-        context.delete(`/posts/${id}`, args)
+    resolve: (_root, { id, ...args }: DeletePageArgs, context): PromiseLike<Page|DeletedPage> => (
+        context.delete(`/pages/${id}`, args)
     ),
 };
 
 export default {
-    createPost,
-    deletePost,
-    updatePost,
+    createPage,
+    deletePage,
+    updatePage,
 };

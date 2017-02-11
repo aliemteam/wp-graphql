@@ -4,7 +4,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types'
+import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types';
 import { ArgumentField } from '../../lib/strongTypes';
 import commentType, { Comment } from './commentType';
 
