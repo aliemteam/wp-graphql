@@ -8,7 +8,7 @@ import {
 } from 'graphql';
 import { ContentDescriptor, contentDescriptorType } from '../../lib/abstract-types';
 import { TypedFields } from '../../lib/strongTypes';
-import { avatarObjectType, UserAvatarUrls } from '../users/userType';
+import { avatarObjectType, UserAvatarUrls } from '../users/types/userType';
 
 export interface Comment {
     author: number;

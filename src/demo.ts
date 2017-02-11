@@ -29,7 +29,6 @@ transport.send(`
             id
         }
     }
-
 `).then((response: any) => {
     console.log(JSON.stringify(response, null, 2)); // tslint:disable-line
 })

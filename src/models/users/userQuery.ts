@@ -6,7 +6,7 @@ import {
 } from 'graphql';
 import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
-import userType, { User } from './userType';
+import userType, { User } from './types/userType';
 
 export interface UsersArgs {
     /** Scope under which the request is made; determines fields present in response. */

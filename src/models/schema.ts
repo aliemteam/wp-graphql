@@ -12,9 +12,11 @@ import postTypeQuery from './post-types/postTypeQuery';
 import postMutation from './posts/postMutation';
 import postQuery from './posts/postQuery';
 import revisionQuery from './revisions/revisionQuery';
+import settingsMutation from './settings/settingsMutation';
 import settingsQuery from './settings/settingsQuery';
 import tagQuery from './tags/tagQuery';
 import taxonomyQuery from './taxonomies/taxonomyQuery';
+import userMutation from './users/userMutation';
 import userQuery from './users/userQuery';
 
 const queries = {
@@ -41,6 +43,8 @@ const query = new GraphQLObjectType({
 const mutations = {
     ...postMutation,
     ...pageMutation,
+    ...settingsMutation,
+    ...userMutation,
 };
 
 const mutation = new GraphQLObjectType({

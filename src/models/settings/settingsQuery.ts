@@ -1,5 +1,5 @@
 import { ArgumentField } from '../../lib/strongTypes';
-import settingsType, { Settings } from './settingsType';
+import settingsType, { Settings } from './types/settingsType';
 
 const settings: ArgumentField<{}, any, any> = {
     description: 'Fetch the site settings.',

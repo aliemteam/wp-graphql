@@ -4,7 +4,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../lib/strongTypes';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface Settings {
     /** A date format for all date strings. */
