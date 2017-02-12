@@ -3,11 +3,14 @@ import {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
 import { ArgumentField } from '../../lib/strongTypes';
-import deletedUserType, { DeletedUser } from './types/deletedUserType';
+import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import userType, { User } from './types/userType';
+
+export const deletedUserType: GraphQLObjectType = deletedObjectFactory(userType);
 
 export interface UserMutationOptions {
     /** Description of the user. */
@@ -204,7 +207,7 @@ const deleteUser: ArgumentField<DeleteUserArgs, any, any> = {
             defaultValue: -1,
         },
     },
-    resolve: (_root, { id, ...args }: DeleteUserArgs, context): PromiseLike<DeletedUser> => (
+    resolve: (_root, { id, ...args }: DeleteUserArgs, context): PromiseLike<DeletedObject<User>> => (
         context.delete(`/users/${id}`, args)
     ),
 };

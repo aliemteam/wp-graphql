@@ -3,7 +3,7 @@ import WPGraphQL from '../../index';
 
 const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTERNAL_TESTING__: true });
 
-test('/comments with no arguments', async t => {
+test('comments query', async t => {
     const expected = {
         comments: [
             {
@@ -17,7 +17,7 @@ test('/comments with no arguments', async t => {
     };
     const actual = await transport.send(`
         {
-            comments {
+            comments(order: asc, per_page: 1) {
                 id
                 author_name
                 author_email

@@ -3,14 +3,17 @@ import {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLObjectType,
     GraphQLString,
     GraphQLUnionType,
 } from 'graphql';
 import { openClosedType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
+import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import { postStatusType, Status } from '../post-statuses/postStatusType';
-import deletedPageType, { DeletedPage } from './types/deletedPageType';
 import pageType, { Page } from './types/pageType';
+
+export const deletedPageType: GraphQLObjectType = deletedObjectFactory(pageType);
 
 export interface PageMutationOptions {
     /** The ID for the author of the object. */
@@ -223,7 +226,7 @@ const deletePage: ArgumentField<DeletePageArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeletePageArgs, context): PromiseLike<Page|DeletedPage> => (
+    resolve: (_root, { id, ...args }: DeletePageArgs, context): PromiseLike<Page|DeletedObject<Page>> => (
         context.delete(`/pages/${id}`, args)
     ),
 };

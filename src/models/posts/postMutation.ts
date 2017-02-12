@@ -3,14 +3,17 @@ import {
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLObjectType,
     GraphQLString,
     GraphQLUnionType,
 } from 'graphql';
 import { openClosedType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
+import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import { postStatusType, Status } from '../post-statuses/postStatusType';
-import deletedPostType, { DeletedPost } from './types/deletedPostType';
 import postType, { Post } from './types/postType';
+
+export const deletedPostType: GraphQLObjectType = deletedObjectFactory(postType);
 
 export interface PostMutationOptions {
     /** The ID for the author of the object. */
@@ -255,7 +258,7 @@ const deletePost: ArgumentField<DeletePostArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeletePostArgs, context): PromiseLike<Post|DeletedPost> => (
+    resolve: (_root, { id, ...args }: DeletePostArgs, context): PromiseLike<Post|DeletedObject<Post>> => (
         context.delete(`/posts/${id}`, args)
     ),
 };

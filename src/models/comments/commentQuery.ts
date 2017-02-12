@@ -4,9 +4,11 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types';
+import { Context, contextType, Order, orderType } from '../../lib/abstract-types';
 import { ArgumentField } from '../../lib/strongTypes';
-import commentType, { Comment } from './commentType';
+import enumFactory from '../../lib/type-factories/enumFactory';
+import commentStatusType, { CommentStatus } from './types/commentStatusType';
+import commentType, { Comment } from './types/commentType';
 
 export interface CommentsArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */
@@ -46,7 +48,7 @@ export interface CommentsArgs {
     /** Limit results to those matching a string. */
     search?: string;
     /** Limit result set to comments assigned a specific status. Requires authorization. */
-    status?: string;
+    status?: CommentStatus;
     /** Limit result set to comments assigned a specific type. Requires authorization. */
     type?: string;
 }
@@ -137,7 +139,7 @@ const comments: ArgumentField<CommentsArgs, any, any> = {
         },
         status: {
             description: 'Limit result set to comments assigned a specific status. Requires authorization.',
-            type: GraphQLString,
+            type: commentStatusType,
         },
         type: {
             description: 'Limit result set to comments assigned a specific type. Requires authorization.',

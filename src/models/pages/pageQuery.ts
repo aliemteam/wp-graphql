@@ -7,11 +7,11 @@ import {
 import {
     Context,
     contextType,
-    enumFactory,
     Order,
     orderType,
 } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
+import enumFactory from '../../lib/type-factories/enumFactory';
 import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
 import pageType, { Page } from './types/pageType';
 

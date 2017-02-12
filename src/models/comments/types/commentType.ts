@@ -3,17 +3,16 @@ import {
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { ContentDescriptor, contentDescriptorType } from '../../lib/abstract-types';
-import { TypedFields } from '../../lib/strongTypes';
-import { avatarObjectType, UserAvatarUrls } from '../users/types/userType';
+import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
+import { TypedFields } from '../../../lib/strongTypes';
+import { avatarObjectType, UserAvatarUrls } from '../../users/types/userType';
+import commentKind, { CommentKind } from './commentKindType';
 
-export interface Comment {
+export interface MutableCommentOptions {
+    /** The id of the user object, if author was a user. */
     author: number;
-    /** Avatar URLs for the object author. */
-    readonly author_avatar_urls: UserAvatarUrls;
     /** Email address for the object author. */
     author_email: string;
     /** IP address for the object author (IPv6). */
@@ -22,20 +21,14 @@ export interface Comment {
     author_name: string;
     /** URL for the object author. */
     author_url: string;
-    /** User agent for the object author. */
-    readonly author_user_agent: string;
     /** The content for the object. */
-    content: ContentDescriptor;
+    content: ContentDescriptor|string;
     /** The date the object was published. */
     date: string;
     /** The date the object was published as GMT. */
     date_gmt: string;
-    /** Unique identifier for the object. */
-    readonly id: number;
     /** Karma for the object. */
     karma: number;
-    /** URL to the object. */
-    readonly link: string;
     /** Meta fields. */
     meta: string[]; // FIXME: not sure
     /** The id for the parent of the object. */
@@ -45,7 +38,20 @@ export interface Comment {
     /** State of the object. */
     status: string;
     /** Type of Comment for the object. */
-    type: string;
+    type: CommentKind;
+}
+
+export interface Comment extends MutableCommentOptions {
+    /** Avatar URLs for the object author. */
+    readonly author_avatar_urls: UserAvatarUrls;
+    /** User agent for the object author. */
+    readonly author_user_agent: string;
+    /** Unique identifier for the object. */
+    readonly id: number;
+    /** URL to the object. */
+    readonly link: string;
+    /** The content for the object. */
+    content: ContentDescriptor;
 }
 
 const commentFields: TypedFields<Comment, Comment, {}> = {
@@ -119,11 +125,11 @@ const commentFields: TypedFields<Comment, Comment, {}> = {
     },
     type: {
         description: 'Type of Comment for the object.',
-        type: GraphQLString,
+        type: commentKind,
     },
 };
 
-export default new GraphQLObjectType(<GraphQLObjectTypeConfig<Comment, {}>>{
+export default new GraphQLObjectType({
     name: 'Comment',
     description: 'A single comment object',
     fields: () => ({

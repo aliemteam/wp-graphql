@@ -3,7 +3,9 @@ import {
     GraphQLSchema,
 } from 'graphql';
 import categoryQuery from './categories/categoryQuery';
+import commentMutation from './comments/commentMutation';
 import commentQuery from './comments/commentQuery';
+import mediaMutation from './media/mediaMutation';
 import mediaQuery from './media/mediaQuery';
 import pageMutation from './pages/pageMutation';
 import pageQuery from './pages/pageQuery';
@@ -41,6 +43,8 @@ const query = new GraphQLObjectType({
 });
 
 const mutations = {
+    ...commentMutation,
+    ...mediaMutation,
     ...postMutation,
     ...pageMutation,
     ...settingsMutation,

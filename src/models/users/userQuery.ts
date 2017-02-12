@@ -4,8 +4,9 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { Context, contextType, enumFactory, Order, orderType } from '../../lib/abstract-types/';
+import { Context, contextType, Order, orderType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
+import enumFactory from '../../lib/type-factories/enumFactory';
 import userType, { User } from './types/userType';
 
 export interface UsersArgs {
