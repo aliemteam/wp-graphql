@@ -1,7 +1,5 @@
-import {
-    GraphQLObjectType,
-    GraphQLSchema,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import categoryMutation from './categories/categoryMutation';
 import categoryQuery from './categories/categoryQuery';
 import commentMutation from './comments/commentMutation';
 import commentQuery from './comments/commentQuery';
@@ -13,6 +11,7 @@ import postStatusQuery from './post-statuses/postStatusQuery';
 import postTypeQuery from './post-types/postTypeQuery';
 import postMutation from './posts/postMutation';
 import postQuery from './posts/postQuery';
+import revisionMutation from './revisions/revisionMutation';
 import revisionQuery from './revisions/revisionQuery';
 import settingsMutation from './settings/settingsMutation';
 import settingsQuery from './settings/settingsQuery';
@@ -43,10 +42,12 @@ const query = new GraphQLObjectType({
 });
 
 const mutations = {
+    ...categoryMutation,
     ...commentMutation,
     ...mediaMutation,
     ...postMutation,
     ...pageMutation,
+    ...revisionMutation,
     ...settingsMutation,
     ...userMutation,
 };

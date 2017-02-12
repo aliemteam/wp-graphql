@@ -4,8 +4,8 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { ContentDescriptor, contentDescriptorType } from '../../lib/abstract-types';
-import { TypedFields } from '../../lib/strongTypes';
+import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface RevisionBase {
     /** The id for the author of the object. */

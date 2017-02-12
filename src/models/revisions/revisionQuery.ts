@@ -1,7 +1,7 @@
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
-import revisionType, { Revision } from './revisionType';
+import revisionType, { Revision } from './types/revisionType';
 
 export interface RevisionsArgs {
     /** Scope under which the request is made; determines fields present in response. */

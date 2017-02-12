@@ -3,10 +3,9 @@ import {
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../lib/strongTypes';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface Category {
     /** Number of published posts for the term. */
@@ -69,8 +68,7 @@ const categoryFields: fields = {
     },
 };
 
-type config = GraphQLObjectTypeConfig<Category, {}>;
-export const categoryType = new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'Category',
     description: 'A single category.',
     fields: () => ({

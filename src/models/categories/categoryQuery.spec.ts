@@ -14,7 +14,7 @@ test('/categories', async t => {
     };
     const actual = await transport.send(`
         {
-            categories {
+            categories(order: asc, orderby: id, per_page: 1) {
                 id
                 name
             }

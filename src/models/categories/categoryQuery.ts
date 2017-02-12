@@ -8,7 +8,7 @@ import {
 import { Context, contextType, Order, orderType } from '../../lib/abstract-types';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
-import { Category, categoryType } from './categoryType';
+import categoryType, { Category } from './types/categoryType';
 
 export interface CategoriesArgs {
     /** Scope under which the request is made; determines fields present in response. */
