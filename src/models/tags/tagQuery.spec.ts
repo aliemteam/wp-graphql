@@ -48,6 +48,7 @@ test('/tags with assorted arguments', async t => {
             }
         }
     `);
+    actual.tags = actual.tags.filter(tag => tag.name !== 'Test Tag' && tag.name !== 'Testing Tag');
     t.deepEqual(actual, expected);
 });
 
