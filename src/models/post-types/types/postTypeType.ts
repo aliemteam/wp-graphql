@@ -5,8 +5,8 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { PostLabels, postLabelsType } from '../../lib/abstract-types/';
-import { TypedFields } from '../../lib/strongTypes';
+import { PostLabels, postLabelsType } from '../../../lib/abstract-types/';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface PostTypeBase<T> {
     /** A human-readable description of the resource. */

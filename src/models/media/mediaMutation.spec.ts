@@ -40,9 +40,6 @@ test.serial('addMedia', async t => {
 });
 
 test.serial('updateMedia', async t => {
-    if (typeof mediaId === 'undefined') {
-        t.pass('Skipped due to failed dependent test');
-    }
     const expected = {
         updateMedia: {
             id: mediaId,
@@ -65,9 +62,6 @@ test.serial('updateMedia', async t => {
 });
 
 test.serial('deleteMedia', async t => {
-    if (typeof mediaId === 'undefined') {
-        t.pass('Skipped due to failed dependent test');
-    }
     const expected = {
         deleteMedia: {
             deleted: true,

@@ -8,7 +8,7 @@ import {
     postStatusType,
     SinglePostStatus,
     singlePostStatusType,
-} from './postStatusType';
+} from './types/postStatusType';
 
 export interface PostStatusesArgs {
     /** Scope under which the request is made; determines fields present in response. */

@@ -10,7 +10,7 @@ import {
 import { openClosedType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
-import { postStatusType, Status } from '../post-statuses/postStatusType';
+import { postStatusType, Status } from '../post-statuses/types/postStatusType';
 import pageType, { Page } from './types/pageType';
 
 export const deletedPageType: GraphQLObjectType = deletedObjectFactory(pageType);

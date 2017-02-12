@@ -2,63 +2,61 @@ import test from 'ava';
 import WPGraphQL from '../../index';
 
 const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTERNAL_TESTING__: true });
-let categoryId: number;
+let tagId: number;
 
-test.serial('createCategory', async t => {
+test.serial('createTag', async t => {
     const expected = {
-        createCategory: {
-            id: 0,
-            name: 'Test Category',
-            taxonomy: 'category',
+        createTag: {
+            id: tagId,
+            name: 'Test Tag',
+            taxonomy: 'post_tag',
         },
     };
     const actual = await transport.send(`
         mutation {
-            createCategory(name: "Test Category") {
+            createTag(name: "Test Tag") {
                 id
                 name
                 taxonomy
             }
         }
     `);
-    categoryId = actual.createCategory.id;
-    expected.createCategory.id = categoryId;
+    tagId = actual.createTag.id;
+    expected.createTag.id = tagId;
     t.deepEqual(actual, expected);
 });
 
-test.serial('updateCategory', async t => {
+test.serial('updateTag', async t => {
     const expected = {
-        updateCategory: {
-            id: categoryId,
-            name: 'Testing Category',
-            slug: 'foo-bar-baz',
+        updateTag: {
+            id: tagId,
+            name: 'Testing Tag',
         },
     };
     const actual = await transport.send(`
         mutation U($id: Int!) {
-            updateCategory(id: $id, name: "Testing Category", slug: "foo-bar-baz") {
+            updateTag(id: $id, name: "Testing Tag") {
                 id
                 name
-                slug
             }
         }
-    `, { id: categoryId });
+    `, { id: tagId });
     t.deepEqual(actual, expected);
 });
 
-test.serial('deleteCategory', async t => {
+test.serial('deleteTag', async t => {
     const expected = {
-        deleteCategory: {
+        deleteTag: {
             deleted: true,
             previous: {
-                id: categoryId,
-                name: 'Testing Category',
+                id: tagId,
+                name: 'Testing Tag',
             },
         },
     };
     const actual = await transport.send(`
         mutation D($id: Int!) {
-            deleteCategory(id: $id) {
+            deleteTag(id: $id) {
                 deleted
                 previous {
                     id
@@ -66,6 +64,6 @@ test.serial('deleteCategory', async t => {
                 }
             }
         }
-    `, { id: categoryId });
+    `, { id: tagId });
     t.deepEqual(actual, expected);
 });

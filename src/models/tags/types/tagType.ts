@@ -6,7 +6,7 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../lib/strongTypes';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export interface Tag {
     /** Number of published posts for the term. */

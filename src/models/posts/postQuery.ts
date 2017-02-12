@@ -13,7 +13,7 @@ import {
 } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
-import { PostStatus, postStatusType } from '../post-statuses/postStatusType';
+import { PostStatus, postStatusType } from '../post-statuses/types/postStatusType';
 import postType, { Post } from './types/postType';
 
 export interface PostsArgs {

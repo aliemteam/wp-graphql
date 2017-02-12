@@ -4,7 +4,7 @@ import {
 } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
-import { PostType, postType as typeOfPost, PostTypeList, postTypeList } from './postTypeType';
+import { PostType, postType as typeOfPost, PostTypeList, postTypeList } from './types/postTypeType';
 
 export interface PostTypesArgs {
     /** Scope under which the request is made; determines fields present in response. */

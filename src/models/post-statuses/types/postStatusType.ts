@@ -4,7 +4,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../lib/strongTypes';
+import { TypedFields } from '../../../lib/strongTypes';
 
 export type Status = 'draft'|'future'|'pending'|'private'|'publish'|'trash';
 export type PostStatus = Status|Status[];

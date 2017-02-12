@@ -35,9 +35,6 @@ test.serial('createComment', async t => {
 });
 
 test.serial('updateComment', async t => {
-    if (typeof commentId === 'undefined') {
-        t.pass('Dependent test failure.');
-    }
     const expected = {
         updateComment: {
             id: commentId,
@@ -62,9 +59,6 @@ test.serial('updateComment', async t => {
 });
 
 test.serial('deleteComment (to trash)', async t => {
-    if (typeof commentId === 'undefined') {
-        t.pass('Dependent test failure.');
-    }
     const expected = {
         deleteComment: {
             id: commentId,
@@ -85,9 +79,6 @@ test.serial('deleteComment (to trash)', async t => {
 });
 
 test.serial('deleteComment (skip trash)', async t => {
-    if (typeof commentId === 'undefined') {
-        t.pass('Dependent test failure.');
-    }
     const expected = {
         deleteComment: {
             deleted: true,

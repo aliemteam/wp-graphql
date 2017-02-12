@@ -6,7 +6,7 @@ Client-side GraphQL wrapper for the WordPress REST API
 
 **PROOF OF CONCEPT & WORK IN PROGRESS!!** This should not be used in production until stated otherwise.
 
-## API Route Status (93% complete)
+## Base API Route Status (100% complete)
 
 Status | Route | Action
 :---:|---|---
@@ -25,9 +25,9 @@ Status | Route | Action
 :ballot_box_with_check: | Categories | Delete a Category
 :ballot_box_with_check: | Tags | List Tags
 :ballot_box_with_check: | Tags | Retrieve a Tag
-:x: | Tags | Create a Tag
-:x: | Tags | Update a Tag
-:x: | Tags | Delete a Tag
+:ballot_box_with_check: | Tags | Create a Tag
+:ballot_box_with_check: | Tags | Update a Tag
+:ballot_box_with_check: | Tags | Delete a Tag
 :ballot_box_with_check: | Pages | List Pages
 :ballot_box_with_check: | Pages | Retrieve a Page
 :ballot_box_with_check: | Pages | Create a Page

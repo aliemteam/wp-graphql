@@ -15,6 +15,7 @@ import revisionMutation from './revisions/revisionMutation';
 import revisionQuery from './revisions/revisionQuery';
 import settingsMutation from './settings/settingsMutation';
 import settingsQuery from './settings/settingsQuery';
+import tagMutation from './tags/tagMutation';
 import tagQuery from './tags/tagQuery';
 import taxonomyQuery from './taxonomies/taxonomyQuery';
 import userMutation from './users/userMutation';
@@ -49,6 +50,7 @@ const mutations = {
     ...pageMutation,
     ...revisionMutation,
     ...settingsMutation,
+    ...tagMutation,
     ...userMutation,
 };
 

@@ -5,8 +5,8 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { TaxonomyLabels, taxonomyLabelsType } from '../../lib/abstract-types';
-import { TypedFields } from '../../lib/strongTypes';
+import { TaxonomyLabels, taxonomyLabelsType } from '../../../lib/abstract-types';
+import { TypedFields } from '../../../lib/strongTypes';
 
 /** All Capabilities used by a taxonomy. */
 export interface TaxonomyCapabilities {

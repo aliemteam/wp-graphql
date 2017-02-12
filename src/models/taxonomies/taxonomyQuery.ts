@@ -5,7 +5,7 @@ import {
 } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
 import { ArgumentField } from '../../lib/strongTypes';
-import taxonomyType, { Taxonomy } from './taxonomyType';
+import taxonomyType, { Taxonomy } from './types/taxonomyType';
 
 const transformTaxonomyObject = (obj: { [key: string]: Taxonomy }): Taxonomy[] => (
     Object.keys(obj).map(k => obj[k])
