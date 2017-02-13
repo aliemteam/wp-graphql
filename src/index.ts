@@ -14,6 +14,7 @@ export {
 
 export interface WPGQLOpts {
     __INTERNAL_TESTING__?: boolean;
+    cookieAuth?: string;
     context?: any;
     mutations?: GraphQLFieldConfigMap<any, any>;
     queries?: GraphQLFieldConfigMap<any, any>;
@@ -28,7 +29,10 @@ export default class WPGraphQL {
         const schema = buildSchema({ mutations, queries });
         this.transport = new GraphqlJSTransport(schema, { rootValue: this, context });
         axios.defaults.baseURL = hostUrl;
-        if (opts && opts.__INTERNAL_TESTING__) {
+        if (opts.cookieAuth) {
+            axios.defaults.headers.common['X-WP-Nonce'] = opts.cookieAuth;
+        }
+        if (opts.__INTERNAL_TESTING__) {
             axios.defaults.auth = { username: 'root', password: 'root' };
         }
     }
