@@ -7,6 +7,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { openClosedType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import mediaType, { Media } from './types/mediaType';
@@ -49,7 +50,7 @@ export interface CreateMediaArgs extends MediaMutationOptions {
     filename: string;
 }
 
-const addMedia: ArgumentField<CreateMediaArgs, any, any> = {
+const addMedia: ArgumentField<CreateMediaArgs> = {
     description: 'Upload media using an Array Buffer.',
     type: mediaType,
     args: {
@@ -114,7 +115,9 @@ const addMedia: ArgumentField<CreateMediaArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args, context): PromiseLike<Media> => context.upload('/media', args),
+    resolve: (root, args): PromiseLike<Media> => (
+        root.upload(`/${NS}/media`, args)
+    ),
 };
 
 export interface UpdateMediaArgs extends MediaMutationOptions {
@@ -122,7 +125,7 @@ export interface UpdateMediaArgs extends MediaMutationOptions {
     id: number;
 }
 
-const updateMedia: ArgumentField<UpdateMediaArgs, any, any> = {
+const updateMedia: ArgumentField<UpdateMediaArgs> = {
     description: 'Update media by ID.',
     type: mediaType,
     args: {
@@ -183,8 +186,8 @@ const updateMedia: ArgumentField<UpdateMediaArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdateMediaArgs, context): PromiseLike<Media> => (
-        context.post(`/media/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateMediaArgs): PromiseLike<Media> => (
+        root.post(`/${NS}/media/${id}`, args)
     ),
 };
 
@@ -195,7 +198,7 @@ export interface DeleteMediaArgs {
     force: true;
 }
 
-const deleteMedia: ArgumentField<DeleteMediaArgs, any, any> = {
+const deleteMedia: ArgumentField<DeleteMediaArgs> = {
     description: 'Delete media by ID.',
     type: deletedMediaType,
     args: {
@@ -209,8 +212,8 @@ const deleteMedia: ArgumentField<DeleteMediaArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeleteMediaArgs, context): PromiseLike<Media|DeletedObject<Media>> => (
-        context.delete(`/media/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteMediaArgs): PromiseLike<Media|DeletedObject<Media>> => (
+        root.delete(`${NS}/media/${id}`, args)
     ),
 };
 

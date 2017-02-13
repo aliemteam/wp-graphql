@@ -10,6 +10,7 @@ import {
     Order,
     orderType,
 } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
 import { PostStatus, postStatusType } from '../post-statuses/types/postStatusType';
@@ -56,7 +57,7 @@ export interface PagesArgs {
     status?: PostStatus;
 }
 
-const pages: ArgumentField<PagesArgs, any, any> = {
+const pages: ArgumentField<PagesArgs> = {
     description: 'Retrieve a list of posts.',
     type: new GraphQLList(pageType),
     args: {
@@ -145,7 +146,9 @@ const pages: ArgumentField<PagesArgs, any, any> = {
             type: new GraphQLList(postStatusType),
         },
     },
-    resolve: (_root, args: PagesArgs, context): PromiseLike<Page[]> => context.get('/pages', args),
+    resolve: (root, args: PagesArgs): PromiseLike<Page[]> => (
+        root.get(`/${NS}/pages`, args)
+    ),
 };
 
 export interface PageArgs {
@@ -157,7 +160,7 @@ export interface PageArgs {
     password?: string;
 }
 
-const page: ArgumentField<PageArgs, any, any> = {
+const page: ArgumentField<PageArgs> = {
     type: pageType,
     args: {
         context: {
@@ -173,7 +176,9 @@ const page: ArgumentField<PageArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: PageArgs, context): PromiseLike<Page> => context.get(`/pages/${id}`, args),
+    resolve: (root, { id, ...args }: PageArgs): PromiseLike<Page> => (
+        root.get(`/${NS}/pages/${id}`, args)
+    ),
 };
 
 export default {

@@ -4,6 +4,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import taxonomyType, { Taxonomy } from './types/taxonomyType';
 
@@ -18,7 +19,7 @@ export interface TaxonomiesArgs {
     type?: string;
 }
 
-const taxonomies: ArgumentField<TaxonomiesArgs, any, any> = {
+const taxonomies: ArgumentField<TaxonomiesArgs> = {
     description: 'List all taxonomies.',
     type: new GraphQLList(taxonomyType),
     args: {
@@ -31,8 +32,8 @@ const taxonomies: ArgumentField<TaxonomiesArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: TaxonomiesArgs, context): PromiseLike<Taxonomy[]> => (
-        context.get('/taxonomies', args).then(transformTaxonomyObject)
+    resolve: (root, args: TaxonomiesArgs): PromiseLike<Taxonomy[]> => (
+        root.get(`/${NS}/taxonomies`, args).then(transformTaxonomyObject)
     ),
 };
 
@@ -43,7 +44,7 @@ export interface TaxonomyArgs {
     slug: string;
 }
 
-const taxonomy: ArgumentField<TaxonomyArgs, any, any> = {
+const taxonomy: ArgumentField<TaxonomyArgs> = {
     description: 'Fetch a single taxonomy.',
     type: taxonomyType,
     args: {
@@ -56,8 +57,8 @@ const taxonomy: ArgumentField<TaxonomyArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (_root, { slug, ...args }: TaxonomyArgs, context): PromiseLike<Taxonomy> => (
-        context.get(`/taxonomies/${slug}`, args)
+    resolve: (root, { slug, ...args }: TaxonomyArgs): PromiseLike<Taxonomy> => (
+        root.get(`/${NS}/taxonomies/${slug}`, args)
     ),
 };
 

@@ -1,5 +1,6 @@
 import { GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import revisionType, { Revision } from './types/revisionType';
 
@@ -11,7 +12,7 @@ export interface RevisionsArgs {
     /** The type of post. */
     postType?: 'posts'|'pages';
 }
-const revisions: ArgumentField<RevisionsArgs, any, any> = {
+const revisions: ArgumentField<RevisionsArgs> = {
     description: 'List all revisions for an individual post.',
     type: new GraphQLList(revisionType),
     args: {
@@ -29,17 +30,16 @@ const revisions: ArgumentField<RevisionsArgs, any, any> = {
             defaultValue: 'posts',
         },
     },
-    resolve:
-        (_root, { id, postType, ...args }: RevisionsArgs, context): PromiseLike<Revision[]> => (
-            context.get(`/${postType}/${id}/revisions`, args)
-        ),
+    resolve: (root, { id, postType, ...args }: RevisionsArgs): PromiseLike<Revision[]> => (
+        root.get(`/${NS}/${postType}/${id}/revisions`, args)
+    ),
 };
 
 export interface RevisionArgs extends RevisionsArgs {
     /** The ID of the post. */
     parentId: number;
 }
-const revision: ArgumentField<RevisionArgs, any, any> = {
+const revision: ArgumentField<RevisionArgs> = {
     description: 'Get a single post revision.',
     type: revisionType,
     args: {
@@ -61,10 +61,9 @@ const revision: ArgumentField<RevisionArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve:
-        (_root, { id, postType, parentId, ...args }: RevisionArgs, context): PromiseLike<Revision> => (
-            context.get(`/${postType}/${parentId}/revisions/${id}`, args)
-        ),
+    resolve: (root, { id, postType, parentId, ...args }: RevisionArgs): PromiseLike<Revision> => (
+        root.get(`/${NS}/${postType}/${parentId}/revisions/${id}`, args)
+    ),
 };
 
 export default {

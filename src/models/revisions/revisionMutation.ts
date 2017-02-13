@@ -5,6 +5,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import revisionType, { Revision } from './types/revisionType';
@@ -22,7 +23,7 @@ export interface DeleteRevisionArgs {
     parentType: 'posts'|'pages';
 }
 
-const deleteRevision: ArgumentField<DeleteRevisionArgs, any, any> = {
+const deleteRevision: ArgumentField<DeleteRevisionArgs> = {
     description: 'Delete a revision.',
     type: deletedRevisionType,
     args: {
@@ -45,8 +46,8 @@ const deleteRevision: ArgumentField<DeleteRevisionArgs, any, any> = {
             defaultValue: 'posts',
         },
     },
-    resolve: (_root, { id, parentId, parentType, ...args }, context): PromiseLike<DeletedObject<Revision>> => (
-        context.delete(`/${parentType}/${parentId}/revisions/${id}`, args)
+    resolve: (root, { id, parentId, parentType, ...args }): PromiseLike<DeletedObject<Revision>> => (
+        root.delete(`/${NS}/${parentType}/${parentId}/revisions/${id}`, args)
     ),
 };
 

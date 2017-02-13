@@ -6,6 +6,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType, Order, orderType } from '../../lib/abstract-types';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
 import categoryType, { Category } from './types/categoryType';
@@ -37,7 +38,7 @@ export interface CategoriesArgs {
     slug?: string;
 }
 
-const categories: ArgumentField<CategoriesArgs, any, any> = {
+const categories: ArgumentField<CategoriesArgs> = {
     description: 'List categories.',
     type: new GraphQLList(categoryType),
     args: {
@@ -97,7 +98,9 @@ const categories: ArgumentField<CategoriesArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: CategoriesArgs, context): PromiseLike<Category[]> => context.get('/categories', args),
+    resolve: (root, args: CategoriesArgs): PromiseLike<Category[]> => (
+        root.get(`/${NS}/categories`, args)
+    ),
 };
 
 export interface CategoryArgs {
@@ -107,7 +110,7 @@ export interface CategoryArgs {
     id: number;
 }
 
-const category: ArgumentField<CategoryArgs, any, any> = {
+const category: ArgumentField<CategoryArgs> = {
     description: 'Fetch a single category.',
     type: categoryType,
     args: {
@@ -120,8 +123,8 @@ const category: ArgumentField<CategoryArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: CategoryArgs, context): PromiseLike<Category> => (
-        context.get(`/categories/${id}`, args)
+    resolve: (root, { id, ...args }: CategoryArgs): PromiseLike<Category> => (
+        root.get(`/${NS}/categories/${id}`, args)
     ),
 };
 

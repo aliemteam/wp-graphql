@@ -5,6 +5,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType, Order, orderType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
 import userType, { User } from './types/userType';
@@ -34,7 +35,7 @@ export interface UsersArgs {
     slug?: string;
 }
 
-const users: ArgumentField<UsersArgs, any, any> = {
+const users: ArgumentField<UsersArgs> = {
     type: new GraphQLList(userType),
     description: 'Fetch a list of all users.',
     args: {
@@ -92,7 +93,9 @@ const users: ArgumentField<UsersArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: UsersArgs, context): PromiseLike<User[]> => context.get('/users', args),
+    resolve: (root, args: UsersArgs): PromiseLike<User[]> => (
+        root.get(`/${NS}/users`, args)
+    ),
 };
 
 export interface UserArgs {
@@ -102,7 +105,7 @@ export interface UserArgs {
     id: number;
 }
 
-const user: ArgumentField<UserArgs, any, any> = {
+const user: ArgumentField<UserArgs> = {
     type: userType,
     description: 'Retrieve a single user.',
     args: {
@@ -115,7 +118,9 @@ const user: ArgumentField<UserArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: UserArgs, context): PromiseLike<User> => context.get(`/users/${id}`, args),
+    resolve: (root, { id, ...args }: UserArgs): PromiseLike<User> => (
+        root.get(`/${NS}/users/${id}`, args)
+    ),
 };
 
 export default {

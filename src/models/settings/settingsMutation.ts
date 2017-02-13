@@ -5,6 +5,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { openClosedType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import settingsType, { Settings } from './types/settingsType';
 
@@ -22,7 +23,7 @@ export const dayOfWeekType = new GraphQLEnumType({
     },
 });
 
-const updateSettings: ArgumentField<Settings, any, any> = {
+const updateSettings: ArgumentField<Settings> = {
     description: 'Update site settings.',
     type: settingsType,
     args: {
@@ -87,7 +88,9 @@ const updateSettings: ArgumentField<Settings, any, any> = {
             type: GraphQLBoolean,
         },
     },
-    resolve: (_root, args: Settings, context): PromiseLike<Settings> => context.post('/settings', args),
+    resolve: (root, args: Settings): PromiseLike<Settings> => (
+        root.post(`/${NS}/settings`, args)
+    ),
 };
 
 export default {

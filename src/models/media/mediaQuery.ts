@@ -10,6 +10,7 @@ import {
     Order,
     orderType,
 } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
 import mediaType, { Media } from './types/mediaType';
@@ -59,7 +60,7 @@ export interface MediaListArgs {
 
 const mediaKindType = enumFactory('MediaKind', ['application', 'audio', 'image', 'text', 'video']);
 
-const mediaList: ArgumentField<MediaListArgs, any, any> = {
+const mediaList: ArgumentField<MediaListArgs> = {
     description: 'Fetch a list of media items.',
     type: new GraphQLList(mediaType),
     args: {
@@ -155,7 +156,9 @@ const mediaList: ArgumentField<MediaListArgs, any, any> = {
             ]),
         },
     },
-    resolve: (_root, args: MediaListArgs, context): PromiseLike<Media[]> => context.get('/media', args),
+    resolve: (root, args: MediaListArgs): PromiseLike<Media[]> => (
+        root.get(`/${NS}/media`, args)
+    ),
 };
 
 export interface MediaArgs {
@@ -167,7 +170,7 @@ export interface MediaArgs {
     password?: string;
 }
 
-const media: ArgumentField<MediaArgs, any, any> = {
+const media: ArgumentField<MediaArgs> = {
     description: 'Retrieve a single media item by ID.',
     type: mediaType,
     args: {
@@ -184,7 +187,9 @@ const media: ArgumentField<MediaArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: MediaArgs, context): PromiseLike<Media> => context.get(`/media/${id}`, args),
+    resolve: (root, { id, ...args }: MediaArgs): PromiseLike<Media> => (
+        root.get(`/${NS}/media/${id}`, args)
+    ),
 };
 
 export default {

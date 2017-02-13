@@ -3,6 +3,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import { PostType, postType as typeOfPost, PostTypeList, postTypeList } from './types/postTypeType';
 
@@ -16,7 +17,7 @@ export interface PostTypeArgs extends PostTypesArgs {
     slug: string;
 }
 
-const postTypes: ArgumentField<PostTypesArgs, any, any> = {
+const postTypes: ArgumentField<PostTypesArgs> = {
     description: 'Retrieve an object of post types.',
     type: postTypeList,
     args: {
@@ -25,10 +26,12 @@ const postTypes: ArgumentField<PostTypesArgs, any, any> = {
             type: contextType,
         },
     },
-    resolve: (_root, args: PostTypesArgs, context): PromiseLike<PostTypeList> => context.get('/types', args),
+    resolve: (root, args: PostTypesArgs): PromiseLike<PostTypeList> => (
+        root.get(`/${NS}/types`, args)
+    ),
 };
 
-const postType: ArgumentField<PostTypeArgs, any, any> = {
+const postType: ArgumentField<PostTypeArgs> = {
     description: 'Retrieve a single post type.',
     type: typeOfPost,
     args: {
@@ -41,8 +44,8 @@ const postType: ArgumentField<PostTypeArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (_root, { slug, ...args }: PostTypeArgs, context): PromiseLike<PostType<string>> => (
-        context.get(`/types/${slug}`, args)
+    resolve: (root, { slug, ...args }: PostTypeArgs): PromiseLike<PostType<string>> => (
+        root.get(`/${NS}/types/${slug}`, args)
     ),
 };
 

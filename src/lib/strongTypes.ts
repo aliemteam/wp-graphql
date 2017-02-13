@@ -8,12 +8,19 @@ export interface FieldConfig<TSource, TContext> extends GraphQLFieldConfig<TSour
     description: string;
 }
 
-export interface ArgumentField<T, TSource, TContext> {
+export interface Source {
+    delete(path: string, args: object): PromiseLike<any>;
+    get(path: string, args: object): PromiseLike<any>;
+    post(path: string, args: object): PromiseLike<any>;
+    upload(path: string, args: object): PromiseLike<any>;
+}
+
+export interface ArgumentField<T> {
     type: GraphQLOutputType;
     args?: {
         [P in keyof T]: ArgumentConfig;
     };
-    resolve?: GraphQLFieldResolver<TSource, TContext>;
+    resolve?: GraphQLFieldResolver<Source, any>;
     deprecationReason?: string;
     description?: string;
 }

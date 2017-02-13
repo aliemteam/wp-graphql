@@ -3,7 +3,7 @@ import WPGraphQL from '../../index';
 
 declare const Buffer;
 
-const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2', { __INTERNAL_TESTING__: true });
+const transport = new WPGraphQL('http://localhost:8080/wp-json', { __INTERNAL_TESTING__: true });
 let file: File|Blob;
 let mediaId: number;
 

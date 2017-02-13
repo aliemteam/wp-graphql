@@ -7,6 +7,7 @@ import {
     GraphQLString,
     GraphQLUnionType,
 } from 'graphql';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import commentKind from './types/commentKindType';
@@ -22,7 +23,7 @@ export interface CreateCommentArgs extends Partial<MutableCommentOptions> {
     post: number;
 }
 
-const createComment: ArgumentField<MutableCommentOptions, any, any> = {
+const createComment: ArgumentField<MutableCommentOptions> = {
     description: 'Create a new comment',
     type: commentType,
     args: {
@@ -83,7 +84,9 @@ const createComment: ArgumentField<MutableCommentOptions, any, any> = {
             type: commentKind,
         },
     },
-    resolve: (_root, args: MutableCommentOptions, context): PromiseLike<Comment> => context.post('/comments', args),
+    resolve: (root, args: MutableCommentOptions): PromiseLike<Comment> => (
+        root.post(`/${NS}/comments`, args)
+    ),
 };
 
 export interface UpdateCommentArgs extends Partial<MutableCommentOptions> {
@@ -91,7 +94,7 @@ export interface UpdateCommentArgs extends Partial<MutableCommentOptions> {
     id: number;
 }
 
-const updateComment: ArgumentField<UpdateCommentArgs, any, any> = {
+const updateComment: ArgumentField<UpdateCommentArgs> = {
     description: 'Update a comment by ID.',
     type: commentType,
     args: {
@@ -156,8 +159,8 @@ const updateComment: ArgumentField<UpdateCommentArgs, any, any> = {
             type: commentKind,
         },
     },
-    resolve: (_root, { id, ...args }: UpdateCommentArgs, context): PromiseLike<Comment> => (
-        context.post(`/comments/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateCommentArgs): PromiseLike<Comment> => (
+        root.post(`/${NS}/comments/${id}`, args)
     ),
 };
 
@@ -179,7 +182,7 @@ export interface DeleteCommentArgs {
     id: number;
 }
 
-const deleteComment: ArgumentField<DeleteCommentArgs, any, any> = {
+const deleteComment: ArgumentField<DeleteCommentArgs> = {
     description: 'Delete a comment by ID.',
     type: deleteCommentResponseUnion,
     args: {
@@ -192,8 +195,8 @@ const deleteComment: ArgumentField<DeleteCommentArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeleteCommentArgs, context): PromiseLike<Comment|DeletedObject<Comment>> => (
-        context.delete(`/comments/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteCommentArgs): PromiseLike<Comment|DeletedObject<Comment>> => (
+        root.delete(`/${NS}/comments/${id}`, args)
     ),
 };
 

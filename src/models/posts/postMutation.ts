@@ -8,6 +8,7 @@ import {
     GraphQLUnionType,
 } from 'graphql';
 import { openClosedType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import { postStatusType, Status } from '../post-statuses/types/postStatusType';
@@ -60,7 +61,7 @@ type CreatePostArgs = PostMutationOptions & (
     Pick<PostMutationOptions, 'content'> | Pick<PostMutationOptions, 'excerpt'> | Pick<PostMutationOptions, 'title'>
 );
 
-const createPost: ArgumentField<CreatePostArgs, any, any> = {
+const createPost: ArgumentField<CreatePostArgs> = {
     description: 'Create a post.',
     type: postType,
     args: {
@@ -137,11 +138,13 @@ const createPost: ArgumentField<CreatePostArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (_root, args, context): PromiseLike<Post> => context.post('/posts', args),
+    resolve: (root, args): PromiseLike<Post> => (
+        root.post(`/${NS}/posts`, args)
+    ),
 };
 
 type UpdatePostArgs = PostMutationOptions & { id: string };
-const updatePost: ArgumentField<UpdatePostArgs, any, any> = {
+const updatePost: ArgumentField<UpdatePostArgs> = {
     description: 'Update a post.',
     type: postType,
     args: {
@@ -222,8 +225,8 @@ const updatePost: ArgumentField<UpdatePostArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdatePostArgs, context): PromiseLike<Post> => (
-        context.post(`/posts/${id}`, args)
+    resolve: (root, { id, ...args }: UpdatePostArgs): PromiseLike<Post> => (
+        root.post(`/${NS}/posts/${id}`, args)
     ),
 };
 
@@ -245,7 +248,7 @@ export interface DeletePostArgs {
     id: number;
 }
 
-const deletePost: ArgumentField<DeletePostArgs, any, any> = {
+const deletePost: ArgumentField<DeletePostArgs> = {
     description: 'Delete a single post by ID.',
     type: deletePostResponseUnion,
     args: {
@@ -258,8 +261,8 @@ const deletePost: ArgumentField<DeletePostArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeletePostArgs, context): PromiseLike<Post|DeletedObject<Post>> => (
-        context.delete(`/posts/${id}`, args)
+    resolve: (root, { id, ...args }: DeletePostArgs): PromiseLike<Post|DeletedObject<Post>> => (
+        root.delete(`/${NS}/posts/${id}`, args)
     ),
 };
 

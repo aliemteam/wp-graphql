@@ -5,6 +5,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType, Order, orderType } from '../../lib/abstract-types';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
 import commentStatusType, { CommentStatus } from './types/commentStatusType';
@@ -53,7 +54,7 @@ export interface CommentsArgs {
     type?: string;
 }
 
-const comments: ArgumentField<CommentsArgs, any, any> = {
+const comments: ArgumentField<CommentsArgs> = {
     description: 'Fetch a list of comments.',
     type: new GraphQLList(commentType),
     args: {
@@ -146,7 +147,9 @@ const comments: ArgumentField<CommentsArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: CommentsArgs, context): PromiseLike<Comment[]> => context.get('/comments', args),
+    resolve: (root, args: CommentsArgs): PromiseLike<Comment[]> => (
+        root.get(`/${NS}/comments`, args)
+    ),
 };
 
 export interface CommentArgs {
@@ -156,7 +159,7 @@ export interface CommentArgs {
     id: number;
 }
 
-const comment: ArgumentField<CommentArgs, any, any> = {
+const comment: ArgumentField<CommentArgs> = {
     description: 'Fetch a single comment',
     type: commentType,
     args: {
@@ -169,8 +172,8 @@ const comment: ArgumentField<CommentArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: CommentArgs, context): PromiseLike<Comment> => (
-        context.get(`/comments/${id}`, args)
+    resolve: (root, { id, ...args }: CommentArgs): PromiseLike<Comment> => (
+        root.get(`/${NS}/comments/${id}`, args)
     ),
 };
 

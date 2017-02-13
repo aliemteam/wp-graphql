@@ -6,6 +6,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import userType, { User } from './types/userType';
@@ -50,7 +51,7 @@ export interface CreateUserArgs extends UserMutationOptions {
     username: string;
 }
 
-const createUser: ArgumentField<CreateUserArgs, any, any> = {
+const createUser: ArgumentField<CreateUserArgs> = {
     description: 'Create a new user.',
     type: userType,
     args: {
@@ -107,7 +108,9 @@ const createUser: ArgumentField<CreateUserArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (_root, args: CreateUserArgs, context): PromiseLike<User> => context.post('/users', args),
+    resolve: (root, args: CreateUserArgs): PromiseLike<User> => (
+        root.post(`/${NS}/users`, args)
+    ),
 };
 
 export interface UpdateUserArgs extends UserMutationOptions {
@@ -115,7 +118,7 @@ export interface UpdateUserArgs extends UserMutationOptions {
     id: number;
 }
 
-const updateUser: ArgumentField<UpdateUserArgs, any, any> = {
+const updateUser: ArgumentField<UpdateUserArgs> = {
     description: 'Update a user by ID.',
     type: userType,
     args: {
@@ -176,7 +179,9 @@ const updateUser: ArgumentField<UpdateUserArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdateUserArgs, context): PromiseLike<User> => context.post(`/users/${id}`, args),
+    resolve: (root, { id, ...args }: UpdateUserArgs): PromiseLike<User> => (
+        root.post(`/${NS}/users/${id}`, args)
+    ),
 };
 
 export interface DeleteUserArgs {
@@ -188,7 +193,7 @@ export interface DeleteUserArgs {
     reassign?: number;
 }
 
-const deleteUser: ArgumentField<DeleteUserArgs, any, any> = {
+const deleteUser: ArgumentField<DeleteUserArgs> = {
     description: 'Delete a user by ID.',
     type: deletedUserType,
     args: {
@@ -207,8 +212,8 @@ const deleteUser: ArgumentField<DeleteUserArgs, any, any> = {
             defaultValue: -1,
         },
     },
-    resolve: (_root, { id, ...args }: DeleteUserArgs, context): PromiseLike<DeletedObject<User>> => (
-        context.delete(`/users/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteUserArgs): PromiseLike<DeletedObject<User>> => (
+        root.delete(`/${NS}/users/${id}`, args)
     ),
 };
 

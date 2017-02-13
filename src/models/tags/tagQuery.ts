@@ -6,6 +6,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { Context, contextType, Order, orderType } from '../../lib/abstract-types';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
 import tagType, { Tag } from './types/tagType';
@@ -37,7 +38,7 @@ export interface TagsArgs {
     slug?: string;
 }
 
-const tags: ArgumentField<TagsArgs, any, any> = {
+const tags: ArgumentField<TagsArgs> = {
     description: 'Fetch a list of tags.',
     type: new GraphQLList(tagType),
     args: {
@@ -98,7 +99,9 @@ const tags: ArgumentField<TagsArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: TagsArgs, context): PromiseLike<Tag[]> => context.get('/tags', args),
+    resolve: (root, args: TagsArgs): PromiseLike<Tag[]> => (
+        root.get(`/${NS}/tags`, args)
+    ),
 };
 
 export interface TagArgs {
@@ -108,7 +111,7 @@ export interface TagArgs {
     id: number;
 }
 
-const tag: ArgumentField<TagArgs, any, any> = {
+const tag: ArgumentField<TagArgs> = {
     description: 'Fetch a single tag.',
     type: tagType,
     args: {
@@ -121,7 +124,9 @@ const tag: ArgumentField<TagArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: TagArgs, context): PromiseLike<Tag> => context.get(`/tags/${id}`, args),
+    resolve: (root, { id, ...args }: TagArgs): PromiseLike<Tag> => (
+        root.get(`/${NS}/tags/${id}`, args)
+    ),
 };
 
 export default {

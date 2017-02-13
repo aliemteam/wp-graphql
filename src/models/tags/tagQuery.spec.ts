@@ -1,7 +1,7 @@
 import test from 'ava';
 import WPGraphQL from '../../index';
 
-const transport = new WPGraphQL('http://localhost:8080/wp-json/wp/v2');
+const transport = new WPGraphQL('http://localhost:8080/wp-json');
 
 test('/tags with no arguments', async t => {
     const expected = {

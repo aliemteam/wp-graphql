@@ -1,5 +1,6 @@
 import { GraphQLNonNull } from 'graphql';
 import { Context, contextType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import {
     PostStatus,
@@ -15,7 +16,7 @@ export interface PostStatusesArgs {
     context?: Context;
 }
 
-const postStatuses: ArgumentField<PostStatusesArgs, any, any> = {
+const postStatuses: ArgumentField<PostStatusesArgs> = {
     description: 'Fetch all post statuses.',
     type: postStatusObjectType,
     args: {
@@ -24,7 +25,9 @@ const postStatuses: ArgumentField<PostStatusesArgs, any, any> = {
             type: contextType,
         },
     },
-    resolve: (_root, args: PostStatusesArgs, context): PromiseLike<PostStatusObject> => context.get('/statuses', args),
+    resolve: (root, args: PostStatusesArgs): PromiseLike<PostStatusObject> => (
+        root.get(`/${NS}/statuses`, args)
+    ),
 };
 
 export interface PostStatusArgs extends PostStatusesArgs {
@@ -32,7 +35,7 @@ export interface PostStatusArgs extends PostStatusesArgs {
     status: PostStatus;
 }
 
-const postStatus: ArgumentField<PostStatusArgs, any, any> = {
+const postStatus: ArgumentField<PostStatusArgs> = {
     description: 'Fetch a single post status.',
     type: singlePostStatusType,
     args: {
@@ -45,8 +48,8 @@ const postStatus: ArgumentField<PostStatusArgs, any, any> = {
             type: new GraphQLNonNull(postStatusType),
         },
     },
-    resolve: (_root, { status, ...args }: PostStatusArgs, context): PromiseLike<SinglePostStatus> => (
-        context.get(`/statuses/${status}`, args)
+    resolve: (root, { status, ...args }: PostStatusArgs): PromiseLike<SinglePostStatus> => (
+        root.get(`/${NS}/statuses/${status}`, args)
     ),
 };
 

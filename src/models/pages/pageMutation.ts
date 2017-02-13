@@ -8,6 +8,7 @@ import {
     GraphQLUnionType,
 } from 'graphql';
 import { openClosedType } from '../../lib/abstract-types/';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import { postStatusType, Status } from '../post-statuses/types/postStatusType';
@@ -48,7 +49,7 @@ export interface PageMutationOptions {
     title?: string;
 }
 
-const createPage: ArgumentField<PageMutationOptions, any, any> = {
+const createPage: ArgumentField<PageMutationOptions> = {
     description: 'Create a page.',
     type: pageType,
     args: {
@@ -113,7 +114,9 @@ const createPage: ArgumentField<PageMutationOptions, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args, context): PromiseLike<Page> => context.post('/pages', args),
+    resolve: (root, args): PromiseLike<Page> => (
+        root.post(`/${NS}/pages`, args)
+    ),
 };
 
 export interface UpdatePageArgs extends PageMutationOptions {
@@ -121,7 +124,7 @@ export interface UpdatePageArgs extends PageMutationOptions {
     id: number;
 }
 
-const updatePage: ArgumentField<UpdatePageArgs, any, any> = {
+const updatePage: ArgumentField<UpdatePageArgs> = {
     description: 'Update a page.',
     type: pageType,
     args: {
@@ -190,8 +193,8 @@ const updatePage: ArgumentField<UpdatePageArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdatePageArgs, context): PromiseLike<Page> => (
-        context.post(`/pages/${id}`, args)
+    resolve: (root, { id, ...args }: UpdatePageArgs): PromiseLike<Page> => (
+        root.post(`/${NS}/pages/${id}`, args)
     ),
 };
 
@@ -213,7 +216,7 @@ export interface DeletePageArgs {
     id: number;
 }
 
-const deletePage: ArgumentField<DeletePageArgs, any, any> = {
+const deletePage: ArgumentField<DeletePageArgs> = {
     description: 'Delete a single page by ID.',
     type: deletePageResponseUnion,
     args: {
@@ -226,8 +229,8 @@ const deletePage: ArgumentField<DeletePageArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeletePageArgs, context): PromiseLike<Page|DeletedObject<Page>> => (
-        context.delete(`/pages/${id}`, args)
+    resolve: (root, { id, ...args }: DeletePageArgs): PromiseLike<Page|DeletedObject<Page>> => (
+        root.delete(`/${NS}/pages/${id}`, args)
     ),
 };
 

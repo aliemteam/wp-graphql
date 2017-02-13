@@ -6,6 +6,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import tagType, { Tag } from './types/tagType';
@@ -28,7 +29,7 @@ export interface CreateTagArgs extends TagMutationOptions {
     name: string;
 }
 
-const createTag: ArgumentField<CreateTagArgs, any, any> = {
+const createTag: ArgumentField<CreateTagArgs> = {
     description: 'Create a new tag.',
     type: tagType,
     args: {
@@ -49,7 +50,9 @@ const createTag: ArgumentField<CreateTagArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: CreateTagArgs, context): PromiseLike<Tag> => context.post('/tags', args),
+    resolve: (root, args: CreateTagArgs): PromiseLike<Tag> => (
+        root.post(`/${NS}/tags`, args)
+    ),
 };
 
 export interface UpdateTagArgs extends TagMutationOptions {
@@ -57,7 +60,7 @@ export interface UpdateTagArgs extends TagMutationOptions {
     id: number;
 }
 
-const updateTag: ArgumentField<UpdateTagArgs, any, any> = {
+const updateTag: ArgumentField<UpdateTagArgs> = {
     description: 'Update a tag by ID.',
     type: tagType,
     args: {
@@ -82,8 +85,8 @@ const updateTag: ArgumentField<UpdateTagArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdateTagArgs, context): PromiseLike<Tag> => (
-        context.post(`/tags/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateTagArgs): PromiseLike<Tag> => (
+        root.post(`/${NS}/tags/${id}`, args)
     ),
 };
 
@@ -94,7 +97,7 @@ export interface DeleteTagArgs {
     id: number;
 }
 
-const deleteTag: ArgumentField<DeleteTagArgs, any, any> = {
+const deleteTag: ArgumentField<DeleteTagArgs> = {
     description: 'Delete a tag by ID.',
     type: deletedTagType,
     args: {
@@ -108,8 +111,8 @@ const deleteTag: ArgumentField<DeleteTagArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeleteTagArgs, context): PromiseLike<DeletedObject<Tag>> => (
-        context.delete(`/tags/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteTagArgs): PromiseLike<DeletedObject<Tag>> => (
+        root.delete(`/${NS}/tags/${id}`, args)
     ),
 };
 

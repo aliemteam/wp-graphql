@@ -6,6 +6,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
+import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
 import categoryType, { Category } from './types/categoryType';
@@ -30,7 +31,7 @@ export interface CreateCategoryArgs extends CategoryMutationOptions {
     name: string;
 }
 
-const createCategory: ArgumentField<CreateCategoryArgs, any, any> = {
+const createCategory: ArgumentField<CreateCategoryArgs> = {
     description: 'Create a new category.',
     type: categoryType,
     args: {
@@ -55,7 +56,9 @@ const createCategory: ArgumentField<CreateCategoryArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, args: CreateCategoryArgs, context): PromiseLike<Category> => context.post('/categories', args),
+    resolve: (root, args: CreateCategoryArgs): PromiseLike<Category> => (
+        root.post(`/${NS}/categories`, args)
+    ),
 };
 
 export interface UpdateCategoryArgs extends CategoryMutationOptions {
@@ -63,7 +66,7 @@ export interface UpdateCategoryArgs extends CategoryMutationOptions {
     id: number;
 }
 
-const updateCategory: ArgumentField<UpdateCategoryArgs, any, any> = {
+const updateCategory: ArgumentField<UpdateCategoryArgs> = {
     description: 'Update a category by ID.',
     type: categoryType,
     args: {
@@ -92,8 +95,8 @@ const updateCategory: ArgumentField<UpdateCategoryArgs, any, any> = {
             type: GraphQLString,
         },
     },
-    resolve: (_root, { id, ...args }: UpdateCategoryArgs, context): PromiseLike<Category> => (
-        context.post(`/categories/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateCategoryArgs): PromiseLike<Category> => (
+        root.post(`/${NS}/categories/${id}`, args)
     ),
 };
 
@@ -104,7 +107,7 @@ export interface DeleteCategoryArgs {
     id: number;
 }
 
-const deleteCategory: ArgumentField<DeleteCategoryArgs, any, any> = {
+const deleteCategory: ArgumentField<DeleteCategoryArgs> = {
     description: 'Delete a category by ID.',
     type: deletedCategoryType,
     args: {
@@ -118,8 +121,8 @@ const deleteCategory: ArgumentField<DeleteCategoryArgs, any, any> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (_root, { id, ...args }: DeleteCategoryArgs, context): PromiseLike<DeletedObject<Category>> => (
-        context.delete(`/categories/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteCategoryArgs): PromiseLike<DeletedObject<Category>> => (
+        root.delete(`/${NS}/categories/${id}`, args)
     ),
 };
 
