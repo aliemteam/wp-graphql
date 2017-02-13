@@ -7,13 +7,13 @@
   "author": "Derek P Sifford <dereksifford@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/graphql": "^0.8.6",
     "ava": "^0.18.1",
     "nyc": "^10.1.2",
     "tslint": "^4.4.2",
     "typescript": "rc"
   },
   "dependencies": {
+    "@types/graphql": "^0.8.6",
     "axios": "^0.15.3",
     "graphql": "^0.9.1",
     "lokka": "^1.7.0",
