@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GraphQLFieldConfigMap, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import GraphqlJSTransport from 'lokka-transport-graphql-js';
-import queryString from './lib/queryString';
+import queryString from './lib/helpers/queryString';
 import defaultMutations from './models/mutations';
 import defaultQueries from './models/queries';
 import defaultSchema from './models/schema';

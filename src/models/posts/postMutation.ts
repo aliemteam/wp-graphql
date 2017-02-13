@@ -37,8 +37,8 @@ export interface PostMutationOptions {
     // format?: 'standard'; Not used for now -- Irrelevant
     /** The number of Liveblog Likes the post has. */
     liveblog_likes?: number;
-    /** Meta fields. */
-    meta?: any[]; // FIXME:
+    /** JSON serialized meta fields. */
+    meta?: string;
     /** A password to protect access to the content and excerpt. */
     password?: string;
     /** Whether or not the object can be pinged. */
@@ -102,8 +102,8 @@ const createPost: ArgumentField<CreatePostArgs> = {
             type: GraphQLInt,
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON serialized meta fields.',
+            type: GraphQLString,
         },
         password: {
             description: 'A password to protect access to the content and excerpt.',
@@ -189,8 +189,8 @@ const updatePost: ArgumentField<UpdatePostArgs> = {
             type: GraphQLInt,
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON serialized meta fields.',
+            type: GraphQLString,
         },
         password: {
             description: 'A password to protect access to the content and excerpt.',

@@ -1,7 +1,6 @@
 import {
     GraphQLBoolean,
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
@@ -19,11 +18,13 @@ export const deletedCommentType: GraphQLObjectType = deletedObjectFactory(commen
 export interface CreateCommentArgs extends Partial<MutableCommentOptions> {
     /** Required: The content for the object. */
     content: string;
+    /** JSON serialized meta fields. */
+    meta?: string;
     /** Required: The id of the associated post object. */
     post: number;
 }
 
-const createComment: ArgumentField<MutableCommentOptions> = {
+const createComment: ArgumentField<CreateCommentArgs> = {
     description: 'Create a new comment',
     type: commentType,
     args: {
@@ -65,7 +66,7 @@ const createComment: ArgumentField<MutableCommentOptions> = {
         },
         meta: {
             description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            type: GraphQLString,
         },
         parent: {
             description: 'The id for the parent of the object.',
@@ -92,6 +93,8 @@ const createComment: ArgumentField<MutableCommentOptions> = {
 export interface UpdateCommentArgs extends Partial<MutableCommentOptions> {
     /** Required: The ID of the comment to be updated. */
     id: number;
+    /** JSON serialized meta fields. */
+    meta?: string;
 }
 
 const updateComment: ArgumentField<UpdateCommentArgs> = {
@@ -140,7 +143,7 @@ const updateComment: ArgumentField<UpdateCommentArgs> = {
         },
         meta: {
             description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            type: GraphQLString,
         },
         parent: {
             description: 'The id for the parent of the object.',

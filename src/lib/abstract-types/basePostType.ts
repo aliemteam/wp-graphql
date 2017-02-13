@@ -4,8 +4,10 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
+import metaParser from '../helpers/metaParser';
 import { TypedFields } from '../strongTypes';
 import { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
+import metaType, { Meta, RawMeta } from './metaType';
 
 export interface SharedFields {
     /** The ID for the author of the object. */
@@ -26,8 +28,6 @@ export interface SharedFields {
     readonly id: number;
     /** URL to the object */
     readonly link: string;
-    /** TODO: Not sure what this is.. */
-    meta: any[];
     /** The date the object was last modified, in the site's timezone. */
     readonly modified: string;
     /** The date the object was last modified, as GMT. */
@@ -49,6 +49,7 @@ export interface RawBasePost extends SharedFields {
     guid: {
         readonly rendered: string;
     };
+    meta: RawMeta;
     title: {
         rendered: string;
     };
@@ -57,6 +58,7 @@ export interface RawBasePost extends SharedFields {
 export interface BasePost extends SharedFields {
     /** The globally unique identifier for the object. */
     readonly guid: string;
+    meta: Meta;
     /** The title for the object. */
     title: string;
 }
@@ -105,7 +107,8 @@ export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
     },
     meta: {
         description: 'Meta fields.',
-        type: new GraphQLList(GraphQLString), // FIXME: Not sure what shape this is
+        type: new GraphQLList(metaType),
+        resolve: metaParser,
     },
     modified: {
         description: "The date the object was last modified, in the site's timezone.",

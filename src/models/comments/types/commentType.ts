@@ -6,6 +6,8 @@ import {
     GraphQLString,
 } from 'graphql';
 import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
+import metaType, { Meta, RawMeta } from '../../../lib/abstract-types/metaType';
+import metaParser from '../../../lib/helpers/metaParser';
 import { TypedFields } from '../../../lib/strongTypes';
 import { avatarObjectType, UserAvatarUrls } from '../../users/types/userType';
 import commentKind, { CommentKind } from './commentKindType';
@@ -29,8 +31,6 @@ export interface MutableCommentOptions {
     date_gmt: string;
     /** Karma for the object. */
     karma: number;
-    /** Meta fields. */
-    meta: string[]; // FIXME: not sure
     /** The id for the parent of the object. */
     parent: number;
     /** The id of the associated post object. */
@@ -39,6 +39,21 @@ export interface MutableCommentOptions {
     status: string;
     /** Type of Comment for the object. */
     type: CommentKind;
+}
+
+export interface RawComment extends MutableCommentOptions {
+    /** Avatar URLs for the object author. */
+    readonly author_avatar_urls: UserAvatarUrls;
+    /** User agent for the object author. */
+    readonly author_user_agent: string;
+    /** Unique identifier for the object. */
+    readonly id: number;
+    /** URL to the object. */
+    readonly link: string;
+    /** The content for the object. */
+    content: ContentDescriptor;
+    /** Meta fields. */
+    meta: RawMeta;
 }
 
 export interface Comment extends MutableCommentOptions {
@@ -52,9 +67,11 @@ export interface Comment extends MutableCommentOptions {
     readonly link: string;
     /** The content for the object. */
     content: ContentDescriptor;
+    /** Meta fields. */
+    meta: Meta;
 }
 
-const commentFields: TypedFields<Comment, Comment, {}> = {
+const commentFields: TypedFields<Comment, RawComment, {}> = {
     author: {
         description: 'The id of the user object, if author was a user.',
         type: GraphQLInt,
@@ -109,7 +126,8 @@ const commentFields: TypedFields<Comment, Comment, {}> = {
     },
     meta: {
         description: 'Meta fields.',
-        type: new GraphQLList(GraphQLString),
+        type: new GraphQLList(metaType),
+        resolve: metaParser,
     },
     parent: {
         description: 'The id for the parent of the object.',
