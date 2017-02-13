@@ -1,0 +1,8 @@
+.vscode
+src
+.editorconfig
+docker-compose.yml
+notes.md
+tsconfig.json
+tslint.json
+.travis.yml
