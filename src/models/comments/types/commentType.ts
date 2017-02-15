@@ -1,13 +1,10 @@
 import {
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
 import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
-import metaType, { Meta, RawMeta } from '../../../lib/abstract-types/metaType';
-import metaParser from '../../../lib/helpers/metaParser';
 import { TypedFields } from '../../../lib/strongTypes';
 import { avatarObjectType, UserAvatarUrls } from '../../users/types/userType';
 import commentKind, { CommentKind } from './commentKindType';
@@ -31,6 +28,8 @@ export interface MutableCommentOptions {
     date_gmt: string;
     /** Karma for the object. */
     karma: number;
+    /** JSON stringified metadata. */
+    meta: string;
     /** The id for the parent of the object. */
     parent: number;
     /** The id of the associated post object. */
@@ -52,8 +51,6 @@ export interface RawComment extends MutableCommentOptions {
     readonly link: string;
     /** The content for the object. */
     content: ContentDescriptor;
-    /** Meta fields. */
-    meta: RawMeta;
 }
 
 export interface Comment extends MutableCommentOptions {
@@ -67,8 +64,6 @@ export interface Comment extends MutableCommentOptions {
     readonly link: string;
     /** The content for the object. */
     content: ContentDescriptor;
-    /** Meta fields. */
-    meta: Meta;
 }
 
 const commentFields: TypedFields<Comment, RawComment, {}> = {
@@ -126,8 +121,8 @@ const commentFields: TypedFields<Comment, RawComment, {}> = {
     },
     meta: {
         description: 'Meta fields.',
-        type: new GraphQLList(metaType),
-        resolve: metaParser,
+        type: GraphQLString,
+        resolve: comment => JSON.stringify(comment.meta),
     },
     parent: {
         description: 'The id for the parent of the object.',

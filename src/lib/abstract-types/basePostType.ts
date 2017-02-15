@@ -1,13 +1,10 @@
 import {
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import metaParser from '../helpers/metaParser';
 import { TypedFields } from '../strongTypes';
 import { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
-import metaType, { Meta, RawMeta } from './metaType';
 
 export interface SharedFields {
     /** The ID for the author of the object. */
@@ -24,6 +21,8 @@ export interface SharedFields {
     excerpt: ContentDescriptor;
     /** The ID of the featured media for the object. */
     featured_media: number;
+    /** JSON stringified meta fields. */
+    meta: string;
     /** Unique identifier for the object. */
     readonly id: number;
     /** URL to the object */
@@ -49,7 +48,6 @@ export interface RawBasePost extends SharedFields {
     guid: {
         readonly rendered: string;
     };
-    meta: RawMeta;
     title: {
         rendered: string;
     };
@@ -58,7 +56,6 @@ export interface RawBasePost extends SharedFields {
 export interface BasePost extends SharedFields {
     /** The globally unique identifier for the object. */
     readonly guid: string;
-    meta: Meta;
     /** The title for the object. */
     title: string;
 }
@@ -107,8 +104,8 @@ export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
     },
     meta: {
         description: 'Meta fields.',
-        type: new GraphQLList(metaType),
-        resolve: metaParser,
+        type: GraphQLString,
+        resolve: post => JSON.stringify(post.meta),
     },
     modified: {
         description: "The date the object was last modified, in the site's timezone.",

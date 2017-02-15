@@ -6,8 +6,6 @@ import {
     GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import metaType, { Meta, RawMeta } from '../../../lib/abstract-types/metaType';
-import metaParser from '../../../lib/helpers/metaParser';
 import { TypedFields } from '../../../lib/strongTypes';
 
 interface RawUserAvatarUrls {
@@ -68,6 +66,8 @@ export interface UserBase {
     link: string;
     /** Locale for the user. */
     locale: string;
+    /** JSON stringified user meta. */
+    meta: string;
     /** Display name for the user. */
     name: string;
     /** The nickname for the user. */
@@ -93,8 +93,6 @@ export interface RawUser extends UserBase {
     extra_capabilities: {
         [capabilityName: string]: true;
     };
-    /** Meta fields. */
-    meta: RawMeta;
 }
 
 export interface User extends UserBase {
@@ -102,8 +100,6 @@ export interface User extends UserBase {
     capabilities: string[];
     /** Any extra capabilities assigned to the user. */
     extra_capabilities: string[];
-    /** Meta fields. */
-    meta: Meta;
 }
 
 type T = UserBase & RawUser;
@@ -155,8 +151,8 @@ const userFields: fields = {
     },
     meta: {
         description: 'Meta fields.',
-        type: new GraphQLList(metaType),
-        resolve: metaParser,
+        type: GraphQLString,
+        resolve: user => JSON.stringify(user.meta),
     },
     name: {
         description: 'Display name for the user.',
