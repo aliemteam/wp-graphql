@@ -48,7 +48,7 @@ export default class WPGraphQL {
     protected get(path: string, args: string): PromiseLike<any> {
         return axios.get(`${path}${args}`).then(res => res.data);
     }
-    protected post(path: string, args: { [k: string]: any }): PromiseLike<any> {
+    protected post(path: string, args: object): PromiseLike<any> {
         return axios.post(path, parseMeta(args)).then(res => res.data);
     }
     protected upload(path: string, { file, filename, ...args }): PromiseLike<any> {
