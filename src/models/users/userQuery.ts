@@ -123,7 +123,27 @@ const user: ArgumentField<UserArgs> = {
     ),
 };
 
+export interface MeArgs {
+    /** Scope under which the request is made; determines fields present in response. */
+    context?: Context;
+}
+
+const me: ArgumentField<MeArgs> = {
+    type: userType,
+    description: 'Retrieve the currently logged in user.',
+    args: {
+        context: {
+            description: 'Scope under which the request is made; determines fields present in response.',
+            type: contextType,
+        },
+    },
+    resolve: (root, args: MeArgs): PromiseLike<User> => (
+        root.get(`/${NS}/users/me`, args)
+    ),
+};
+
 export default {
     users,
     user,
+    me,
 };

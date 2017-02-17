@@ -141,3 +141,33 @@ test('/user/<id> with "edit" context', async t => {
     `);
     t.deepEqual(actual, expected);
 });
+
+test('/users/me', async t => {
+    const expected = {
+        me: {
+            id: 1,
+            name: 'root',
+            email: null,
+        },
+        editContext: {
+            id: 1,
+            name: 'root',
+            email: 'admin@wordpress.com',
+        },
+    };
+    const actual = await transport.send(`
+        {
+            me {
+                id
+                name
+                email
+            }
+            editContext: me(context: edit) {
+                id
+                name
+                email
+            }
+        }
+    `);
+    t.deepEqual(actual, expected);
+});
