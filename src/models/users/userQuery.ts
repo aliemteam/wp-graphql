@@ -135,6 +135,7 @@ const me: ArgumentField<MeArgs> = {
         context: {
             description: 'Scope under which the request is made; determines fields present in response.',
             type: contextType,
+            defaultValue: 'edit',
         },
     },
     resolve: (root, args: MeArgs): PromiseLike<User> => (

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { GraphQLFieldConfigMap, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import GraphqlJSTransport from 'lokka-transport-graphql-js';
-import queryString from './lib/helpers/queryString';
+import parseMeta from './lib/core/metaParser';
+import queryString from './lib/core/queryString';
 import defaultMutations from './models/mutations';
 import defaultQueries from './models/queries';
 import defaultSchema from './models/schema';
@@ -37,7 +38,7 @@ export default class WPGraphQL {
         }
     }
     public send(gql: string, vars?: object) {
-        return this.transport.send(gql, vars);
+        return this.transport.send(gql, vars).then(parseMeta);
     }
     @queryString
     protected delete(path: string, args: string): PromiseLike<any> {
@@ -48,10 +49,7 @@ export default class WPGraphQL {
         return axios.get(`${path}${args}`).then(res => res.data);
     }
     protected post(path: string, args: { [k: string]: any }): PromiseLike<any> {
-        if (args.meta) {
-            args.meta = JSON.parse(args.meta);
-        }
-        return axios.post(path, args).then(res => res.data);
+        return axios.post(path, parseMeta(args)).then(res => res.data);
     }
     protected upload(path: string, { file, filename, ...args }): PromiseLike<any> {
         return axios.post(path, file, {

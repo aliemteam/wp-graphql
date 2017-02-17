@@ -157,12 +157,12 @@ test('/users/me', async t => {
     };
     const actual = await transport.send(`
         {
-            me {
+            me(context: view) {
                 id
                 name
                 email
             }
-            editContext: me(context: edit) {
+            editContext: me {
                 id
                 name
                 email
