@@ -79,15 +79,15 @@ test.serial('deletePost', async t => {
     t.deepEqual(actual, expected);
 });
 
-test('createPost then deletePost (to trash)', async t => {
+test('addPost then deletePost (to trash)', async t => {
     const data = await transport.send(`
         mutation {
-            createPost(title: "My Post", content: "My post content.") {
+            addPost(title: "My Post", content: "My post content.") {
                 id
             }
         }
     `);
-    const { id } = data.createPost;
+    const { id } = data.addPost;
     const expected = {
         deletePost: {
             id,

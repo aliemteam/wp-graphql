@@ -83,15 +83,15 @@ test.serial('deletePage', async t => {
     t.deepEqual(actual, expected);
 });
 
-test('createPage then deletePage (to trash)', async t => {
+test('addPage then deletePage (to trash)', async t => {
     const data = await transport.send(`
         mutation {
-            createPage(title: "My Page", content: "My page content.") {
+            addPage(title: "My Page", content: "My page content.") {
                 id
             }
         }
     `);
-    const { id } = data.createPage;
+    const { id } = data.addPage;
     const expected = {
         deletePage: {
             id,

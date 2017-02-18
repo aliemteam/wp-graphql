@@ -8,12 +8,12 @@ let revisionId: number;
 test.before(async t => {
     let call = await transport.send(`
         mutation {
-            createPost(title: "Test post for revisions", content: "Content") {
+            addPost(title: "Test post for revisions", content: "Content") {
                 id
             }
         }
     `);
-    postId = call.createPost.id;
+    postId = call.addPost.id;
     await transport.send(`
         mutation U($id: Int!) {
             updatePost(id: $id, content: "Test content") {
