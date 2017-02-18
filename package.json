@@ -1,6 +1,6 @@
 {
   "name": "wp-graphql",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A client-side GraphQL wrapper for the WordPress REST API",
   "main": "lib/index.js",
   "repository": "https://github.com/aliemteam/wp-graphql.git",
