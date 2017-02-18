@@ -38,7 +38,7 @@ export default class WPGraphQL {
         }
     }
     public send(gql: string, vars?: object) {
-        return this.transport.send(gql, vars).then(data => parseMeta(data));
+        return this.transport.send(gql, vars).then(parseMeta);
     }
     @queryString
     protected delete(path: string, args: string): PromiseLike<any> {

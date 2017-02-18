@@ -7,7 +7,7 @@
   "author": "Derek P Sifford <dereksifford@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "ava": "^0.18.1",
+    "ava": "^0.18.2",
     "nyc": "^10.1.2",
     "tslint": "^4.4.2",
     "typescript": "rc"

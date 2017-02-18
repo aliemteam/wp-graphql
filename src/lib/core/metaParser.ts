@@ -7,14 +7,14 @@
 export default function parseMeta(input: object|any[]) {
     if (Array.isArray(input)) {
         return input.map(i => {
-            if (i instanceof Object || Array.isArray(i)) {
+            if (typeof i === 'object' && i !== null) {
                 return parseMeta(i);
             }
             return i;
         });
     }
     return Object.keys(input).reduce((prev, curr) => {
-        if (input[curr] instanceof Object || Array.isArray(input[curr])) {
+        if (typeof input[curr] === 'object' && input[curr] !== null) {
             return { ...prev, [curr]: parseMeta(input[curr]) };
         }
         return {
