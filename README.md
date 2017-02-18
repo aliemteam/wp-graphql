@@ -160,9 +160,117 @@ Mutation | Description
 
 ## Advanced Usage
 
-TODO: ...
+### Adding custom queries and mutations
+
+```js
+// customQuery.js
+import {
+    GraphQLInt,
+    GraphQLNonNull,
+    GraphQLString,
+} from 'graphql';
+const NAMESPACE = 'myRoute/v1';
+
+const getStringData = {
+    description: 'Get a string from a custom endpoint.',
+    type: GraphQLString,
+    args: {
+        id: {
+            description: 'The ID of the string I need.',
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+        someOtherArg: {
+            description: 'Some other argument to pass as a parameter',
+            type: GraphQLString,
+        },
+    }
+    resolve: (root, { id, ...args }) => (
+        root.get(`/${NAMESPACE}/path/to/endpoint/${id}`, args)
+    ),
+};
+
+export default {
+    getStringData,
+}
+```
+
+```js
+// customMutation.js
+import {
+    GraphQLInt,
+    GraphQLNonNull,
+    GraphQLString,
+} from 'graphql';
+const NAMESPACE = 'myRoute/v1';
+
+const postStringData = {
+    description: 'Post a string to a custom endpoint.',
+    type: GraphQLString,
+    args: {
+        myString: {
+            description: 'Some other argument to pass as a parameter',
+            type: new GraphQLNonNull(GraphQLString),
+        },
+    }
+    resolve: (root, args) => (
+        root.post(`/${NAMESPACE}/path/to/endpoint`, args)
+    ),
+};
+
+const deleteStringData = {
+    description: 'Delete a string from a custom endpoint.',
+    type: GraphQLString,
+    args: {
+        id: {
+            description: 'The ID of the string to delete.',
+            type: new GraphQLNonNull(GraphQLInt),
+        },
+    }
+    resolve: (root, { id }) => (
+        root.delete(`/${NAMESPACE}/path/to/endpoint/${id}`)
+    ),
+};
+
+export default {
+    postStringData,
+    deleteStringData,
+}
+```
+
+```js
+// Using the custom queries and mutations.
+import WPGraphQL from 'wp-graphql';
+import queries from './customQuery';
+import mutations from './customMutation';
+
+const transport = new WPGraphQL('http://localhost:8080/wp-json', { queries, mutations });
+```
+
+### Using default queries, mutations, and schema in your own server side JS codebase
+
+Just import what you need. You don't _have_ to use the `WPGraphQL` library if you don't need it.
+
+```js
+import express from 'express';
+import graphqlHTTP from 'express-graphql';
+import { schema } from 'wp-graphql';
+import myCustomResolver from './my-custom-resolver';
+
+const app = express();
+
+app.use('/graphql', graphqlHTTP({ schema, root: myCustomResolver }));
+
+app.listen(3000);
+```
 
 ## Limitations
 
 The primary limitation of this library is that it only provides a convenient way to fetch and mutate data over top of the existing REST API on the **client side**. Because of this, the **primary benefit of GraphQL**, querying and mutating data in a single round trip, is lost.
 
+### The "Meta" Limitiation
+
+In order to be declarative, GraphQL requires users to be explicit about the shape of their API responses. This creates a unique problem with `Post`, `User`, and `Comment` meta, since all three objects can have essentially an unlimited number of shapes.
+
+Because there is no reasonable way to know up front what shape the Meta fields are going to be, the `meta` must be `JSON.stringified` prior to being transacted by GraphQL. This process is done automatically for queries, but must be done manually for mutations.
+
+With that in mind, it's important to remember that GraphQL only sees the meta fields as a `String`. When the meta field is returned to you, it will be converted to back to an object by `wp-graphql`. Although it is an object when you receive it, you will not be able to query _into_ the meta fields like you would with a typical GraphQL object. In other words, the `meta` field is a **leaf type**.
