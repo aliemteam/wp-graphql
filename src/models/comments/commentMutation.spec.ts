@@ -4,9 +4,9 @@ import WPGraphQL from '../../index';
 const transport = new WPGraphQL('http://localhost:8080/wp-json', { __INTERNAL_TESTING__: true });
 let commentId: number;
 
-test.serial('createComment', async t => {
+test.serial('addComment', async t => {
     const expected = {
-        createComment: {
+        addComment: {
             id: 0,
             status: 'approved',
             post: 1,
@@ -18,7 +18,7 @@ test.serial('createComment', async t => {
     };
     const actual = await transport.send(`
         mutation {
-            createComment(post: 1, content: "Test comment content.") {
+            addComment(post: 1, content: "Test comment content.") {
                 id
                 status
                 post
@@ -29,8 +29,8 @@ test.serial('createComment', async t => {
             }
         }
     `);
-    commentId = actual.createComment.id;
-    expected.createComment.id = commentId;
+    commentId = actual.addComment.id;
+    expected.addComment.id = commentId;
     t.deepEqual(actual, expected);
 });
 

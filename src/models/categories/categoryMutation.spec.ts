@@ -4,9 +4,9 @@ import WPGraphQL from '../../index';
 const transport = new WPGraphQL('http://localhost:8080/wp-json/', { __INTERNAL_TESTING__: true });
 let categoryId: number;
 
-test.serial('createCategory', async t => {
+test.serial('addCategory', async t => {
     const expected = {
-        createCategory: {
+        addCategory: {
             id: 0,
             name: 'Test Category',
             taxonomy: 'category',
@@ -14,15 +14,15 @@ test.serial('createCategory', async t => {
     };
     const actual = await transport.send(`
         mutation {
-            createCategory(name: "Test Category") {
+            addCategory(name: "Test Category") {
                 id
                 name
                 taxonomy
             }
         }
     `);
-    categoryId = actual.createCategory.id;
-    expected.createCategory.id = categoryId;
+    categoryId = actual.addCategory.id;
+    expected.addCategory.id = categoryId;
     t.deepEqual(actual, expected);
 });
 

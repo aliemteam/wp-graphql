@@ -49,7 +49,7 @@ export interface PageMutationOptions {
     title?: string;
 }
 
-const createPage: ArgumentField<PageMutationOptions> = {
+const addPage: ArgumentField<PageMutationOptions> = {
     description: 'Create a page.',
     type: pageType,
     args: {
@@ -235,7 +235,7 @@ const deletePage: ArgumentField<DeletePageArgs> = {
 };
 
 export default {
-    createPage,
-    deletePage,
+    addPage,
     updatePage,
+    deletePage,
 };

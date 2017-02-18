@@ -15,7 +15,7 @@ import commentType, { Comment, MutableCommentOptions } from './types/commentType
 
 export const deletedCommentType: GraphQLObjectType = deletedObjectFactory(commentType);
 
-export interface CreateCommentArgs extends Partial<MutableCommentOptions> {
+export interface AddCommentArgs extends Partial<MutableCommentOptions> {
     /** Required: The content for the object. */
     content: string;
     /** JSON serialized meta fields. */
@@ -24,7 +24,7 @@ export interface CreateCommentArgs extends Partial<MutableCommentOptions> {
     post: number;
 }
 
-const createComment: ArgumentField<CreateCommentArgs> = {
+const addComment: ArgumentField<AddCommentArgs> = {
     description: 'Create a new comment',
     type: commentType,
     args: {
@@ -204,7 +204,7 @@ const deleteComment: ArgumentField<DeleteCommentArgs> = {
 };
 
 export default {
-    createComment,
+    addComment,
     updateComment,
     deleteComment,
 };

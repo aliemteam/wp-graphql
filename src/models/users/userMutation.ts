@@ -42,7 +42,7 @@ export interface UserMutationOptions {
     username?: string;
 }
 
-export interface CreateUserArgs extends UserMutationOptions {
+export interface AddUserArgs extends UserMutationOptions {
     /** The email address for the user. */
     email: string;
     /** Password for the user (never included). */
@@ -51,7 +51,7 @@ export interface CreateUserArgs extends UserMutationOptions {
     username: string;
 }
 
-const createUser: ArgumentField<CreateUserArgs> = {
+const addUser: ArgumentField<AddUserArgs> = {
     description: 'Create a new user.',
     type: userType,
     args: {
@@ -108,7 +108,7 @@ const createUser: ArgumentField<CreateUserArgs> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (root, args: CreateUserArgs): PromiseLike<User> => (
+    resolve: (root, args: AddUserArgs): PromiseLike<User> => (
         root.post(`/${NS}/users`, args)
     ),
 };
@@ -218,7 +218,7 @@ const deleteUser: ArgumentField<DeleteUserArgs> = {
 };
 
 export default {
-    createUser,
+    addUser,
     updateUser,
     deleteUser,
 };

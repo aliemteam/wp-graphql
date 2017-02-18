@@ -24,12 +24,12 @@ export interface TagMutationOptions {
     slug?: string;
 }
 
-export interface CreateTagArgs extends TagMutationOptions {
+export interface AddTagArgs extends TagMutationOptions {
     /** HTML title for the term. */
     name: string;
 }
 
-const createTag: ArgumentField<CreateTagArgs> = {
+const addTag: ArgumentField<AddTagArgs> = {
     description: 'Create a new tag.',
     type: tagType,
     args: {
@@ -50,7 +50,7 @@ const createTag: ArgumentField<CreateTagArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: CreateTagArgs): PromiseLike<Tag> => (
+    resolve: (root, args: AddTagArgs): PromiseLike<Tag> => (
         root.post(`/${NS}/tags`, args)
     ),
 };
@@ -117,7 +117,7 @@ const deleteTag: ArgumentField<DeleteTagArgs> = {
 };
 
 export default {
-    createTag,
+    addTag,
     updateTag,
     deleteTag,
 };

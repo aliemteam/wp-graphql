@@ -57,11 +57,11 @@ export interface PostMutationOptions {
     title?: string;
 }
 
-type CreatePostArgs = PostMutationOptions & (
+type AddPostArgs = PostMutationOptions & (
     Pick<PostMutationOptions, 'content'> | Pick<PostMutationOptions, 'excerpt'> | Pick<PostMutationOptions, 'title'>
 );
 
-const createPost: ArgumentField<CreatePostArgs> = {
+const addPost: ArgumentField<AddPostArgs> = {
     description: 'Create a post.',
     type: postType,
     args: {
@@ -267,7 +267,7 @@ const deletePost: ArgumentField<DeletePostArgs> = {
 };
 
 export default {
-    createPost,
+    addPost,
     deletePost,
     updatePost,
 };

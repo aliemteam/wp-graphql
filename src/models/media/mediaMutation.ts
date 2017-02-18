@@ -43,15 +43,15 @@ export interface MediaMutationOptions {
     title?: string;
 }
 
-export interface CreateMediaArgs extends MediaMutationOptions {
+export interface AddMediaArgs extends MediaMutationOptions {
     /** The file to be uploaded. */
     file: ArrayBuffer|Blob|File;
     /** The name of the file, including the file extension. */
     filename: string;
 }
 
-const addMedia: ArgumentField<CreateMediaArgs> = {
-    description: 'Upload media using an Array Buffer.',
+const addMedia: ArgumentField<AddMediaArgs> = {
+    description: 'Upload media using an Array Buffer, File, or Blob.',
     type: mediaType,
     args: {
         alt_text: {

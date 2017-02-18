@@ -26,12 +26,12 @@ export interface CategoryMutationOptions {
     slug?: string;
 }
 
-export interface CreateCategoryArgs extends CategoryMutationOptions {
+export interface AddCategoryArgs extends CategoryMutationOptions {
     /** HTML title for the term. */
     name: string;
 }
 
-const createCategory: ArgumentField<CreateCategoryArgs> = {
+const addCategory: ArgumentField<AddCategoryArgs> = {
     description: 'Create a new category.',
     type: categoryType,
     args: {
@@ -56,7 +56,7 @@ const createCategory: ArgumentField<CreateCategoryArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: CreateCategoryArgs): PromiseLike<Category> => (
+    resolve: (root, args: AddCategoryArgs): PromiseLike<Category> => (
         root.post(`/${NS}/categories`, args)
     ),
 };
@@ -127,7 +127,7 @@ const deleteCategory: ArgumentField<DeleteCategoryArgs> = {
 };
 
 export default {
-    createCategory,
+    addCategory,
     updateCategory,
     deleteCategory,
 };
