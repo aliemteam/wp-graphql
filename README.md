@@ -162,7 +162,7 @@ Mutation | Description
 
 ## Advanced Usage
 
-### Adding custom queries and mutations
+### Custom queries and mutations
 
 ```js
 // customQuery.js
@@ -246,6 +246,45 @@ import queries from './customQuery';
 import mutations from './customMutation';
 
 const transport = new WPGraphQL('http://localhost:8080/wp-json', { queries, mutations });
+```
+
+### Generating queries and mutations for custom post types
+
+Let's assume that your site has a custom post type called `books`. If you'd like to query and mutate this custom post type similarly to how you would for regular posts, all you need to do is register the custom type with `wp-graphql` on instantiation by setting the `postTypes` config parameter. This will set up resolvers using the same conventions as regular posts.
+
+```js
+import WPGraphQL from  'wp-graphql';
+
+const transport = new WPGraphQL('http://localhost:8080/wp-json', {
+    postTypes: [
+        { name: 'book', namePlural: 'books', restBase: 'books' },
+    ],
+});
+
+transport.send(`
+    mutation {
+        addBook(title: "My book", content: "My book content") {
+            title
+        }
+        updateBook(id: 1, title: "My new book title") {
+            id
+        }
+        deleteBook(id: 1) {
+            ... on DeletedBook {
+                deleted
+            }
+        }
+    }
+    query {
+        books {
+            id
+        }
+        book(id: 1) {
+            author
+        }
+    }
+`);
+
 ```
 
 ### Using default queries, mutations, and schema in your own server side JS codebase
