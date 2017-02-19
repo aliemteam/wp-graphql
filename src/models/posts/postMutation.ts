@@ -16,6 +16,17 @@ import postType, { Post } from './types/postType';
 
 export const deletedPostType: GraphQLObjectType = deletedObjectFactory(postType);
 
+export const deletePostResponseUnion = new GraphQLUnionType({
+    name: 'DeletePostResponse',
+    types: [ deletedPostType, postType ],
+    resolveType: res => {
+        if (res.deleted) {
+            return deletedPostType;
+        }
+        return postType;
+    },
+});
+
 export interface PostMutationOptions {
     /** The ID for the author of the object. */
     author?: number;
@@ -57,189 +68,11 @@ export interface PostMutationOptions {
     title?: string;
 }
 
-type AddPostArgs = PostMutationOptions & (
+export type AddPostArgs = PostMutationOptions & (
     Pick<PostMutationOptions, 'content'> | Pick<PostMutationOptions, 'excerpt'> | Pick<PostMutationOptions, 'title'>
 );
 
-const addPost: ArgumentField<AddPostArgs> = {
-    description: 'Create a post.',
-    type: postType,
-    args: {
-        author: {
-            description: 'The ID for the author of the object.',
-            type: GraphQLInt,
-        },
-        categories: {
-            description: 'The terms assigned to the object in the category taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
-        comment_status: {
-            description: 'Whether or not comments are open on the object.',
-            type: openClosedType,
-        },
-        content: {
-            description: 'The content for the object.',
-            type: new GraphQLNonNull(GraphQLString),
-        },
-        date: {
-            description: 'The date the object was published, in the site’s timezone.',
-            type: GraphQLString,
-        },
-        date_gmt: {
-            description: 'The date the object was published, as GMT.',
-            type: GraphQLString,
-        },
-        excerpt: {
-            description: 'The excerpt for the object.',
-            type: GraphQLString,
-        },
-        featured_media: {
-            description: 'The ID of the featured media for the object.',
-            type: GraphQLInt,
-        },
-        liveblog_likes: {
-            description: 'The number of Liveblog Likes the post has.',
-            type: GraphQLInt,
-        },
-        meta: {
-            description: 'JSON serialized meta fields.',
-            type: GraphQLString,
-        },
-        password: {
-            description: 'A password to protect access to the content and excerpt.',
-            type: GraphQLString,
-        },
-        ping_status: {
-            description: 'Whether or not the object can be pinged.',
-            type: openClosedType,
-        },
-        slug: {
-            description: 'An alphanumeric identifier for the object unique to its type.',
-            type: GraphQLString,
-        },
-        status: {
-            description: 'A named status for the object.',
-            type: postStatusType,
-        },
-        sticky: {
-            description: 'Whether or not the object should be treated as sticky.',
-            type: GraphQLBoolean,
-        },
-        tags: {
-            description: 'The terms assigned to the object in the post_tag taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
-        template: {
-            description: 'The theme file to use to display the object.',
-            type: GraphQLString,
-        },
-        title: {
-            description: 'The title for the object.',
-            type: new GraphQLNonNull(GraphQLString),
-        },
-    },
-    resolve: (root, args): PromiseLike<Post> => (
-        root.post(`/${NS}/posts`, args)
-    ),
-};
-
-type UpdatePostArgs = PostMutationOptions & { id: string };
-const updatePost: ArgumentField<UpdatePostArgs> = {
-    description: 'Update a post.',
-    type: postType,
-    args: {
-        author: {
-            description: '',
-            type: GraphQLInt,
-        },
-        categories: {
-            description: 'The terms assigned to the object in the category taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
-        comment_status: {
-            description: 'Whether or not comments are open on the object.',
-            type: openClosedType,
-        },
-        content: {
-            description: 'The content for the object.',
-            type: GraphQLString,
-        },
-        date: {
-            description: 'The date the object was published, in the site’s timezone.',
-            type: GraphQLString,
-        },
-        date_gmt: {
-            description: 'The date the object was published, as GMT.',
-            type: GraphQLString,
-        },
-        excerpt: {
-            description: 'The excerpt for the object.',
-            type: GraphQLString,
-        },
-        featured_media: {
-            description: 'The ID of the featured media for the object.',
-            type: GraphQLInt,
-        },
-        id: {
-            description: 'The ID of the post being updated',
-            type: new GraphQLNonNull(GraphQLInt),
-        },
-        liveblog_likes: {
-            description: 'The number of Liveblog Likes the post has.',
-            type: GraphQLInt,
-        },
-        meta: {
-            description: 'JSON serialized meta fields.',
-            type: GraphQLString,
-        },
-        password: {
-            description: 'A password to protect access to the content and excerpt.',
-            type: GraphQLString,
-        },
-        ping_status: {
-            description: 'Whether or not the object can be pinged.',
-            type: openClosedType,
-        },
-        slug: {
-            description: 'An alphanumeric identifier for the object unique to its type.',
-            type: GraphQLString,
-        },
-        status: {
-            description: 'A named status for the object.',
-            type: postStatusType,
-        },
-        sticky: {
-            description: 'Whether or not the object should be treated as sticky.',
-            type: GraphQLBoolean,
-        },
-        tags: {
-            description: 'The terms assigned to the object in the post_tag taxonomy.',
-            type: new GraphQLList(GraphQLInt),
-        },
-        template: {
-            description: 'The theme file to use to display the object.',
-            type: GraphQLString,
-        },
-        title: {
-            description: 'The title for the object.',
-            type: GraphQLString,
-        },
-    },
-    resolve: (root, { id, ...args }: UpdatePostArgs): PromiseLike<Post> => (
-        root.post(`/${NS}/posts/${id}`, args)
-    ),
-};
-
-const deletePostResponseUnion = new GraphQLUnionType({
-    name: 'DeletePostResponse',
-    types: [ deletedPostType, postType ],
-    resolveType: res => {
-        if (res.deleted) {
-            return deletedPostType;
-        }
-        return postType;
-    },
-});
+export type UpdatePostArgs = PostMutationOptions & { id: string };
 
 export interface DeletePostArgs {
     /** Whether to bypass trash and force deletion. */
@@ -248,26 +81,197 @@ export interface DeletePostArgs {
     id: number;
 }
 
-const deletePost: ArgumentField<DeletePostArgs> = {
-    description: 'Delete a single post by ID.',
-    type: deletePostResponseUnion,
-    args: {
-        force: {
-            description: 'Whether to bypass trash and force deletion.',
-            type: GraphQLBoolean,
+export function postMutationFactory({ name = 'post', restBase = 'posts' } = {}) {
+    name = name.replace(/[^a-zA-Z_]/g, '');
+    const ucName = name[0].toUpperCase() + name.slice(1);
+    const addItem = `add${ucName}`;
+    const updateItem = `update${ucName}`;
+    const deleteItem = `delete${ucName}`;
+    return {
+        [addItem]: <ArgumentField<AddPostArgs>> {
+            description: `Create an object of type "${name}".`,
+            type: postType,
+            args: {
+                author: {
+                    description: 'The ID for the author of the object.',
+                    type: GraphQLInt,
+                },
+                categories: {
+                    description: 'The terms assigned to the object in the category taxonomy.',
+                    type: new GraphQLList(GraphQLInt),
+                },
+                comment_status: {
+                    description: 'Whether or not comments are open on the object.',
+                    type: openClosedType,
+                },
+                content: {
+                    description: 'The content for the object.',
+                    type: new GraphQLNonNull(GraphQLString),
+                },
+                date: {
+                    description: 'The date the object was published, in the site’s timezone.',
+                    type: GraphQLString,
+                },
+                date_gmt: {
+                    description: 'The date the object was published, as GMT.',
+                    type: GraphQLString,
+                },
+                excerpt: {
+                    description: 'The excerpt for the object.',
+                    type: GraphQLString,
+                },
+                featured_media: {
+                    description: 'The ID of the featured media for the object.',
+                    type: GraphQLInt,
+                },
+                liveblog_likes: {
+                    description: 'The number of Liveblog Likes the object has.',
+                    type: GraphQLInt,
+                },
+                meta: {
+                    description: 'JSON serialized meta fields.',
+                    type: GraphQLString,
+                },
+                password: {
+                    description: 'A password to protect access to the content and excerpt.',
+                    type: GraphQLString,
+                },
+                ping_status: {
+                    description: 'Whether or not the object can be pinged.',
+                    type: openClosedType,
+                },
+                slug: {
+                    description: 'An alphanumeric identifier for the object unique to its type.',
+                    type: GraphQLString,
+                },
+                status: {
+                    description: 'A named status for the object.',
+                    type: postStatusType,
+                },
+                sticky: {
+                    description: 'Whether or not the object should be treated as sticky.',
+                    type: GraphQLBoolean,
+                },
+                tags: {
+                    description: 'The terms assigned to the object in the post_tag taxonomy.',
+                    type: new GraphQLList(GraphQLInt),
+                },
+                template: {
+                    description: 'The theme file to use to display the object.',
+                    type: GraphQLString,
+                },
+                title: {
+                    description: 'The title for the object.',
+                    type: new GraphQLNonNull(GraphQLString),
+                },
+            },
+            resolve: (root, args): PromiseLike<Post> => (
+                root.post(`/${NS}/${restBase}`, args)
+            ),
         },
-        id: {
-            description: 'The ID of the post being deleted.',
-            type: new GraphQLNonNull(GraphQLInt),
+        [updateItem]: <ArgumentField<UpdatePostArgs>> {
+            description: `Update an object of type "${name}".`,
+            type: postType,
+            args: {
+                author: {
+                    description: 'The ID for the author of the object.',
+                    type: GraphQLInt,
+                },
+                categories: {
+                    description: 'The terms assigned to the object in the category taxonomy.',
+                    type: new GraphQLList(GraphQLInt),
+                },
+                comment_status: {
+                    description: 'Whether or not comments are open on the object.',
+                    type: openClosedType,
+                },
+                content: {
+                    description: 'The content for the object.',
+                    type: GraphQLString,
+                },
+                date: {
+                    description: 'The date the object was published, in the site’s timezone.',
+                    type: GraphQLString,
+                },
+                date_gmt: {
+                    description: 'The date the object was published, as GMT.',
+                    type: GraphQLString,
+                },
+                excerpt: {
+                    description: 'The excerpt for the object.',
+                    type: GraphQLString,
+                },
+                featured_media: {
+                    description: 'The ID of the featured media for the object.',
+                    type: GraphQLInt,
+                },
+                id: {
+                    description: 'The ID of the object being updated',
+                    type: new GraphQLNonNull(GraphQLInt),
+                },
+                liveblog_likes: {
+                    description: 'The number of Liveblog Likes the object has.',
+                    type: GraphQLInt,
+                },
+                meta: {
+                    description: 'JSON serialized meta fields.',
+                    type: GraphQLString,
+                },
+                password: {
+                    description: 'A password to protect access to the content and excerpt.',
+                    type: GraphQLString,
+                },
+                ping_status: {
+                    description: 'Whether or not the object can be pinged.',
+                    type: openClosedType,
+                },
+                slug: {
+                    description: 'An alphanumeric identifier for the object unique to its type.',
+                    type: GraphQLString,
+                },
+                status: {
+                    description: 'A named status for the object.',
+                    type: postStatusType,
+                },
+                sticky: {
+                    description: 'Whether or not the object should be treated as sticky.',
+                    type: GraphQLBoolean,
+                },
+                tags: {
+                    description: 'The terms assigned to the object in the post_tag taxonomy.',
+                    type: new GraphQLList(GraphQLInt),
+                },
+                template: {
+                    description: 'The theme file to use to display the object.',
+                    type: GraphQLString,
+                },
+                title: {
+                    description: 'The title for the object.',
+                    type: GraphQLString,
+                },
+            },
+            resolve: (root, { id, ...args }: UpdatePostArgs): PromiseLike<Post> => (
+                root.post(`/${NS}/${restBase}/${id}`, args)
+            ),
         },
-    },
-    resolve: (root, { id, ...args }: DeletePostArgs): PromiseLike<Post|DeletedObject<Post>> => (
-        root.delete(`/${NS}/posts/${id}`, args)
-    ),
-};
+        [deleteItem]: <ArgumentField<DeletePostArgs>> {
+            description: `Delete a single object of type "${name}" by ID.`,
+            type: deletePostResponseUnion,
+            args: {
+                force: {
+                    description: 'Whether to bypass trash and force deletion.',
+                    type: GraphQLBoolean,
+                },
+                id: {
+                    description: 'The ID of the object being deleted.',
+                    type: new GraphQLNonNull(GraphQLInt),
+                },
+            },
+            resolve: (root, { id, ...args }: DeletePostArgs): PromiseLike<Post|DeletedObject<Post>> => (
+                root.delete(`/${NS}/${restBase}/${id}`, args)
+            ),
+        },
+    };
+}
 
-export default {
-    addPost,
-    deletePost,
-    updatePost,
-};
+export default postMutationFactory();
