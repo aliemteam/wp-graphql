@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GraphQLFieldConfigMap, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import GraphqlJSTransport from 'lokka-transport-graphql-js';
-import bootstrapPostResolvers, { postTypeConfigList } from './lib/core/bootstrapPostResolvers';
+import bootstrapPostResolvers, { CustomPostTypeParams } from './lib/core/bootstrapPostResolvers';
 import parseMeta from './lib/core/metaParser';
 import queryString from './lib/core/queryString';
 import defaultMutations from './models/mutations';
@@ -26,7 +26,7 @@ export interface Config {
     /** Custom queries to be merged into the library upon instantiation. */
     queries?: GraphQLFieldConfigMap<any, any>;
     /** List of `postTypeConfig` to be merged into the library upon instantiation. */
-    postTypes?: postTypeConfigList;
+    postTypes?: CustomPostTypeParams[];
 }
 
 export default class WPGraphQL {
