@@ -1,6 +1,6 @@
 > **Note:** API is unstable and subject to change without warning until `v1.0.0` release. Every change, even those that are breaking, will be a `minor` semver bump until `v1.0.0`.
 
-# wp-graphql [![Build Status](https://travis-ci.org/aliemteam/wp-graphql.svg?branch=master)](https://travis-ci.org/aliemteam/wp-graphql) [![codecov](https://codecov.io/gh/aliemteam/wp-graphql/branch/master/graph/badge.svg)](https://codecov.io/gh/aliemteam/wp-graphql)
+# wp-graphql [![Build Status](https://travis-ci.org/aliemteam/wp-graphql.svg?branch=master)](https://travis-ci.org/aliemteam/wp-graphql) [![codecov](https://codecov.io/gh/aliemteam/wp-graphql/branch/master/graph/badge.svg)](https://codecov.io/gh/aliemteam/wp-graphql) [![npm](https://img.shields.io/npm/v/wp-graphql.svg)](https://www.npmjs.com/package/wp-graphql)
 
 > Client-side GraphQL convenience wrapper for the WordPress REST API
 
