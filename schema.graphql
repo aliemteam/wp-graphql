@@ -1,0 +1,2275 @@
+# Object containing user avatars.
+type AvatarObject {
+  # 24x24 avatar url.
+  size24: String
+
+  # 48x48 avatar url.
+  size48: String
+
+  # 96x96 avatar url.
+  size96: String
+}
+
+# A single category.
+type Category {
+  # Number of published posts for the term.
+  count: Int
+
+  # HTML description of the term.
+  description: String
+
+  # Unique identifier for the term.
+  id: Int!
+
+  # URL of the term.
+  link: String
+
+  # Meta fields.
+  meta: [String]
+
+  # HTML title for the term.
+  name: String
+
+  # The parent term ID.
+  parent: Int
+
+  # An alphanumeric identifier for the term unique to its type.
+  slug: String
+
+  # Type attribution for the term.
+  taxonomy: String
+}
+
+# A single comment object
+type Comment {
+  # The id of the user object, if author was a user.
+  author: Int
+
+  # Avatar URLs for the object author.
+  author_avatar_urls: AvatarObject
+
+  # Email address for the object author.
+  author_email: String
+
+  # IP address for the object author (IPv6).
+  author_ip: String
+
+  # Display name for the object author.
+  author_name: String
+
+  # URL for the object author.
+  author_url: String
+
+  # User agent for the object author.
+  author_user_agent: String
+
+  # The content for the object.
+  content: ContentDescriptor
+
+  # The date the object was published.
+  date: String
+
+  # The date the object was published as GMT.
+  date_gmt: String
+
+  # Unique identifier for the object.
+  id: Int!
+
+  # Karma for the object.
+  karma: Int
+
+  # URL to the object.
+  link: String
+
+  # Meta fields.
+  meta: String
+
+  # The id for the parent of the object.
+  parent: Int
+
+  # The id of the associated post object.
+  post: Int
+
+  # State of the object.
+  status: String
+
+  # Type of Comment for the object.
+  type: CommentType
+}
+
+# Accepts one of the following (unquoted) strings: date, date_gmt, id, include, parent, post, type
+enum CommentsOrderby {
+  date
+  date_gmt
+  id
+  include
+  parent
+  post
+  type
+}
+
+# Accepts one of the following (unquoted) strings: approve, hold, spam, trash
+enum CommentStatus {
+  approve
+  hold
+  spam
+  trash
+}
+
+# Accepts one of the following (unquoted) strings: comment, pingback, trackback
+enum CommentType {
+  comment
+  pingback
+  trackback
+}
+
+# Simple descriptor object for post content.
+type ContentDescriptor {
+  # Boolean describing whether or not the content is protected.
+  protected: Boolean
+
+  # The raw text without markup of the content.
+  raw: String
+
+  # The raw HTML for the rendered content.
+  rendered: String
+}
+
+enum Context {
+  edit
+  embed
+  view
+}
+
+# Weekday abbreviations to integer enum.
+enum DaysOfWeek {
+  sun
+  mon
+  tues
+  wed
+  thurs
+  fri
+  sat
+}
+
+union DeleteCommentResponse = DeletedComment | Comment
+
+# An object representing the API response for a deleted Category.
+type DeletedCategory {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Category.
+  previous: Category
+}
+
+# An object representing the API response for a deleted Comment.
+type DeletedComment {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Comment.
+  previous: Comment
+}
+
+# An object representing the API response for a deleted Media.
+type DeletedMedia {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Media.
+  previous: Media
+}
+
+# An object representing the API response for a deleted Page.
+type DeletedPage {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Page.
+  previous: Page
+}
+
+# An object representing the API response for a deleted Post.
+type DeletedPost {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Post.
+  previous: Post
+}
+
+# An object representing the API response for a deleted Revision.
+type DeletedRevision {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Revision.
+  previous: Revision
+}
+
+# An object representing the API response for a deleted Tag.
+type DeletedTag {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted Tag.
+  previous: Tag
+}
+
+# An object representing the API response for a deleted User.
+type DeletedUser {
+  # Boolean (usually true) stating if the object has been deleted.
+  deleted: Boolean
+
+  # The entire deleted User.
+  previous: User
+}
+
+union DeletePageResponse = DeletedPage | Page
+
+union DeletePostResponse = DeletedPost | Post
+
+# Metadata for photographs.
+type ImageMeta {
+  # Image aperture.
+  aperture: String
+
+  # Details about the camera used to take the photo.
+  camera: String
+
+  # Image caption.
+  caption: String
+
+  # Copyright details.
+  copyright: String
+
+  # ISO8601 timestamp.
+  created_timestamp: String
+
+  # Image credit.
+  credit: String
+
+  # Image focal length.
+  focal_length: String
+
+  # Image iso details.
+  iso: String
+
+  # List of keywords.
+  keywords: [String]
+
+  # Image orientation.
+  orientation: String
+
+  # Image shutter speed.
+  shutter_speed: String
+
+  # Image title.
+  title: String
+}
+
+# An object representing a singular media item.
+type Media {
+  # Alternative text to display when resource is not displayed.
+  alt_text: String
+
+  # The id for the author of the object.
+  author: Int
+
+  # The caption for the resource.
+  caption: ContentDescriptor
+
+  # Whether or not comments are open on the object.
+  comment_status: String
+
+  # The date the object was published, in the site’s timezone.
+  date: String
+
+  # The date the object was published, as GMT.
+  date_gmt: String
+
+  # The description for the resource.
+  description: ContentDescriptor
+
+  # The globally unique identifier for the object.
+  guid: ContentDescriptor
+
+  # Unique identifier for the object.
+  id: Int
+
+  # URL to the object.
+  link: String
+
+  # Array of MediaSizeDetails
+  media_details: MediaDetails
+
+  # Type of resource. ("image" or "file")
+  media_type: String
+
+  # Meta fields.
+  meta: [String]
+
+  # MIME type of resource.
+  mime_type: String
+
+  # The date the object was last modified, in the site’s timezone.
+  modified: String
+
+  # The date the object was last modified, as GMT.
+  modified_gmt: String
+
+  # Whether or not the object can be pinged.
+  ping_status: String
+
+  # The id for the associated post of the resource.
+  post: Int
+
+  # An alphanumeric identifier for the object unique to its type.
+  slug: String
+
+  # URL to the original resource file.
+  source_url: String
+
+  # A named status for the object.
+  status: String
+
+  # The title for the object.
+  title: ContentDescriptor
+
+  # Type of Post for the object.
+  type: String
+}
+
+# Details about the resource file, specific to its type.
+type MediaDetails {
+  file: String
+  height: Int
+  image_meta: ImageMeta
+  sizes: [MediaSize]
+  width: Int
+}
+
+# Accepts one of the following (unquoted) strings: application, audio, image, text, video
+enum MediaKind {
+  application
+  audio
+  image
+  text
+  video
+}
+
+# Accepts one of the following (unquoted) strings: date, id, include, relevance, slug, title
+enum MediaOrderBy {
+  date
+  id
+  include
+  relevance
+  slug
+  title
+}
+
+# Details about a single media item at a specific size.
+type MediaSize {
+  # File name including extension.
+  file: String
+
+  # The height of the file.
+  height: Int
+
+  # The mime_type for the file.
+  mime_type: String
+
+  # The name of the size. (eg. "thumbnail")
+  slug: String
+
+  # The full URL for the file.
+  source_url: String
+
+  # The width of the file.
+  width: Int
+}
+
+# Accepts one of the following (unquoted) strings: inherit, private, trash
+enum MediaStatusType {
+  inherit
+  private
+  trash
+}
+
+# The root mutation.
+type Mutation {
+  # Create a new category.
+  addCategory(
+    # HTML description of the term.
+    description: String
+
+    # Meta fields.
+    meta: [String]
+
+    # HTML title for the term.
+    name: String!
+
+    # The parent term ID.
+    parent: Int
+
+    # An alphanumeric identifier for the term unique to its type.
+    slug: String
+  ): Category
+
+  # Update a category by ID.
+  updateCategory(
+    # HTML description of the term.
+    description: String
+
+    # ID of the category being updated.
+    id: Int!
+
+    # Meta fields.
+    meta: [String]
+
+    # HTML title for the term.
+    name: String
+
+    # The parent term ID.
+    parent: Int
+
+    # An alphanumeric identifier for the term unique to its type.
+    slug: String
+  ): Category
+
+  # Delete a category by ID.
+  deleteCategory(
+    # Set internally. Required to be true, as terms do not support trashing.
+    force: Boolean = true
+
+    # The ID of the category being deleted.
+    id: Int!
+  ): DeletedCategory
+
+  # Create a new comment
+  addComment(
+    # The id of the user object, if author was a user.
+    author: Int
+
+    # Email address for the object author.
+    author_email: String
+
+    # IP address for the object author (IPv6).
+    author_ip: String
+
+    # Display name for the object author.
+    author_name: String
+
+    # URL for the object author.
+    author_url: String
+
+    # The content for the object.
+    content: String!
+
+    # The date the object was published.
+    date: String
+
+    # The date the object was published as GMT.
+    date_gmt: String
+
+    # Karma for the object.
+    karma: Int
+
+    # Meta fields.
+    meta: String
+
+    # The id for the parent of the object.
+    parent: Int
+
+    # The id of the associated post object.
+    post: Int!
+
+    # State of the object.
+    status: CommentStatus
+
+    # Type of Comment for the object.
+    type: CommentType
+  ): Comment
+
+  # Update a comment by ID.
+  updateComment(
+    # The id of the user object, if author was a user.
+    author: Int
+
+    # Email address for the object author.
+    author_email: String
+
+    # IP address for the object author (IPv6).
+    author_ip: String
+
+    # Display name for the object author.
+    author_name: String
+
+    # URL for the object author.
+    author_url: String
+
+    # The content for the object.
+    content: String
+
+    # The date the object was published.
+    date: String
+
+    # The date the object was published as GMT.
+    date_gmt: String
+
+    # Required: The ID of the comment to be updated.
+    id: Int!
+
+    # Karma for the object.
+    karma: Int
+
+    # Meta fields.
+    meta: String
+
+    # The id for the parent of the object.
+    parent: Int
+
+    # The id of the associated post object.
+    post: Int
+
+    # State of the object.
+    status: CommentStatus
+
+    # Type of Comment for the object.
+    type: CommentType
+  ): Comment
+
+  # Delete a comment by ID.
+  deleteComment(
+    # Whether to bypass trash and force deletion.
+    force: Boolean
+
+    # The ID of the comment being deleted.
+    id: Int!
+  ): DeleteCommentResponse
+
+  # Upload media using an Array Buffer, File, or Blob.
+  addMedia(
+    # Alternative text to display when resource is not displayed.
+    alt_text: String
+
+    # The id for the author of the object.
+    author: Int
+
+    # The caption for the resource.
+    caption: String
+
+    # Whether or not comments are open on the object.
+    comment_status: OpenOrClosed
+
+    # The date the object was published, in the site’s timezone.
+    date: String
+
+    # The date the object was published, as GMT.
+    date_gmt: String
+
+    # The description for the resource.
+    description: Int
+
+    # The file to be uploaded.
+    file: String!
+
+    # The name of the file, including the file extension.
+    filename: String!
+
+    # Meta fields.
+    meta: [String]
+
+    # Whether or not the object can be pinged.
+    ping_status: OpenOrClosed
+
+    # The id for the associated post of the resource.
+    post: Int
+
+    # An alphanumeric identifier for the object unique to its type.
+    slug: String
+
+    # A named status for the object.
+    status: String
+
+    # The title for the object.
+    title: String
+  ): Media
+
+  # Update media by ID.
+  updateMedia(
+    # Alternative text to display when resource is not displayed.
+    alt_text: String
+
+    # The id for the author of the object.
+    author: Int
+
+    # The caption for the resource.
+    caption: String
+
+    # Whether or not comments are open on the object.
+    comment_status: OpenOrClosed
+
+    # The date the object was published, in the site’s timezone.
+    date: String
+
+    # The date the object was published, as GMT.
+    date_gmt: String
+
+    # The description for the resource.
+    description: Int
+
+    # The ID of the media file.
+    id: Int!
+
+    # Meta fields.
+    meta: [String]
+
+    # Whether or not the object can be pinged.
+    ping_status: OpenOrClosed
+
+    # The id for the associated post of the resource.
+    post: Int
+
+    # An alphanumeric identifier for the object unique to its type.
+    slug: String
+
+    # A named status for the object.
+    status: String
+
+    # The title for the object.
+    title: String
+  ): Media
+
+  # Delete media by ID.
+  deleteMedia(
+    # Set internally. Must be true for request to complete.
+    force: Boolean = true
+
+    # The ID of the media being deleted.
+    id: Int!
+  ): DeletedMedia
+
+  # Create an object of type "post".
+  addPost(
+    # The ID for the author of the object.
+    author: Int
+
+    # The terms assigned to the object in the category taxonomy.
+    categories: [Int]
+
+    # Whether or not comments are open on the object.
+    comment_status: OpenOrClosed
+
+    # The content for the object.
+    content: String!
+
+    # The date the object was published, in the site’s timezone.
+    date: String
+
+    # The date the object was published, as GMT.
+    date_gmt: String
+
+    # The excerpt for the object.
+    excerpt: String
+
+    # The ID of the featured media for the object.
+    featured_media: Int
+
+    # The number of Liveblog Likes the object has.
+    liveblog_likes: Int
+
+    # JSON serialized meta fields.
+    meta: String
+
+    # A password to protect access to the content and excerpt.
+    password: String
+
+    # Whether or not the object can be pinged.
+    ping_status: OpenOrClosed
+
+    # An alphanumeric identifier for the object unique to its type.
+    slug: String
+
+    # A named status for the object.
+    status: PostStatusArg
+
+    # Whether or not the object should be treated as sticky.
+    sticky: Boolean
+
+    # The terms assigned to the object in the post_tag taxonomy.
+    tags: [Int]
+
+    # The theme file to use to display the object.
+    template: String
+
+    # The title for the object.
+    title: String!
+  ): Post
+
+  # Update an object of type "post".
+  updatePost(
+    # The ID for the author of the object.
+    author: Int
+
+    # The terms assigned to the object in the category taxonomy.
+    categories: [Int]
+
+    # Whether or not comments are open on the object.
+    comment_status: OpenOrClosed
+
+    # The content for the object.
+    content: String
+
+    # The date the object was published, in the site’s timezone.
+    date: String
+
+    # The date the object was published, as GMT.
+    date_gmt: String
+
+    # The excerpt for the object.
+    excerpt: String
+
+    # The ID of the featured media for the object.
+    featured_media: Int
+
+    # The ID of the object being updated
+    id: Int!
+
+    # The number of Liveblog Likes the object has.
+    liveblog_likes: Int
+
+    # JSON serialized meta fields.
+    meta: String
+
+    # A password to protect access to the content and excerpt.
+    password: String
+
+    # Whether or not the object can be pinged.
+    ping_status: OpenOrClosed
+
+    # An alphanumeric identifier for the object unique to its type.
+    slug: String
+
+    # A named status for the object.
+    status: PostStatusArg
+
+    # Whether or not the object should be treated as sticky.
+    sticky: Boolean
+
+    # The terms assigned to the object in the post_tag taxonomy.
+    tags: [Int]
+
+    # The theme file to use to display the object.
+    template: String
+
+    # The title for the object.
+    title: String
+  ): Post
+
+  # Delete a single object of type "post" by ID.
+  deletePost(
+    # Whether to bypass trash and force deletion.
+    force: Boolean
+
+    # The ID of the object being deleted.
+    id: Int!
+  ): DeletePostResponse
+
+  # Create a page.
+  addPage(
+    # The ID for the author of the object.
+    author: Int
+
+    # Whether or not comments are open on the object.
+    comment_status: OpenOrClosed
+
+    # The content for the object.
+    content: String
+
+    # The date the object was published, in the site’s timezone.
+    date: String
+
+    # The date the object was published, as GMT.
+    date_gmt: String
+
+    # The excerpt for the object.
+    excerpt: String
+
+    # The ID of the featured media for the object.
+    featured_media: Int
+
+    # The order of the object in relation to other object of its type.
+    menu_order: Int
+
+    # Meta fields.
+    meta: [String]
+
+    # The id for the parent of the object.
+    parent: Int
+
+    # Whether or not the object can be pinged.
+    ping_status: OpenOrClosed
+
+    # An alphanumeric identifier for the object unique to its type.
+    slug: String
+
+    # A named status for the object.
+    status: PostStatusArg
+
+    # The theme file to use to display the object.
+    template: String
+
+    # The title for the object.
+    title: String
+  ): Page
+
+  # Update a page.
+  updatePage(
+    # The ID for the author of the object.
+    author: Int
+
+    # Whether or not comments are open on the object.
+    comment_status: OpenOrClosed
+
+    # The content for the object.
+    content: String
+
+    # The date the object was published, in the site’s timezone.
+    date: String
+
+    # The date the object was published, as GMT.
+    date_gmt: String
+
+    # The excerpt for the object.
+    excerpt: String
+
+    # The ID of the featured media for the object.
+    featured_media: Int
+
+    # ID of the page being upadated.
+    id: Int!
+
+    # The order of the object in relation to other object of its type.
+    menu_order: Int
+
+    # Meta fields.
+    meta: [String]
+
+    # The id for the parent of the object.
+    parent: Int
+
+    # Whether or not the object can be pinged.
+    ping_status: OpenOrClosed
+
+    # An alphanumeric identifier for the object unique to its type.
+    slug: String
+
+    # A named status for the object.
+    status: PostStatusArg
+
+    # The theme file to use to display the object.
+    template: String
+
+    # The title for the object.
+    title: String
+  ): Page
+
+  # Delete a single page by ID.
+  deletePage(
+    # Whether to bypass trash and force deletion.
+    force: Boolean
+
+    # The ID of the page being deleted.
+    id: Int!
+  ): DeletePageResponse
+
+  # Delete a revision.
+  deleteRevision(
+    # Set internally. Must be true for request to complete.
+    force: Boolean = true
+
+    # ID of the revision being deleted.
+    id: Int!
+
+    # ID of the revisions parent.
+    parentId: Int!
+
+    # Pluralized form of the revision's parent type.
+    parentType: String = "posts"
+  ): DeletedRevision
+
+  # Update site settings.
+  updateSettings(
+    # A date format for all date strings.
+    date_format: String
+
+    # ID of default category.
+    default_category: Int
+
+    # Either "open" or "closed".
+    default_comment_status: OpenOrClosed
+
+    # Either "open" or "closed".
+    default_ping_status: OpenOrClosed
+
+    # Default post format.
+    default_post_format: String
+
+    # Site description.
+    description: String
+
+    # This address is used for admin purposes.
+    email: String
+
+    # WordPress locale code.
+    language: String
+
+    # Blog pages show at most.
+    posts_per_page: Int
+
+    # A day number of the week that the week should start on.
+    start_of_week: DaysOfWeek
+
+    # A time format for all time strings.
+    time_format: String
+
+    # A city in the same timezone as you.
+    timezone: String
+
+    # Site title.
+    title: String
+
+    # Site URL.
+    url: String
+
+    # Convert emoticons like :-) and :-P to graphics on display.
+    use_smilies: Boolean
+  ): Settings
+
+  # Create a new tag.
+  addTag(
+    # HTML description of the term. 
+    description: String
+
+    # Meta fields.
+    meta: [String]
+
+    # HTML title for the term.
+    name: String!
+
+    # An alphanumeric identifier for the term unique to its type.
+    slug: String
+  ): Tag
+
+  # Update a tag by ID.
+  updateTag(
+    # HTML description of the term. 
+    description: String
+
+    # ID of the tag being updated.
+    id: Int!
+
+    # Meta fields.
+    meta: [String]
+
+    # HTML title for the term.
+    name: String
+
+    # An alphanumeric identifier for the term unique to its type.
+    slug: String
+  ): Tag
+
+  # Delete a tag by ID.
+  deleteTag(
+    # Set internally. Required to be true, as terms do not support trashing.
+    force: Boolean = true
+
+    # ID of the tag being deleted.
+    id: Int!
+  ): DeletedTag
+
+  # Create a new user.
+  addUser(
+    # Description of the user.
+    description: String
+
+    # The email address for the user.
+    email: String!
+
+    # First name for the user.
+    first_name: String
+
+    # Last name for the user.
+    last_name: String
+
+    # Locale for the user.
+    locale: String
+
+    # JSON serialized meta fields.
+    meta: String
+
+    # Display name for the user.
+    name: String
+
+    # The nickname for the user.
+    nickname: String
+
+    # Password for the user (never included).
+    password: String!
+
+    # Roles assigned to the user.
+    roles: [String]
+
+    # An alphanumeric identifier for the user.
+    slug: String
+
+    # URL of the user.
+    url: String
+
+    # Login name for the user.
+    username: String!
+  ): User
+
+  # Update a user by ID.
+  updateUser(
+    # Description of the user.
+    description: String
+
+    # The email address for the user.
+    email: String
+
+    # First name for the user.
+    first_name: String
+
+    # ID of the user being mutated.
+    id: Int!
+
+    # Last name for the user.
+    last_name: String
+
+    # Locale for the user.
+    locale: String
+
+    # JSON serialized meta fields.
+    meta: String
+
+    # Display name for the user.
+    name: String
+
+    # The nickname for the user.
+    nickname: String
+
+    # Password for the user (never included).
+    password: String
+
+    # Roles assigned to the user.
+    roles: [String]
+
+    # An alphanumeric identifier for the user.
+    slug: String
+
+    # URL of the user.
+    url: String
+
+    # Login name for the user.
+    username: String
+  ): User
+
+  # Delete a user by ID.
+  deleteUser(
+    # Always set to true internally. Must be true to complete request.
+    force: Boolean = true
+
+    # ID of user being deleted.
+    id: Int!
+
+    # Reassign the deleted user’s posts and links to this user ID.
+    reassign: Int = -1
+  ): DeletedUser
+}
+
+enum OpenOrClosed {
+  open
+  closed
+}
+
+enum Order {
+  asc
+  desc
+}
+
+# Accepts one of the following (unquoted) strings: count, description, id, name, slug, term_group
+enum OrderByCategory {
+  count
+  description
+  id
+  name
+  slug
+  term_group
+}
+
+# A WordPress Page Object.
+type Page {
+  # The ID for the author of the object.
+  author: Int
+
+  # Whether or not comments are open on the object.
+  comment_status: String
+
+  # The content for the object.
+  content: ContentDescriptor
+
+  # The date the object was published, in the site's timezone.
+  date: String
+
+  # The date the object was published, as GMT.
+  date_gmt: String
+
+  # The excerpt for the object.
+  excerpt: ContentDescriptor
+
+  # The ID of the featured media for the object.
+  featured_media: Int
+
+  # The globally unique identifier for the object.
+  guid: String
+
+  # Unique identifier for the object.
+  id: Int!
+
+  # The URL to the object.
+  link: String
+
+  # Meta fields.
+  meta: String
+
+  # The date the object was last modified, in the site's timezone.
+  modified: String
+
+  # The date the object was last modified, as GMT.
+  modified_gmt: String
+
+  # Whether or not the object can be pinged.
+  ping_status: String
+
+  # An alphanumeric identifier for the object unique to its type.
+  slug: String
+
+  # A named status for the object.
+  status: String
+
+  # The theme file to use to display the object. Currently unused.
+  template: String
+
+  # The title for the object.
+  title: String
+
+  # Type of Post for the object.
+  type: String
+
+  # The order of the object in relation to other object of its type.
+  menu_order: Int
+
+  # The id for the parent of the object.
+  parent: Int
+}
+
+# Accepts one of the following (unquoted) strings: date, id, include, menu_order, relevance, slug, title
+enum PageOrderBy {
+  date
+  id
+  include
+  menu_order
+  relevance
+  slug
+  title
+}
+
+# A WordPress Post Object.
+type Post {
+  # The ID for the author of the object.
+  author: Int
+
+  # Whether or not comments are open on the object.
+  comment_status: String
+
+  # The content for the object.
+  content: ContentDescriptor
+
+  # The date the object was published, in the site's timezone.
+  date: String
+
+  # The date the object was published, as GMT.
+  date_gmt: String
+
+  # The excerpt for the object.
+  excerpt: ContentDescriptor
+
+  # The ID of the featured media for the object.
+  featured_media: Int
+
+  # The globally unique identifier for the object.
+  guid: String
+
+  # Unique identifier for the object.
+  id: Int!
+
+  # The URL to the object.
+  link: String
+
+  # Meta fields.
+  meta: String
+
+  # The date the object was last modified, in the site's timezone.
+  modified: String
+
+  # The date the object was last modified, as GMT.
+  modified_gmt: String
+
+  # Whether or not the object can be pinged.
+  ping_status: String
+
+  # An alphanumeric identifier for the object unique to its type.
+  slug: String
+
+  # A named status for the object.
+  status: String
+
+  # The theme file to use to display the object. Currently unused.
+  template: String
+
+  # The title for the object.
+  title: String
+
+  # Type of Post for the object.
+  type: String
+
+  # The terms assigned to the object in the category taxonomy.
+  categories: [Int]
+
+  # The format for the object.
+  format: String
+
+  # The number of Liveblog Likes the post has.
+  liveblog_likes: Int
+
+  # A password to protect access to the content and excerpt.
+  password: String
+
+  # Whether or not the object should be treated as sticky.
+  sticky: Boolean
+
+  # The terms assigned to the object in the post_tag taxonomy.
+  tags: [Int]
+}
+
+# Human-readable labels for the resource for various contexts.
+type PostLabels {
+  # Label for "add_new" field.
+  add_new: String
+
+  # Label for "add_new_item" field.
+  add_new_item: String
+
+  # Label for "all_items" field.
+  all_items: String
+
+  # Label for "archives" field.
+  archives: String
+
+  # Label for "attributes" field.
+  attributes: String
+
+  # Label for "edit_item" field.
+  edit_item: String
+
+  # Label for "featured_image" field.
+  featured_image: String
+
+  # Label for "filter_items_list" field.
+  filter_items_list: String
+
+  # Label for "insert_into_item" field.
+  insert_into_item: String
+
+  # Label for "items_list" field.
+  items_list: String
+
+  # Label for "items_list_navigation" field.
+  items_list_navigation: String
+
+  # Label for "menu_name" field.
+  menu_name: String
+
+  # Label for "name" field.
+  name: String
+
+  # Label for "name_admin_bar" field.
+  name_admin_bar: String
+
+  # Label for "new_item" field.
+  new_item: String
+
+  # Label for "not_found" field.
+  not_found: String
+
+  # Label for "not_found_in_trash" field.
+  not_found_in_trash: String
+
+  # Label for "parent_item_colon" field.
+  parent_item_colon: String
+
+  # Label for "remove_featured_image" field.
+  remove_featured_image: String
+
+  # Label for "search_items" field.
+  search_items: String
+
+  # Label for "set_featured_image" field.
+  set_featured_image: String
+
+  # Label for "singular_name" field.
+  singular_name: String
+
+  # Label for "uploaded_to_this_item" field.
+  uploaded_to_this_item: String
+
+  # Label for "use_featured_image" field.
+  use_featured_image: String
+
+  # Label for "view_item" field.
+  view_item: String
+
+  # Label for "view_items" field.
+  view_items: String
+}
+
+# Accepts one of the following (unquoted) strings: date, id, include, relevance, slug, title
+enum PostOrderBy {
+  date
+  id
+  include
+  relevance
+  slug
+  title
+}
+
+# Object representing a single post status type.
+type PostStatus {
+  # The title for the resource.
+  name: String
+
+  # Whether posts with this resource should be private.
+  private: Boolean
+
+  # Whether posts with this resource should be protected.
+  protected: Boolean
+
+  # Whether posts of this resource should be shown in the front end of the site.
+  public: Boolean
+
+  # Whether posts with this resource should be publicly-queryable.
+  queryable: Boolean
+
+  # Whether to include posts in the edit listing for their post type.
+  show_in_list: Boolean
+
+  # An alphanumeric identifier for the resource.
+  slug: String
+}
+
+# Publication status of the post.
+enum PostStatusArg {
+  draft
+  future
+  pending
+  private
+  publish
+  trash
+}
+
+# Object containing all post status types.
+type PostStatusObject {
+  # PostStatus for type "draft"
+  draft: PostStatus
+
+  # PostStatus for type "future"
+  future: PostStatus
+
+  # PostStatus for type "pending"
+  pending: PostStatus
+
+  # PostStatus for type "private"
+  private: PostStatus
+
+  # PostStatus for type "publish"
+  publish: PostStatus
+
+  # PostStatus for type "trash"
+  trash: PostStatus
+}
+
+# Object containing data for a single post type.
+type PostType {
+  # All capabilities used by the resource.
+  capabilities: [String]
+
+  # A human-readable description of the resource.
+  description: String
+
+  # Whether or not the resource should have children.
+  hierarchial: Boolean
+
+  # Human-readable labels for the resource for various contexts.
+  labels: PostLabels
+
+  # The title for the resource.
+  name: String
+
+  # The base URL for the REST call.
+  rest_base: String
+
+  # An alphanumeric identifier for the resource.
+  slug: String
+
+  # Associated taxonomies.
+  taxonomies: [String]
+}
+
+# Object containing all post types whos key names are the post type slug.
+type PostTypeList {
+  # WordPress "Post" type
+  post: PostType
+
+  # WordPress "Page" type
+  page: PostType
+
+  # WordPress "Attachment" type
+  attachment: PostType
+}
+
+# The root query.
+type Query {
+  # List categories.
+  categories(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Current page of the collection.
+    page: Int
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Ensure result set excludes specific IDs.
+    exclude: [Int]
+
+    # Limit result set to specific IDs.
+    include: [Int]
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by term attribute.
+    orderby: OrderByCategory
+
+    # Whether to hide terms not assigned to any posts.
+    hide_empty: Boolean
+
+    # Limit result set to terms assigned to a specific parent.
+    parent: String
+
+    # Limit result set to terms assigned to a specific post.
+    post: String
+
+    # Limit result set to terms with a specific slug.
+    slug: String
+  ): [Category]
+
+  # Fetch a single category.
+  category(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # ID for the category.
+    id: Int!
+  ): Category
+
+  # Fetch a list of comments.
+  comments(
+    # Limit response to resources published after a given ISO8601 compliant date.
+    after: String
+
+    # Limit result set to comments assigned to specific user ids. Requires authorization.
+    author: [Int]
+
+    # Limit result set to that from a specific author email. Requires authorization.
+    author_email: String
+
+    # Ensure result set excludes comments assigned to specific user ids. Requires authorization.
+    author_exclude: [Int]
+
+    # Limit response to resources published before a given ISO8601 compliant date.
+    before: String
+
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Ensure result set excludes specific ids.
+    exclude: [Int]
+
+    # Limit result set to specific ids.
+    include: [Int]
+
+    # Limit result set to that of a particular comment karma. Requires authorization.
+    karma: Int
+
+    # Offset the result set by a specific number of comments.
+    offset: Int
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by object attribute.
+    orderby: CommentsOrderby
+
+    # Current page of the collection.
+    page: Int
+
+    # Limit result set to resources of specific parent ids.
+    parent: [Int]
+
+    # Ensure result set excludes specific parent ids.
+    parent_exclude: [Int]
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit result set to resources assigned to specific post ids.
+    post: String
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Limit result set to comments assigned a specific status. Requires authorization.
+    status: CommentStatus
+
+    # Limit result set to comments assigned a specific type. Requires authorization.
+    type: String
+  ): [Comment]
+
+  # Fetch a single comment
+  comment(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # ID of the comment being requested.
+    id: Int!
+  ): Comment
+
+  # Fetch a list of media items.
+  mediaList(
+    # Limit response to resources published after a given ISO8601 compliant date.
+    after: String
+
+    # Limit result set to posts assigned to specific authors.
+    author: [Int]
+
+    # Ensure result set excludes posts assigned to specific authors.
+    author_exclude: [Int]
+
+    # Limit response to resources published before a given ISO8601 compliant date.
+    before: String
+
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Ensure result set excludes specific ids.
+    exclude: [Int]
+
+    # Use WP Query arguments to modify the response.
+    filter: String
+
+    # Limit result set to specific ids.
+    include: [Int]
+
+    # Limit result set to attachments of a particular media type.
+    media_type: MediaKind
+
+    # Limit result set to attachments of a particular MIME type.
+    mime_type: String
+
+    # Offset the result set by a specific number of items.
+    offset: Int
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by object attribute.
+    orderby: MediaOrderBy
+
+    # Current page of the collection.
+    page: Int
+
+    # Limit result set to those of particular parent ids.
+    parent: [Int]
+
+    # Limit result set to all items except those of a particular parent id.
+    parent_exclude: [Int]
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Limit result set to posts with a specific slug.
+    slug: String
+
+    # Limit result set to posts assigned a specific status.
+    status: MediaStatusType
+  ): [Media]
+
+  # Retrieve a single media item by ID.
+  media(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # ID of the media item being fetched.
+    id: Int!
+
+    # The password for the post if it is password protected.
+    password: String
+  ): Media
+
+  # Retrieve a list of posts.
+  pages(
+    # Limit response to resources published after a given ISO8601 compliant date.
+    after: String
+
+    # Limit result set to posts assigned to specific authors.
+    author: [Int]
+
+    # Ensure result set excludes posts assigned to specific authors.
+    author_exclude: [Int]
+
+    # Limit response to resources published before a given ISO8601 compliant date.
+    before: String
+
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Ensure result set excludes specific ids.
+    exclude: [Int]
+
+    # Use WP Query arguments to modify the response.
+    filter: String
+
+    # Limit result set to specific ids.
+    include: [Int]
+
+    # Limit result set to resources with a specific menu_order value.
+    menu_order: Int
+
+    # Offset the result set by a specific number of items.
+    offset: Int
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by object attribute.
+    orderby: PageOrderBy
+
+    # Current page of the collection.
+    page: Int
+
+    # Limit result set to those of particular parent ids.
+    parent: [Int]
+
+    # Limit result set to all items except those of a particular parent id.
+    parent_exclude: [Int]
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Limit result set to posts with a specific slug.
+    slug: String
+
+    # Limit result set to posts assigned a specific status.
+    status: [PostStatusArg]
+  ): [Page]
+  page(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # The ID of the page.
+    id: Int!
+
+    # The password for the post if it is password protected.
+    password: String
+  ): Page
+
+  # Fetch all post statuses.
+  postStatuses(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+  ): PostStatusObject
+
+  # Fetch a single post status.
+  postStatus(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # The post status being queried.
+    status: PostStatusArg!
+  ): PostStatus
+
+  # Retrieve an object of post types.
+  postTypes(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+  ): PostTypeList
+
+  # Retrieve a single post type.
+  postType(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Slug of the post type being requested.
+    slug: String!
+  ): PostType
+
+  # Retrieve a list of type "post".
+  posts(
+    # Limit response to resources published after a given ISO8601 compliant date.
+    after: String
+
+    # Limit result set to content assigned to specific authors.
+    author: [Int]
+
+    # Ensure result set excludes content assigned to specific authors.
+    author_exclude: [Int]
+
+    # Limit response to resources published before a given ISO8601 compliant date.
+    before: String
+
+    # Limit result set to all items that have the specified term assigned in the categories taxonomy.
+    categories: [Int]
+
+    # Limit result set to all items except those that have the specified term assigned in the categories taxonomy.
+    categories_exclude: [Int]
+
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Ensure result set excludes specific ids.
+    exclude: [Int]
+
+    # Limit result set to specific ids.
+    include: [Int]
+
+    # Offset the result set by a specific number of items.
+    offset: Int
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by object attribute.
+    orderby: PostOrderBy
+
+    # Current page of the collection.
+    page: Int
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Limit result set to content with a specific slug.
+    slug: String
+
+    # Limit result set to content assigned a specific status.
+    status: [PostStatusArg]
+
+    # Limit result set to items that are sticky.
+    sticky: Boolean
+
+    # Limit result set to all items that have the specified term assigned in the tags taxonomy.
+    tags: [Int]
+
+    # Limit result set to all items except those that have the specified term assigned in the tags taxonomy.
+    tags_exclude: [Int]
+  ): [Post]
+
+  # Retrieve a single item of type "posts"
+  post(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # The ID of the content.
+    id: Int!
+
+    # The password for the content if it is password protected.
+    password: String
+  ): Post
+
+  # List all revisions for an individual post.
+  revisions(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # The ID of the post.
+    id: Int!
+
+    # The type of post.
+    postType: String = "posts"
+  ): [Revision]
+
+  # Get a single post revision.
+  revision(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # The ID of the revision.
+    id: Int!
+
+    # The type of post.
+    postType: String = "posts"
+
+    # The ID of the post.
+    parentId: Int!
+  ): Revision
+
+  # Fetch the site settings.
+  settings: Settings
+
+  # Fetch a list of tags.
+  tags(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Ensure result set excludes specific IDs.
+    exclude: [Int]
+
+    # Whether to hide terms not assigned to any posts.
+    hide_empty: Boolean
+
+    # Limit result set to specific IDs.
+    include: [Int]
+
+    # Offset the result set by a specific number of items.
+    offset: Int
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by term attribute.
+    orderby: TagOrderBy
+
+    # Current page of the collection.
+    page: Int
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit result set to terms assigned to a specific post.
+    post: Int
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Limit result set to terms with a specific slug.
+    slug: String
+  ): [Tag]
+
+  # Fetch a single tag.
+  tag(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # ID of the tag of interest.
+    id: Int!
+  ): Tag
+
+  # List all taxonomies.
+  taxonomies(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Limit results to taxonomies associated with a specific post type.
+    type: String
+  ): [Taxonomy]
+
+  # Fetch a single taxonomy.
+  taxonomy(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Slug of the specific taxonomy being queried.
+    slug: String!
+  ): Taxonomy
+
+  # Fetch a list of all users.
+  users(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # Ensure result set excludes specific IDs.
+    exclude: [Int]
+
+    # Limit result set to specific IDs.
+    include: [Int]
+
+    # Offset the result set by a specific number of items.
+    offset: Int
+
+    # Order sort attribute ascending or descending.
+    order: Order
+
+    # Sort collection by object attribute.
+    orderby: UserOrderBy
+
+    # Current page of the collection.
+    page: Int
+
+    # Maximum number of items to be returned in result set.
+    per_page: Int
+
+    # Limit results to those matching a string.
+    search: String
+
+    # Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
+    roles: [String]
+
+    # Limit result set to users with a specific slug.
+    slug: String
+  ): [User]
+
+  # Retrieve a single user.
+  user(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context
+
+    # ID for the user.
+    id: Int!
+  ): User
+
+  # Retrieve the currently logged in user.
+  me(
+    # Scope under which the request is made; determines fields present in response.
+    context: Context = edit
+  ): User
+}
+
+# A post revision object.
+type Revision {
+  # The id for the author of the object.
+  author: Int
+
+  # Content for the object, as it exists in the database.
+  content: ContentDescriptor
+
+  # The date the object was published. (ISO8601)
+  date: String
+
+  # The date the object was published, as GMT.
+  date_gmt: String
+
+  # Excerpt for the object, as it exists in the database.
+  excerpt: ContentDescriptor
+
+  # GUID for the object, as it exists in the database.
+  guid: String
+
+  # Unique identifier for the object.
+  id: Int
+
+  # The date the object was last modified.
+  modified: String
+
+  # The date the object was last modified, as GMT.
+  modified_gmt: String
+
+  # The id for the parent of the object.
+  parent: Int
+
+  # An alphanumeric identifier for the object unique to its type.
+  slug: String
+
+  # Title for the object, as it exists in the database.
+  title: String
+}
+
+# Object containing site settings.
+type Settings {
+  # A date format for all date strings.
+  date_format: String
+
+  # ID of default category.
+  default_category: Int
+
+  # Either "open" or "closed".
+  default_comment_status: String
+
+  # Either "open" or "closed".
+  default_ping_status: String
+
+  # Default post format.
+  default_post_format: String
+
+  # Site description.
+  description: String
+
+  # This address is used for admin purposes.
+  email: String
+
+  # WordPress locale code.
+  language: String
+
+  # Blog pages show at most.
+  posts_per_page: Int
+
+  # A day number of the week that the week should start on.
+  start_of_week: Int
+
+  # A time format for all time strings.
+  time_format: String
+
+  # A city in the same timezone as you.
+  timezone: String
+
+  # Site title.
+  title: String
+
+  # Site URL.
+  url: String
+
+  # Convert emoticons like :-) and :-P to graphics on display.
+  use_smilies: Boolean
+}
+
+# A single tag object.
+type Tag {
+  # Number of published posts for the term.
+  count: Int
+
+  # HTML description of the term.
+  description: String
+
+  # Unique identifier for the term.
+  id: Int!
+
+  # URL of the term.
+  link: String
+
+  # Meta fields.
+  meta: [String]
+
+  # HTML title for the term.
+  name: String
+
+  # An alphanumeric identifier for the term unique to its type.
+  slug: String
+
+  # Type attribution for the term.
+  taxonomy: String
+}
+
+# Accepts one of the following (unquoted) strings: count, description, id, include, name, slug, term_group
+enum TagOrderBy {
+  count
+  description
+  id
+  include
+  name
+  slug
+  term_group
+}
+
+# A single taxonomy object.
+type Taxonomy {
+  # All capabilities used by the taxonomy.
+  capabilities: TaxonomyCapabilities
+
+  # A human-readable description of the taxonomy.
+  description: String
+
+  # Whether or not the taxonomy should have children.
+  hierarchial: Boolean
+
+  # Human-readable labels for the taxonomy for various contexts.
+  labels: TaxonomyLabels
+
+  # The title for the taxonomy.
+  name: String
+
+  # REST base route for the taxonomy.
+  rest_base: String
+
+  # Whether or not the term cloud should be displayed.
+  show_cloud: Boolean
+
+  # An alphanumeric identifier for the taxonomy.
+  slug: String
+
+  # Types associated with the taxonomy.
+  types: [String]
+}
+
+# All capabilities used by the taxonomy.
+type TaxonomyCapabilities {
+  # Unique label for "assign_terms" field
+  assign_terms: String
+
+  # Unique label for "delete_terms" field
+  delete_terms: String
+
+  # Unique label for "edit_terms" field
+  edit_terms: String
+
+  # Unique label for "manage_terms" field
+  manage_terms: String
+}
+
+# Human-readable labels for the resource for various contexts.
+type TaxonomyLabels {
+  # Label for "add_new_item" field.
+  add_new_item: String
+
+  # Label for "add_or_remove_items" field.
+  add_or_remove_items: String
+
+  # Label for "all_items" field.
+  all_items: String
+
+  # Label for "choose_from_most_used" field.
+  choose_from_most_used: String
+
+  # Label for "edit_item" field.
+  edit_item: String
+
+  # Label for "items_list" field.
+  items_list: String
+
+  # Label for "items_list_navigation" field.
+  items_list_navigation: String
+
+  # Label for "menu_name" field.
+  menu_name: String
+
+  # Label for "name" field.
+  name: String
+
+  # Label for "name_admin_bar" field.
+  name_admin_bar: String
+
+  # Label for "new_item_name" field.
+  new_item_name: String
+
+  # Label for "no_terms" field.
+  no_terms: String
+
+  # Label for "not_found" field.
+  not_found: String
+
+  # Label for "parent_item" field.
+  parent_item: String
+
+  # Label for "parent_item_colon" field.
+  parent_item_colon: String
+
+  # Label for "popular_items" field.
+  popular_items: String
+
+  # Label for "search_items" field.
+  search_items: String
+
+  # Label for "separate_items_with_commas" field.
+  separate_items_with_commas: String
+
+  # Label for "singular_name" field.
+  singular_name: String
+
+  # Label for "update_item" field.
+  update_item: String
+
+  # Label for "view_item" field.
+  view_item: String
+}
+
+# A WordPress User Object.
+type User {
+  # Avatar URLs for the user.
+  avatar_urls: AvatarObject
+
+  # All capabilities assigned to the user.
+  capabilities: [String]
+
+  # Description of the user.
+  description: String
+
+  # Any extra capabilities assigned to the user.
+  extra_capabilities: [String]
+
+  # The email address for the user.
+  email: String
+
+  # First name for the user.
+  first_name: String
+
+  # Unique identifier for the user.
+  id: Int!
+
+  # Last name for the user.
+  last_name: String
+
+  # Author URL of the user.
+  link: String
+
+  # Locale for the user.
+  locale: String
+
+  # Meta fields.
+  meta: String
+
+  # Display name for the user.
+  name: String
+
+  # The nickname for the user.
+  nickname: String
+
+  # Registration date for the user. (ISO8601)
+  registered_date: String
+
+  # Roles assigned to the user.
+  roles: [String]
+
+  # An alphanumeric identifier for the user.
+  slug: String
+
+  # URL of the user.
+  url: String
+
+  # Login name for the user.
+  username: String
+}
+
+# Accepts one of the following (unquoted) strings: email, id, include, name, registered_date, slug, url
+enum UserOrderBy {
+  email
+  id
+  include
+  name
+  registered_date
+  slug
+  url
+}

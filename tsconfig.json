@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "outDir": "lib",
-        "sourceMap": true,
+        "sourceMap": false,
         "lib": [
             "dom",
             "es5",

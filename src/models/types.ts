@@ -1,0 +1,12 @@
+export { Category } from './categories/types/categoryType';
+export { Comment } from './comments/types/commentType';
+export { Media } from './media/types/mediaType';
+export { Page } from './pages/types/pageType';
+export { PostStatus } from './post-statuses/types/postStatusType';
+export { PostTypeList } from './post-types/types/postTypeType';
+export { Post } from './posts/types/postType';
+export { Revision } from './revisions/types/revisionType';
+export { Settings } from './settings/types/settingsType';
+export { Tag } from './tags/types/tagType';
+export { Taxonomy } from './taxonomies/types/taxonomyType';
+export { User } from './users/types/userType';
