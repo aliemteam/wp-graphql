@@ -1,6 +1,6 @@
 {
   "name": "wp-graphql",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "A client-side GraphQL wrapper for the WordPress REST API",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
