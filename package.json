@@ -10,7 +10,7 @@
     "ava": "^0.18.2",
     "nyc": "^10.1.2",
     "tslint": "^4.4.2",
-    "typescript": "rc"
+    "typescript": "next"
   },
   "dependencies": {
     "@types/graphql": "^0.8.6",
@@ -22,6 +22,7 @@
   "scripts": {
     "travis": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov",
     "test": "yarn lint && rm -rf ./lib/* && tsc -p . && ava ./**/*.spec.js",
-    "lint": "tslint --project . -t codeFrame"
+    "lint": "tslint --project . -t codeFrame",
+    "update-schema": "node ./.vscode/printSchema"
   }
 }

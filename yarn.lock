@@ -2824,9 +2824,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typescript@rc:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0.tgz#626f2fc70087d2480f21ebb12c1888288c8614e3"
+typescript@next:
+  version "2.3.0-dev.20170221"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.3.0-dev.20170221.tgz#7bfec654bc2b1aac45b06cd050158232af03e99c"
 
 uglify-js@^2.6:
   version "2.7.5"
