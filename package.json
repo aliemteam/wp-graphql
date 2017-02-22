@@ -3,6 +3,7 @@
   "version": "0.10.0",
   "description": "A client-side GraphQL wrapper for the WordPress REST API",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/aliemteam/wp-graphql.git",
   "author": "Derek P Sifford <dereksifford@gmail.com>",
   "license": "MIT",
