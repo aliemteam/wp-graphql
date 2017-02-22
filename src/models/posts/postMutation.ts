@@ -7,7 +7,7 @@ import {
     GraphQLString,
     GraphQLUnionType,
 } from 'graphql';
-import { openClosedType } from '../../lib/abstract-types/';
+import { openClosedType, OpenOrClosed } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
@@ -31,9 +31,9 @@ export interface PostMutationOptions {
     /** The ID for the author of the object. */
     author?: number;
     /** The terms assigned to the object in the category taxonomy. */
-    categories?: number[]; // FIXME: Check this
+    categories?: number[];
     /** Whether or not comments are open on the object. */
-    comment_status?: 'open'|'closed';
+    comment_status?: OpenOrClosed;
     /** The content for the object. */
     content?: string;
     /** The date the object was published, in the site’s timezone. */
@@ -48,12 +48,12 @@ export interface PostMutationOptions {
     // format?: 'standard'; Not used for now -- Irrelevant
     /** The number of Liveblog Likes the post has. */
     liveblog_likes?: number;
-    /** JSON serialized meta fields. */
+    /** JSON stringified meta fields. */
     meta?: string;
     /** A password to protect access to the content and excerpt. */
     password?: string;
     /** Whether or not the object can be pinged. */
-    ping_status?: 'open'|'closed';
+    ping_status?: OpenOrClosed;
     /** An alphanumeric identifier for the object unique to its type. */
     slug?: string;
     /** A named status for the object. */
@@ -61,19 +61,15 @@ export interface PostMutationOptions {
     /** Whether or not the object should be treated as sticky. */
     sticky?: boolean;
     /** The terms assigned to the object in the post_tag taxonomy. */
-    tags?: number[]; // FIXME: Check this
+    tags?: number[];
     /** The theme file to use to display the object. */
     template?: string;
     /** The title for the object. */
     title?: string;
 }
 
-export type AddPostArgs = PostMutationOptions & (
-    Pick<PostMutationOptions, 'content'> | Pick<PostMutationOptions, 'excerpt'> | Pick<PostMutationOptions, 'title'>
-);
-
+export type AddPostArgs = PostMutationOptions & Pick<PostMutationOptions, 'content'|'excerpt'|'title'>;
 export type UpdatePostArgs = PostMutationOptions & { id: string };
-
 export interface DeletePostArgs {
     /** Whether to bypass trash and force deletion. */
     force?: boolean;
@@ -129,7 +125,7 @@ export function postMutationFactory({ name = 'post', restBase = 'posts' } = {}) 
                     type: GraphQLInt,
                 },
                 meta: {
-                    description: 'JSON serialized meta fields.',
+                    description: 'JSON stringified meta fields.',
                     type: GraphQLString,
                 },
                 password: {
@@ -214,7 +210,7 @@ export function postMutationFactory({ name = 'post', restBase = 'posts' } = {}) 
                     type: GraphQLInt,
                 },
                 meta: {
-                    description: 'JSON serialized meta fields.',
+                    description: 'JSON stringified meta fields.',
                     type: GraphQLString,
                 },
                 password: {

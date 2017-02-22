@@ -3,12 +3,11 @@ import {
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
 import { TypedFields } from '../../../lib/strongTypes';
 
-interface RawUserAvatarUrls {
+interface UserAvatarUrlsRaw {
     /** 24x24 avatar url. */
     24: string;
     /** 48x48 avatar url. */
@@ -26,12 +25,8 @@ export interface UserAvatarUrls {
     size96: string;
 }
 
-type avatarConfig = GraphQLObjectTypeConfig<RawUserAvatarUrls, {}>;
-export const avatarObjectType = new GraphQLObjectType(<avatarConfig>{
-    name: 'AvatarObject',
-    description: 'Object containing user avatars.',
-    fields: () => ({
-        size24: {
+const avatarFields: TypedFields<UserAvatarUrls, UserAvatarUrlsRaw, {}> = {
+    size24: {
             description: '24x24 avatar url.',
             type: GraphQLString,
             resolve: avatar => avatar['24'],
@@ -46,10 +41,17 @@ export const avatarObjectType = new GraphQLObjectType(<avatarConfig>{
             type: GraphQLString,
             resolve: avatar => avatar['96'],
         },
+};
+
+export const avatarObjectType = new GraphQLObjectType({
+    name: 'AvatarObject',
+    description: 'Object containing user avatars.',
+    fields: () => ({
+        ...avatarFields,
     }),
 });
 
-export interface UserBase {
+export interface UserBase<TMeta> {
     /** Avatar URLs for the user. */
     avatar_urls: UserAvatarUrls;
     /** Description of the user. */
@@ -66,8 +68,8 @@ export interface UserBase {
     link: string;
     /** Locale for the user. */
     locale: string;
-    /** JSON stringified user meta. */
-    meta: string;
+    /** Expected shape of the user meta. */
+    meta: TMeta;
     /** Display name for the user. */
     name: string;
     /** The nickname for the user. */
@@ -84,7 +86,7 @@ export interface UserBase {
     username: string;
 };
 
-export interface RawUser extends UserBase {
+export interface UserRaw extends UserBase<object> {
     /** All capabilities assigned to the user. */
     capabilities: {
         [capabilityName: string]: true;
@@ -95,18 +97,16 @@ export interface RawUser extends UserBase {
     };
 }
 
-export interface User extends UserBase {
+export interface User<TMeta = { [k: string]: any }> extends UserBase<TMeta> {
     /** All capabilities assigned to the user. */
     capabilities: string[];
     /** Any extra capabilities assigned to the user. */
     extra_capabilities: string[];
+    /** Expected shape of the user meta. */
+    meta: TMeta;
 }
 
-type T = UserBase & RawUser;
-type config = GraphQLObjectTypeConfig<T, {}>;
-type fields = TypedFields<T, T, {}>;
-
-const userFields: fields = {
+const userFields: TypedFields<User, UserRaw, {}> = {
     avatar_urls: {
         description: 'Avatar URLs for the user.',
         type: avatarObjectType,
@@ -150,7 +150,7 @@ const userFields: fields = {
         type: GraphQLString,
     },
     meta: {
-        description: 'Meta fields.',
+        description: 'JSON stringified meta fields.',
         type: GraphQLString,
         resolve: user => JSON.stringify(user.meta),
     },
@@ -184,7 +184,7 @@ const userFields: fields = {
     },
 };
 
-export default new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'User',
     description: 'A WordPress User Object.',
     fields: () => ({

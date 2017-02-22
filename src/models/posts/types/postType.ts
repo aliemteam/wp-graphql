@@ -3,7 +3,6 @@ import {
     GraphQLInt,
     GraphQLList,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
 import { basePost, BasePost, RawBasePost } from '../../../lib/abstract-types/';
@@ -20,19 +19,16 @@ export interface UniquePostFields {
     password: 'string';
     /** Whether or not the object should be treated as sticky. */
     sticky: boolean;
-    /** The terms assigned to the object in the post_tag taxonomy. TODO: not sure what shape this is */
-    tags: any[];
+    /** The terms assigned to the object in the post_tag taxonomy. */
+    tags: number[];
 }
 
-export interface Post extends BasePost, UniquePostFields {
+export interface Post<TMeta  = { [k: string]: any }> extends BasePost<TMeta>, UniquePostFields {
     /** String literal. Will always be "post" for posts. */
     readonly type: 'post';
 }
 
-type config = GraphQLObjectTypeConfig<(UniquePostFields & RawBasePost), {}>;
-type fields = TypedFields<UniquePostFields, (UniquePostFields & RawBasePost), {}>;
-
-const postFields: fields = {
+const postFields: TypedFields<UniquePostFields, (UniquePostFields & RawBasePost), {}> = {
     categories: {
         description: 'The terms assigned to the object in the category taxonomy.',
         type: new GraphQLList(GraphQLInt),
@@ -59,7 +55,7 @@ const postFields: fields = {
     },
 };
 
-export default new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'Post',
     description: 'A WordPress Post Object.',
     fields: () => ({

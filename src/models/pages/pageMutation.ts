@@ -1,13 +1,12 @@
 import {
     GraphQLBoolean,
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
     GraphQLUnionType,
 } from 'graphql';
-import { openClosedType } from '../../lib/abstract-types/';
+import { openClosedType, OpenOrClosed } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
@@ -20,7 +19,7 @@ export interface PageMutationOptions {
     /** The ID for the author of the object. */
     author?: number;
     /** Whether or not comments are open on the object. */
-    comment_status?: 'open'|'closed';
+    comment_status?: OpenOrClosed;
     /** The content for the object. */
     content?: string;
     /** The date the object was published, in the site’s timezone. */
@@ -33,12 +32,12 @@ export interface PageMutationOptions {
     featured_media?: number;
     /** The order of the object in relation to other object of its type. */
     menu_order: any;
-    /** Meta fields. */
-    meta?: any[]; // FIXME:
+    /** JSON stringified meta fields. */
+    meta?: string;
     /** The id for the parent of the object. */
     parent?: number;
     /** Whether or not the object can be pinged. */
-    ping_status?: 'open'|'closed';
+    ping_status?: OpenOrClosed;
     /** An alphanumeric identifier for the object unique to its type. */
     slug?: string;
     /** A named status for the object. */
@@ -86,8 +85,8 @@ const addPage: ArgumentField<PageMutationOptions> = {
             type: GraphQLInt,
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         parent: {
             description: 'The id for the parent of the object.',
@@ -165,8 +164,8 @@ const updatePage: ArgumentField<UpdatePageArgs> = {
             type: GraphQLInt,
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         parent: {
             description: 'The id for the parent of the object.',

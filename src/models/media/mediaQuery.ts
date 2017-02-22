@@ -1,19 +1,22 @@
 import {
+    GraphQLEnumType,
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import {
-    Context,
-    contextType,
-    Order,
-    orderType,
-} from '../../lib/abstract-types/';
+import { Context, contextType, Order, orderType } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import enumFactory from '../../lib/type-factories/enumFactory';
+import { MediaMimeBase, mediaMimeBaseType } from './types/mediaKindType';
+import mediaStatusType, { MediaStatus } from './types/mediaStatusType';
 import mediaType, { Media } from './types/mediaType';
+
+export type MediaOrderBy = 'date'|'id'|'include'|'relevance'|'slug'|'title';
+export const mediaOrderByType: GraphQLEnumType = enumFactory('MediaOrderBy',
+    ['date', 'id', 'include', 'relevance', 'slug', 'title'],
+);
 
 export interface MediaListArgs {
     /** Limit response to resources published after a given ISO8601 compliant date. */
@@ -29,11 +32,11 @@ export interface MediaListArgs {
     /** Ensure result set excludes specific ids. */
     exclude?: number|number[];
     /** Use WP Query arguments to modify the response; private query vars require appropriate authorization. */
-    filter?: string; // FIXME: what is this?
+    filter?: string;
     /** Limit result set to specific ids. */
     include?: number|number[];
     /** Limit result set to attachments of a particular media type. */
-    media_type?: 'application'|'audio'|'image'|'text'|'video';
+    media_type?: MediaMimeBase;
     /** Limit result set to attachments of a particular MIME type. */
     mime_type?: string;
     /** Offset the result set by a specific number of items. */
@@ -41,7 +44,7 @@ export interface MediaListArgs {
     /** Order sort attribute ascending or descending. */
     order?: Order;
     /** Sort collection by object attribute. */
-    orderby?: 'date'|'id'|'include'|'relevance'|'slug'|'title';
+    orderby?: MediaOrderBy;
     /** Current page of the collection. */
     page?: number;
     /** Limit result set to those of particular parent ids. */
@@ -55,10 +58,8 @@ export interface MediaListArgs {
     /** Limit result set to posts with a specific slug. */
     slug?: string;
     /** Limit result set to posts assigned a specific status. */
-    status?: 'inherit'|'private'|'trash';
+    status?: MediaStatus;
 }
-
-const mediaKindType = enumFactory('MediaKind', ['application', 'audio', 'image', 'text', 'video']);
 
 const mediaList: ArgumentField<MediaListArgs> = {
     description: 'Fetch a list of media items.',
@@ -89,7 +90,7 @@ const mediaList: ArgumentField<MediaListArgs> = {
             type: new GraphQLList(GraphQLInt),
         },
         filter: {
-            description: 'Use WP Query arguments to modify the response.',
+            description: 'Use WP Query arguments to modify the response. (Not supported very well by WordPress)',
             type: GraphQLString,
         },
         include: {
@@ -98,7 +99,7 @@ const mediaList: ArgumentField<MediaListArgs> = {
         },
         media_type: {
             description: 'Limit result set to attachments of a particular media type.',
-            type: mediaKindType,
+            type: mediaMimeBaseType,
         },
         mime_type: {
             description: 'Limit result set to attachments of a particular MIME type.',
@@ -114,14 +115,7 @@ const mediaList: ArgumentField<MediaListArgs> = {
         },
         orderby: {
             description: 'Sort collection by object attribute.',
-            type: enumFactory('MediaOrderBy', [
-                'date',
-                'id',
-                'include',
-                'relevance',
-                'slug',
-                'title',
-            ]),
+            type: mediaOrderByType,
         },
         page: {
             description: 'Current page of the collection.',
@@ -149,11 +143,7 @@ const mediaList: ArgumentField<MediaListArgs> = {
         },
         status: {
             description: 'Limit result set to posts assigned a specific status.',
-            type: enumFactory('MediaStatusType', [
-                'inherit',
-                'private',
-                'trash',
-            ]),
+            type: mediaStatusType,
         },
     },
     resolve: (root, args: MediaListArgs): PromiseLike<Media[]> => (

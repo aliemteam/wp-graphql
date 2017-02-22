@@ -49,12 +49,6 @@ import WPGraphQL from 'wp-graphql';
 const transport = new WPGraphQL(AUTH.root, { nonce: AUTH.nonce });
 
 transport.send(`
-    mutation {
-        addPost(title: "My New Post", content: "My post content.") {
-            title
-            content
-        }
-    }
     query {
         user(id: 1, context: edit) {
             id
@@ -69,15 +63,20 @@ transport.send(`
         }
     }
 `).then(data => console.log(data));
+
+transport.send(`
+    mutation {
+        addPost: {
+            title: 'My New Post',
+            content: 'My post content.'
+        },
+    }
+`).then(data => console.log(data));
 ```
 <details>
 <summary><strong>Result</strong></summary>
 <pre>
 {
-    addPost: {
-        title: 'My New Post',
-        content: 'My post content.'
-    },
     user: {
         id: 1,
         name: 'root',
@@ -90,6 +89,13 @@ transport.send(`
     ],
     settings: {
         title: 'My WordPress Site',
+    },
+}
+
+{
+    addPost: {
+        title: 'My New Post',
+        content: 'My post content.'
     },
 }
 </pre>
@@ -191,6 +197,53 @@ Mutation | Description
 
 
 ## Advanced Usage
+
+### Static type checking with TypeScript
+
+> **Note:** Requires TypeScript `^2.3.0`. (At time of writing, that's currently `typescript@next`).
+
+All types in this library are available for consumption. Types that contain a `meta` property can optionally be passed the shape of the expected metadata as a Generic to expand your type checking into the meta fields. The API response returned from the `send()` method can also optionally be typed by passing the expected shape of the response as a Generic.
+
+If desired, the fields of each type interface can be narrowed by using TypeScript's built-in `Pick` method.
+
+```ts
+import WPGraphQL, { User as U, Settings } from 'wp-graphql';
+
+const transport = new WPGraphQL(AUTH.root, { nonce: AUTH.nonce });
+
+interface UserMeta {
+    hobby: string;
+    luckyNumber: number;
+}
+
+type User = U<UserMeta>;
+
+interface Response {
+    user: Pick<User, 'id'|'name'|'meta'|'email'>;
+    firstThreeUsers: Pick<User, 'name'>;
+    settings: Pick<Settings, 'title'>;
+}
+
+transport.send<Response>(`
+    query {
+        user(id: 1, context: edit) {
+            id
+            name
+            meta
+            email
+        }
+        firstThreeUsers: users(per_page: 3, orderby: id) {
+            name
+        }
+        settings {
+            title
+        }
+    }
+`).then(data => {
+    console.log(data.user.description); // Compile Error: The description field is not defined in the Response interface.
+    const hobby = data.user.meta.hobby; // Type inferred as "string".
+});
+```
 
 ### Custom queries and mutations
 

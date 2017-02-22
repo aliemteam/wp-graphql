@@ -1,15 +1,15 @@
 import {
     GraphQLBoolean,
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { openClosedType } from '../../lib/abstract-types/';
+import { openClosedType, OpenOrClosed } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
 import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
+import mediaStatusType, { MediaStatus } from './types/mediaStatusType';
 import mediaType, { Media } from './types/mediaType';
 
 export const deletedMediaType: GraphQLObjectType = deletedObjectFactory(mediaType);
@@ -22,23 +22,23 @@ export interface MediaMutationOptions {
     /** The caption for the resource. */
     caption?: string;
     /** Whether or not comments are open on the object. */
-    comment_status?: 'open'|'closed';
+    comment_status?: OpenOrClosed;
     /** The date the object was published, in the site’s timezone. */
     date?: string;
     /** The date the object was published, as GMT. */
     date_gmt?: string;
     /** The description for the resource. */
     description?: string;
-    /** Meta fields. */
-    meta?: any[]; // FIXME:
+    /** JSON stringified meta fields. */
+    meta?: string;
     /** Whether or not the object can be pinged. */
-    ping_status?: 'open'|'closed';
+    ping_status?: OpenOrClosed;
     /** The id for the associated post of the resource. */
     post?: number;
     /** An alphanumeric identifier for the object unique to its type. */
     slug?: string;
     /** A named status for the object. */
-    status?: 'inherit'|'private'|'trash';
+    status?: MediaStatus;
     /** The title for the object. */
     title?: string;
 }
@@ -92,7 +92,7 @@ const addMedia: ArgumentField<AddMediaArgs> = {
         },
         meta: {
             description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            type: GraphQLString,
         },
         ping_status: {
             description: 'Whether or not the object can be pinged.',
@@ -108,7 +108,7 @@ const addMedia: ArgumentField<AddMediaArgs> = {
         },
         status: {
             description: 'A named status for the object.',
-            type: GraphQLString, // FIXME:
+            type: mediaStatusType,
         },
         title: {
             description: 'The title for the object.',
@@ -162,8 +162,8 @@ const updateMedia: ArgumentField<UpdateMediaArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         ping_status: {
             description: 'Whether or not the object can be pinged.',
@@ -179,7 +179,7 @@ const updateMedia: ArgumentField<UpdateMediaArgs> = {
         },
         status: {
             description: 'A named status for the object.',
-            type: GraphQLString, // FIXME:
+            type: mediaStatusType,
         },
         title: {
             description: 'The title for the object.',

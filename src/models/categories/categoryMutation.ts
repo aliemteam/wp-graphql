@@ -1,7 +1,6 @@
 import {
     GraphQLBoolean,
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
@@ -16,8 +15,8 @@ export const deletedCategoryType: GraphQLObjectType = deletedObjectFactory(categ
 export interface CategoryMutationOptions {
     /** HTML description of the term. */
     description?: string;
-    /** Meta fields. */
-    meta?: any[];
+    /** JSON stringified meta fields. */
+    meta?: string;
     /** HTML title for the term. */
     name?: string;
     /** The parent term ID. */
@@ -40,8 +39,8 @@ const addCategory: ArgumentField<AddCategoryArgs> = {
             type: GraphQLString,
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString), // FIXME:
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         name: {
             description: 'HTML title for the term.',
@@ -79,8 +78,8 @@ const updateCategory: ArgumentField<UpdateCategoryArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString), // FIXME:
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         name: {
             description: 'HTML title for the term.',

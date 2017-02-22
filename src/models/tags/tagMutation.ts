@@ -1,7 +1,6 @@
 import {
     GraphQLBoolean,
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
@@ -16,8 +15,8 @@ export const deletedTagType: GraphQLObjectType = deletedObjectFactory(tagType);
 export interface TagMutationOptions {
     /** HTML description of the term. */
     description?: string;
-    /** Meta fields. */
-    meta?: any[]; // FIXME:
+    /** JSON stringified meta fields. */
+    meta?: string;
     /** HTML title for the term. */
     name?: string;
     /** An alphanumeric identifier for the term unique to its type. */
@@ -38,8 +37,8 @@ const addTag: ArgumentField<AddTagArgs> = {
             type: GraphQLString,
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         name: {
             description: 'HTML title for the term.',
@@ -73,8 +72,8 @@ const updateTag: ArgumentField<UpdateTagArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
         meta: {
-            description: 'Meta fields.',
-            type: new GraphQLList(GraphQLString),
+            description: 'JSON stringified meta fields.',
+            type: GraphQLString,
         },
         name: {
             description: 'HTML title for the term.',

@@ -20,7 +20,7 @@ export interface DeleteRevisionArgs {
     /** ID of the revisions parent. */
     parentId: number;
     /** Pluralized form of the revision's parent type. */
-    parentType: 'posts'|'pages';
+    parentType: string;
 }
 
 const deleteRevision: ArgumentField<DeleteRevisionArgs> = {

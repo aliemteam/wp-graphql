@@ -10,7 +10,7 @@ export interface RevisionsArgs {
     /** The ID of the post. */
     id: number;
     /** The type of post. */
-    postType?: 'posts'|'pages';
+    postType?: string;
 }
 const revisions: ArgumentField<RevisionsArgs> = {
     description: 'List all revisions for an individual post.',

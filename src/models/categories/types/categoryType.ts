@@ -1,13 +1,12 @@
 import {
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
 import { TypedFields } from '../../../lib/strongTypes';
 
-export interface Category {
+export interface Category<TMeta = { [k: string]: any }> {
     /** Number of published posts for the term. */
     readonly count: number;
     /** HTML description of the term. */
@@ -16,8 +15,8 @@ export interface Category {
     readonly id: number;
     /** URL of the term. */
     readonly link: string;
-    /** Meta fields. */
-    meta: any[];
+    /** The expected shape of the category meta fields. */
+    meta: TMeta;
     /** HTML title for the term. */
     name: string;
     /** The parent term ID. */
@@ -28,8 +27,7 @@ export interface Category {
     taxonomy: 'category'|'post_tag'|'nav_menu'|'link_category'|'post_format';
 }
 
-type fields = TypedFields<Category, Category, {}>;
-const categoryFields: fields = {
+const categoryFields: TypedFields<Category, Category, {}> = {
     count: {
         description: 'Number of published posts for the term.',
         type: GraphQLInt,
@@ -47,8 +45,9 @@ const categoryFields: fields = {
         type: GraphQLString,
     },
     meta: {
-        description: 'Meta fields.',
-        type: new GraphQLList(GraphQLString),
+        description: 'JSON stringified meta fields.',
+        type: GraphQLString,
+        resolve: category => JSON.stringify(category.meta),
     },
     name: {
         description: 'HTML title for the term.',

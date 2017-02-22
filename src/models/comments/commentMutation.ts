@@ -18,7 +18,7 @@ export const deletedCommentType: GraphQLObjectType = deletedObjectFactory(commen
 export interface AddCommentArgs extends Partial<MutableCommentOptions> {
     /** Required: The content for the object. */
     content: string;
-    /** JSON serialized meta fields. */
+    /** JSON stringified meta fields. */
     meta?: string;
     /** Required: The id of the associated post object. */
     post: number;
@@ -65,7 +65,7 @@ const addComment: ArgumentField<AddCommentArgs> = {
             type: GraphQLInt,
         },
         meta: {
-            description: 'Meta fields.',
+            description: 'JSON stringified meta fields.',
             type: GraphQLString,
         },
         parent: {
@@ -93,7 +93,7 @@ const addComment: ArgumentField<AddCommentArgs> = {
 export interface UpdateCommentArgs extends Partial<MutableCommentOptions> {
     /** Required: The ID of the comment to be updated. */
     id: number;
-    /** JSON serialized meta fields. */
+    /** JSON stringified meta fields. */
     meta?: string;
 }
 
@@ -142,7 +142,7 @@ const updateComment: ArgumentField<UpdateCommentArgs> = {
             type: GraphQLInt,
         },
         meta: {
-            description: 'Meta fields.',
+            description: 'JSON stringified meta fields.',
             type: GraphQLString,
         },
         parent: {

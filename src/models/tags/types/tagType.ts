@@ -1,6 +1,5 @@
 import {
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLObjectTypeConfig,
@@ -8,7 +7,7 @@ import {
 } from 'graphql';
 import { TypedFields } from '../../../lib/strongTypes';
 
-export interface Tag {
+export interface Tag<TMeta = { [k: string]: any }> {
     /** Number of published posts for the term. */
     readonly count: number;
     /** HTML description of the term. */
@@ -17,8 +16,8 @@ export interface Tag {
     readonly id: number;
     /** URL of the term. */
     readonly link: string;
-    /** Meta fields. */
-    meta: any[];
+    /** Expected shape of the meta fields. */
+    meta: TMeta;
     /** HTML title for the term. */
     name: string;
     /** An alphanumeric identifier for the term unique to its type. */
@@ -46,7 +45,8 @@ const tagFields: TypedFields<Tag, Tag, {}> = {
     },
     meta: {
         description: 'Meta fields.',
-        type: new GraphQLList(GraphQLString),
+        type: GraphQLString,
+        resolve: tag => JSON.stringify(tag.meta),
     },
     name: {
         description: 'HTML title for the term.',

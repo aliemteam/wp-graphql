@@ -6,7 +6,7 @@ import {
 import { TypedFields } from '../strongTypes';
 import { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
 
-export interface SharedFields {
+export interface SharedFields<TMeta> {
     /** The ID for the author of the object. */
     author: number;
     /** Whether or not comments are open on the object. */
@@ -21,8 +21,8 @@ export interface SharedFields {
     excerpt: ContentDescriptor;
     /** The ID of the featured media for the object. */
     featured_media: number;
-    /** JSON stringified meta fields. */
-    meta: string;
+    /** The shape of the meta. */
+    meta: TMeta;
     /** Unique identifier for the object. */
     readonly id: number;
     /** URL to the object */
@@ -40,11 +40,10 @@ export interface SharedFields {
     /** The theme file to use to display the object. Currently unused */
     template: '';
     /** Type of Post for the object. */
-    readonly type: 'post'|'page';
-    // links: {}; TODO:
+    readonly type: string;
 };
 
-export interface RawBasePost extends SharedFields {
+export interface RawBasePost extends SharedFields<object> {
     guid: {
         readonly rendered: string;
     };
@@ -53,7 +52,7 @@ export interface RawBasePost extends SharedFields {
     };
 }
 
-export interface BasePost extends SharedFields {
+export interface BasePost<TMeta> extends SharedFields<TMeta> {
     /** The globally unique identifier for the object. */
     readonly guid: string;
     /** The title for the object. */

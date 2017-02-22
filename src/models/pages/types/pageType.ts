@@ -1,4 +1,4 @@
-import { GraphQLInt, GraphQLObjectType, GraphQLObjectTypeConfig } from 'graphql';
+import { GraphQLInt, GraphQLObjectType } from 'graphql';
 import { basePost, BasePost, RawBasePost } from '../../../lib/abstract-types/';
 import { TypedFields } from '../../../lib/strongTypes';
 
@@ -9,15 +9,12 @@ export interface UniquePageFields {
     parent: number;
 }
 
-export interface Page extends BasePost, UniquePageFields {
+export interface Page<TMeta = { [k: string]: any }> extends BasePost<TMeta>, UniquePageFields {
     /** String literal. Will always be "page" for pages. */
     type: 'page';
 }
 
-type config = GraphQLObjectTypeConfig<(UniquePageFields & RawBasePost), {}>;
-type fields = TypedFields<UniquePageFields, (UniquePageFields & RawBasePost), {}>;
-
-const pageFields: fields = {
+const pageFields: TypedFields<UniquePageFields, (UniquePageFields & RawBasePost), {}> = {
      menu_order: {
         type: GraphQLInt,
         description: 'The order of the object in relation to other object of its type.',
@@ -28,10 +25,10 @@ const pageFields: fields = {
     },
 };
 
-export default new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'Page',
     description: 'A WordPress Page Object.',
-    fields: (): fields => ({
+    fields: () => ({
        ...basePost,
        ...pageFields,
     }),

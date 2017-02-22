@@ -24,7 +24,7 @@ export interface UserMutationOptions {
     last_name?: string;
     /** Locale for the user. */
     locale?: string;
-    /** JSON serialized meta fields. */
+    /** JSON stringified meta fields. */
     meta?: string;
     /** Display name for the user. */
     name?: string;
@@ -76,7 +76,7 @@ const addUser: ArgumentField<AddUserArgs> = {
             type: GraphQLString,
         },
         meta: {
-            description: 'JSON serialized meta fields.',
+            description: 'JSON stringified meta fields.',
             type: GraphQLString,
         },
         name: {
@@ -147,7 +147,7 @@ const updateUser: ArgumentField<UpdateUserArgs> = {
             type: GraphQLString,
         },
         meta: {
-            description: 'JSON serialized meta fields.',
+            description: 'JSON stringified meta fields.',
             type: GraphQLString,
         },
         name: {

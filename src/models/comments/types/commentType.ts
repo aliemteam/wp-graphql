@@ -28,14 +28,12 @@ export interface MutableCommentOptions {
     date_gmt: string;
     /** Karma for the object. */
     karma: number;
-    /** JSON stringified metadata. */
-    meta: string;
     /** The id for the parent of the object. */
     parent: number;
     /** The id of the associated post object. */
     post: number;
     /** State of the object. */
-    status: string;
+    status: 'deleted'|'approved'|'unapproved'|'spam';
     /** Type of Comment for the object. */
     type: CommentKind;
 }
@@ -51,19 +49,23 @@ export interface RawComment extends MutableCommentOptions {
     readonly link: string;
     /** The content for the object. */
     content: ContentDescriptor;
+    /** The comment meta. */
+    meta: object;
 }
 
-export interface Comment extends MutableCommentOptions {
+export interface Comment<TMeta = { [k: string]: any }> extends MutableCommentOptions {
     /** Avatar URLs for the object author. */
     readonly author_avatar_urls: UserAvatarUrls;
     /** User agent for the object author. */
     readonly author_user_agent: string;
+    /** The content for the object. */
+    content: ContentDescriptor;
     /** Unique identifier for the object. */
     readonly id: number;
     /** URL to the object. */
     readonly link: string;
-    /** The content for the object. */
-    content: ContentDescriptor;
+    /** The expected shape of the comment meta. */
+    meta: TMeta;
 }
 
 const commentFields: TypedFields<Comment, RawComment, {}> = {
@@ -120,7 +122,7 @@ const commentFields: TypedFields<Comment, RawComment, {}> = {
         type: GraphQLString,
     },
     meta: {
-        description: 'Meta fields.',
+        description: 'JSON stringified meta fields.',
         type: GraphQLString,
         resolve: comment => JSON.stringify(comment.meta),
     },

@@ -4,6 +4,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
+import { openClosedType, OpenOrClosed } from '../../../lib/abstract-types/';
 import { TypedFields } from '../../../lib/strongTypes';
 
 export interface Settings {
@@ -12,9 +13,9 @@ export interface Settings {
     /** ID of default category. */
     default_category: number;
     /** Either "open" or "closed". */
-    default_comment_status: 'open'|'closed';
+    default_comment_status: OpenOrClosed;
     /** Either "open" or "closed". */
-    default_ping_status: 'open'|'closed';
+    default_ping_status: OpenOrClosed;
     /** Default post format. */
     default_post_format: string;
     /** Site description. */
@@ -50,11 +51,11 @@ const settingsFields: TypedFields<Settings, Settings, any> = {
     },
     default_comment_status: {
         description: 'Either "open" or "closed".',
-        type: GraphQLString,
+        type: openClosedType,
     },
     default_ping_status: {
         description: 'Either "open" or "closed".',
-        type: GraphQLString,
+        type: openClosedType,
     },
     default_post_format: {
         description: 'Default post format.',

@@ -1,14 +1,15 @@
 import {
     GraphQLInt,
-    GraphQLList,
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types/';
+import { ContentDescriptor, contentDescriptorType, openClosedType, OpenOrClosed } from '../../../lib/abstract-types/';
 import { TypedFields } from '../../../lib/strongTypes';
 import mediaDetailsType, { MediaDetails, MediaDetailsRaw } from './mediaDetailsType';
+import mediaKindType, { MediaKind } from './mediaKindType';
+import mediaStatusType, { MediaStatus } from './mediaStatusType';
 
-export interface MediaBase {
+export interface MediaBase<TMeta> {
     /** Alternative text to display when resource is not displayed. */
     alt_text: string;
     /** The id for the author of the object. */
@@ -16,7 +17,7 @@ export interface MediaBase {
     /** The caption for the resource. */
     caption: ContentDescriptor;
     /** Whether or not comments are open on the object. */
-    comment_status: 'open'|'closed';
+    comment_status: OpenOrClosed;
     /** The date the object was published, in the site’s timezone. */
     date: string;
     /** The date the object was published, as GMT. */
@@ -30,9 +31,9 @@ export interface MediaBase {
     /** URL to the object. */
     link: string;
     /** Type of resource. */
-    media_type: 'image'|'file';
-    /** Meta fields. */
-    meta: any[]; // FIXME:
+    media_type: MediaKind;
+    /** The expected shape of the meta fields. */
+    meta: TMeta;
     /** MIME type of resource. */
     mime_type: string;
     /** The date the object was last modified, in the site’s timezone. */
@@ -40,7 +41,7 @@ export interface MediaBase {
     /** The date the object was last modified, as GMT. */
     modified_gmt: string;
     /** Whether or not the object can be pinged. */
-    ping_status: 'open'|'closed';
+    ping_status: OpenOrClosed;
     /** The id for the associated post of the resource. */
     post: number;
     /** An alphanumeric identifier for the object unique to its type. */
@@ -48,19 +49,19 @@ export interface MediaBase {
     /** URL to the original resource file. */
     source_url: string;
     /** A named status for the object. */
-    status: 'inherit'|'private'|'trash';
+    status: MediaStatus;
     /** The title for the object. */
     title: ContentDescriptor;
     /** Type of Post for the object. */
     type: string;
 }
 
-export interface MediaRaw extends MediaBase {
+export interface MediaRaw extends MediaBase<object> {
     /** Details about the resource file, specific to its type. */
     media_details: MediaDetailsRaw;
 }
 
-export interface Media extends MediaBase {
+export interface Media<TMeta = { [k: string]: any }> extends MediaBase<TMeta> {
     /** Details about the resource file, specific to its type. */
     media_details: MediaDetails;
 }
@@ -80,7 +81,7 @@ const mediaFields: TypedFields<MediaRaw, Media, {}> = {
     },
     comment_status: {
         description: 'Whether or not comments are open on the object.',
-        type: GraphQLString,
+        type: openClosedType,
     },
     date: {
         description: 'The date the object was published, in the site’s timezone.',
@@ -111,12 +112,13 @@ const mediaFields: TypedFields<MediaRaw, Media, {}> = {
         type: mediaDetailsType,
     },
     media_type: {
-        description: 'Type of resource. ("image" or "file")',
-        type: GraphQLString,
+        description: 'Type of resource. (image or file)',
+        type: mediaKindType,
     },
     meta: {
-        description: 'Meta fields.',
-        type: new GraphQLList(GraphQLString),
+        description: 'JSON stringified meta fields.',
+        type: GraphQLString,
+        resolve: media => JSON.stringify(media.meta),
     },
     mime_type: {
         description: 'MIME type of resource.',
@@ -132,7 +134,7 @@ const mediaFields: TypedFields<MediaRaw, Media, {}> = {
     },
     ping_status: {
         description: 'Whether or not the object can be pinged.',
-        type: GraphQLString,
+        type: openClosedType,
     },
     post: {
         description: 'The id for the associated post of the resource.',
@@ -148,7 +150,7 @@ const mediaFields: TypedFields<MediaRaw, Media, {}> = {
     },
     status: {
         description: 'A named status for the object.',
-        type: GraphQLString,
+        type: mediaStatusType,
     },
     title: {
         description: 'The title for the object.',
