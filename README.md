@@ -63,15 +63,6 @@ transport.send(`
         }
     }
 `).then(data => console.log(data));
-
-transport.send(`
-    mutation {
-        addPost: {
-            title: 'My New Post',
-            content: 'My post content.'
-        },
-    }
-`).then(data => console.log(data));
 ```
 <details>
 <summary><strong>Result</strong></summary>
@@ -89,13 +80,6 @@ transport.send(`
     ],
     settings: {
         title: 'My WordPress Site',
-    },
-}
-
-{
-    addPost: {
-        title: 'My New Post',
-        content: 'My post content.'
     },
 }
 </pre>
@@ -130,6 +114,75 @@ interface Config {
     queries?: GraphQLFieldConfigMap<any, any>;
 }
 ```
+
+### Methods
+
+#### `send`
+
+Execute a single GraphQL query or mutation.
+
+```ts
+type send = <TResponse>(gql: string, variables?: object, operationName?: string) => PromiseLike<TResponse>
+```
+
+#### `batch`
+
+Execute a chain of GraphQL queries and/or mutations.
+
+If at any point a response returns with a field labelled `extract`, all first-level fields are available to be used in the immediately subsequent query or mutation. Variables may also still be passed _to_ `batch`, but keep in mind that the variables passed to the `batch` signature will _always_ win if a name conflict occurs in an extracted variable.
+
+Keep in mind also that if queries are batched with the same field names, each subsequent query will overwrite the last one. To avoid this, just tag the fields with a unique name.
+
+```ts
+type batch = <TResponse>(gql: string, operationNames: string[], variables?: object) => PromiseLike<TResponse>
+```
+
+**Example:**
+
+```ts
+import WPGraphQL from 'wp-graphql';
+
+const transport = new WPGraphQL(AUTH.root, { nonce: AUTH.nonce });
+
+transport.batch(`
+    query first {
+        extract: me {
+            id
+            name
+        }
+    }
+    query second($id: Int!) {
+        user(id: $id) {
+            name
+        }
+    }
+    mutation third($anotherId: Int!, $name: String) {
+        updateUser(id: $anotherId, name: $name) {
+            id
+            name
+        }
+    }
+`, ['first', 'second', 'third'], { anotherId: 2, name: 'Sally Jones' }).then(data => console.log(data));
+```
+<details>
+<summary><strong>Result</strong></summary>
+<pre>
+{
+    extract: {
+        id: 1,
+        name: 'Bob Smith',
+    },
+    user: {
+        id: 1,
+        name: 'Bob Smith',
+    },
+    updateUser: {
+        id: 2,
+        name: 'Sally Jones',
+    },
+}
+</pre>
+</details>
 
 ### Resolvers
 
