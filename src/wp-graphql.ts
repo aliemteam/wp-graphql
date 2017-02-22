@@ -45,6 +45,8 @@ export interface Config {
 export interface TransportLayer {
     send<T>(gql: string, variables?: object, operationName?: string): PromiseLike<T>;
     send(gql: string, variables?: object, operationName?: string): PromiseLike<any>;
+    batch<T>(gql: string, operationNames: string[], variables?: object): Promise<T>;
+    batch(gql: string, operationNames: string[], variables?: object): Promise<any>;
 }
 
 export default class WPGraphQL implements TransportLayer {
@@ -80,6 +82,19 @@ export default class WPGraphQL implements TransportLayer {
     }
     public send<T = any>(gql: string, vars?: object, operationName?: string): PromiseLike<T> {
         return this.transport.send(gql, vars, operationName).then(parseMeta);
+    }
+    public async batch<T = any>(gql: string, operationNames: string[], vars?: object): Promise<T> {
+        let data = {};
+        let batchedVars;
+        for (const operation of operationNames) {
+            const d = await this.transport.send<any>(gql, { ...vars, ...batchedVars }, operation);
+            batchedVars = d.extract;
+            data = {
+                ...data,
+                ...d,
+            };
+        }
+        return parseMeta(data);
     }
     @queryString
     protected delete(path: string, args: string): PromiseLike<any> {

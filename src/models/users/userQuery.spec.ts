@@ -171,3 +171,85 @@ test('/users/me', async t => {
     `);
     t.deepEqual(actual, expected);
 });
+
+test('batched queries with "extract"', async t => {
+    const expected = {
+        extract: {
+            id: 1,
+            name: 'root',
+            email: 'admin@wordpress.com',
+        },
+        user: {
+            name: 'root',
+        },
+    };
+    const actual = await transport.batch(`
+        query firstQuery {
+            extract: me {
+                id
+                name
+                email
+            }
+        }
+        query secondQuery($id: Int!) {
+            user(id: $id) {
+                name
+            }
+        }
+    `, ['firstQuery', 'secondQuery']);
+    t.deepEqual(actual, expected);
+});
+
+test('batched queries without "extract", but with variables', async t => {
+    const expected = {
+        me: {
+            name: 'root',
+        },
+        user: {
+            name: 'root',
+        },
+    };
+    const actual = await transport.batch(`
+        query secondQuery($id: Int!) {
+            user(id: $id) {
+                name
+            }
+        }
+        query firstQuery {
+            me {
+                name
+            }
+        }
+    `, ['firstQuery', 'secondQuery'], { id: 1 });
+    t.deepEqual(actual, expected);
+});
+
+test('batched queries with "extract" and defined variables', async t => {
+    const expected = {
+        extract: {
+            id: 1,
+        },
+        user: {
+            name: 'root',
+        },
+        user2: {
+            name: 'root',
+        },
+    };
+    const actual = await transport.batch(`
+        query secondQuery($id: Int!, $myId: Int!) {
+            user(id: $id) {
+                name
+            }
+            user2: user(id: $myId) {
+                name
+            }
+        }
+        query firstQuery($myId: Int!) {
+            extract: user(id: $myId) {
+                id
+            }
+        }
+    `, ['firstQuery', 'secondQuery'], { myId: 1 });
+    t.deepEqual(actual, expected);
+});
