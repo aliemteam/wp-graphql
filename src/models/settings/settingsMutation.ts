@@ -88,8 +88,8 @@ const updateSettings: ArgumentField<Settings> = {
             type: GraphQLBoolean,
         },
     },
-    resolve: (root, args: Settings): PromiseLike<Settings> => (
-        root.post(`/${NS}/settings`, args)
+    resolve: (root, args: Settings) => (
+        root.post<Settings>(`/${NS}/settings`, args)
     ),
 };
 

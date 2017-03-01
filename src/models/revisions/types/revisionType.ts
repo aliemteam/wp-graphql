@@ -1,7 +1,6 @@
 import {
     GraphQLInt,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
 import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
@@ -48,11 +47,7 @@ export interface Revision extends RevisionBase {
     title: string;
 }
 
-type T = RevisionBase & RawRevision;
-type config = GraphQLObjectTypeConfig<T, {}>;
-type fields = TypedFields<T, T, {}>;
-
-const revisionFields: fields = {
+const revisionFields: TypedFields<Revision, RawRevision> = {
     author: {
         description: 'The id for the author of the object.',
         type: GraphQLInt,
@@ -105,7 +100,7 @@ const revisionFields: fields = {
     },
 };
 
-export default new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'Revision',
     description: 'A post revision object.',
     fields: () => ({

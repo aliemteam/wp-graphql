@@ -46,7 +46,7 @@ Once an instance is created, you are able to query and mutate data using standar
 
 import WPGraphQL from 'wp-graphql';
 
-const transport = new WPGraphQL(AUTH.root, { nonce: AUTH.nonce });
+const transport = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
 
 transport.send(`
     query {
@@ -92,6 +92,15 @@ transport.send(`
 The `WPGraphQL` class accepts an object with the `Config` interface as the second argument to configure the instance.
 
 ```ts
+/** Authenticate with Basic Auth (Requires Basic Auth plugin) */
+interface BasicAuth {
+    username: string;
+    password: string;
+}
+
+/** Either a BasicAuth object or a WordPress nonce string */
+type Authentication = BasicAuth | string;
+
 interface CustomPostTypeParams {
     /** The singular name of the custom content type. (e.g. "book") */
     name: string;
@@ -142,7 +151,7 @@ type batch = <TResponse>(gql: string, operationNames: string[], variables?: obje
 ```ts
 import WPGraphQL from 'wp-graphql';
 
-const transport = new WPGraphQL(AUTH.root, { nonce: AUTH.nonce });
+const transport = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
 
 transport.batch(`
     query first {
@@ -262,7 +271,7 @@ If desired, the fields of each type interface can be narrowed by using TypeScrip
 ```ts
 import WPGraphQL, { User as U, Settings } from 'wp-graphql';
 
-const transport = new WPGraphQL(AUTH.root, { nonce: AUTH.nonce });
+const transport = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
 
 interface UserMeta {
     hobby: string;

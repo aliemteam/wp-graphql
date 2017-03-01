@@ -10,12 +10,11 @@ import {
 import { openClosedType, OpenOrClosed } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
-import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
+import deletedObjectFactory, { DeletedUnion } from '../../lib/type-factories/deletedObjectFactory';
 import { postStatusType, Status } from '../post-statuses/types/postStatusType';
 import postType, { Post } from './types/postType';
 
 export const deletedPostType: GraphQLObjectType = deletedObjectFactory(postType);
-
 export const deletePostResponseUnion = new GraphQLUnionType({
     name: 'DeletePostResponse',
     types: [ deletedPostType, postType ],
@@ -161,8 +160,8 @@ export function postMutationFactory({ name = 'post', restBase = 'posts' } = {}) 
                     type: new GraphQLNonNull(GraphQLString),
                 },
             },
-            resolve: (root, args): PromiseLike<Post> => (
-                root.post(`/${NS}/${restBase}`, args)
+            resolve: (root, args: AddPostArgs) => (
+                root.post<Post>(`/${NS}/${restBase}`, args)
             ),
         },
         [updateItem]: <ArgumentField<UpdatePostArgs>> {
@@ -246,8 +245,8 @@ export function postMutationFactory({ name = 'post', restBase = 'posts' } = {}) 
                     type: GraphQLString,
                 },
             },
-            resolve: (root, { id, ...args }: UpdatePostArgs): PromiseLike<Post> => (
-                root.post(`/${NS}/${restBase}/${id}`, args)
+            resolve: (root, { id, ...args }: UpdatePostArgs) => (
+                root.post<Post>(`/${NS}/${restBase}/${id}`, args)
             ),
         },
         [deleteItem]: <ArgumentField<DeletePostArgs>> {
@@ -263,8 +262,8 @@ export function postMutationFactory({ name = 'post', restBase = 'posts' } = {}) 
                     type: new GraphQLNonNull(GraphQLInt),
                 },
             },
-            resolve: (root, { id, ...args }: DeletePostArgs): PromiseLike<Post|DeletedObject<Post>> => (
-                root.delete(`/${NS}/${restBase}/${id}`, args)
+            resolve: (root, { id, ...args }: DeletePostArgs) => (
+                root.delete<DeletedUnion<Post>>(`/${NS}/${restBase}/${id}`, args)
             ),
         },
     };

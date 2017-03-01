@@ -8,7 +8,7 @@ import {
 import { openClosedType, OpenOrClosed } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
-import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
+import deletedObjectFactory, { DeletedUnion } from '../../lib/type-factories/deletedObjectFactory';
 import mediaStatusType, { MediaStatus } from './types/mediaStatusType';
 import mediaType, { Media } from './types/mediaType';
 
@@ -115,8 +115,8 @@ const addMedia: ArgumentField<AddMediaArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args): PromiseLike<Media> => (
-        root.upload(`/${NS}/media`, args)
+    resolve: (root, args: AddMediaArgs) => (
+        root.upload<Media>(`/${NS}/media`, args)
     ),
 };
 
@@ -186,8 +186,8 @@ const updateMedia: ArgumentField<UpdateMediaArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: UpdateMediaArgs): PromiseLike<Media> => (
-        root.post(`/${NS}/media/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateMediaArgs) => (
+        root.post<Media>(`/${NS}/media/${id}`, args)
     ),
 };
 
@@ -212,8 +212,8 @@ const deleteMedia: ArgumentField<DeleteMediaArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: DeleteMediaArgs): PromiseLike<Media|DeletedObject<Media>> => (
-        root.delete(`${NS}/media/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteMediaArgs) => (
+        root.delete<DeletedUnion<Media>>(`${NS}/media/${id}`, args)
     ),
 };
 

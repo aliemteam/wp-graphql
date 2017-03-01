@@ -49,8 +49,8 @@ const addTag: ArgumentField<AddTagArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: AddTagArgs): PromiseLike<Tag> => (
-        root.post(`/${NS}/tags`, args)
+    resolve: (root, args: AddTagArgs) => (
+        root.post<Tag>(`/${NS}/tags`, args)
     ),
 };
 
@@ -84,8 +84,8 @@ const updateTag: ArgumentField<UpdateTagArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: UpdateTagArgs): PromiseLike<Tag> => (
-        root.post(`/${NS}/tags/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateTagArgs) => (
+        root.post<Tag>(`/${NS}/tags/${id}`, args)
     ),
 };
 
@@ -110,8 +110,8 @@ const deleteTag: ArgumentField<DeleteTagArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: DeleteTagArgs): PromiseLike<DeletedObject<Tag>> => (
-        root.delete(`/${NS}/tags/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteTagArgs) => (
+        root.delete<DeletedObject<Tag>>(`/${NS}/tags/${id}`, args)
     ),
 };
 

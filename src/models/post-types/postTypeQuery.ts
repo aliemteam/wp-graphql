@@ -26,8 +26,8 @@ const postTypes: ArgumentField<PostTypesArgs> = {
             type: contextType,
         },
     },
-    resolve: (root, args: PostTypesArgs): PromiseLike<PostTypeList> => (
-        root.get(`/${NS}/types`, args)
+    resolve: (root, args: PostTypesArgs) => (
+        root.get<PostTypeList>(`/${NS}/types`, args)
     ),
 };
 
@@ -44,8 +44,8 @@ const postType: ArgumentField<PostTypeArgs> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (root, { slug, ...args }: PostTypeArgs): PromiseLike<PostType<string>> => (
-        root.get(`/${NS}/types/${slug}`, args)
+    resolve: (root, { slug, ...args }: PostTypeArgs) => (
+        root.get<PostType>(`/${NS}/types/${slug}`, args)
     ),
 };
 

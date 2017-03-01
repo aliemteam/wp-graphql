@@ -8,7 +8,7 @@ import {
 } from 'graphql';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
-import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
+import deletedObjectFactory, { DeletedUnion } from '../../lib/type-factories/deletedObjectFactory';
 import commentKind from './types/commentKindType';
 import commentStatusType from './types/commentStatusType';
 import commentType, { Comment, MutableCommentOptions } from './types/commentType';
@@ -85,8 +85,8 @@ const addComment: ArgumentField<AddCommentArgs> = {
             type: commentKind,
         },
     },
-    resolve: (root, args: MutableCommentOptions): PromiseLike<Comment> => (
-        root.post(`/${NS}/comments`, args)
+    resolve: (root, args: MutableCommentOptions) => (
+        root.post<Comment>(`/${NS}/comments`, args)
     ),
 };
 
@@ -162,8 +162,8 @@ const updateComment: ArgumentField<UpdateCommentArgs> = {
             type: commentKind,
         },
     },
-    resolve: (root, { id, ...args }: UpdateCommentArgs): PromiseLike<Comment> => (
-        root.post(`/${NS}/comments/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateCommentArgs) => (
+        root.post<Comment>(`/${NS}/comments/${id}`, args)
     ),
 };
 
@@ -198,8 +198,8 @@ const deleteComment: ArgumentField<DeleteCommentArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: DeleteCommentArgs): PromiseLike<Comment|DeletedObject<Comment>> => (
-        root.delete(`/${NS}/comments/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteCommentArgs) => (
+        root.delete<DeletedUnion<Comment>>(`/${NS}/comments/${id}`, args)
     ),
 };
 

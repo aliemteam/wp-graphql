@@ -1,5 +1,9 @@
 import { GraphQLArgumentConfig, GraphQLFieldConfig, GraphQLFieldResolver, GraphQLOutputType } from 'graphql';
 
+export interface Meta {
+    [metaKey: string]: any;
+}
+
 export interface ArgumentConfig extends GraphQLArgumentConfig {
     description: string;
 }
@@ -9,10 +13,10 @@ export interface FieldConfig<TSource, TContext> extends GraphQLFieldConfig<TSour
 }
 
 export interface Source {
-    delete(path: string, args: object): PromiseLike<any>;
-    get(path: string, args: object): PromiseLike<any>;
-    post(path: string, args: object): PromiseLike<any>;
-    upload(path: string, args: object): PromiseLike<any>;
+    delete<T = any>(path: string, args: object): PromiseLike<T>;
+    get<T = any>(path: string, args: object): PromiseLike<T>;
+    post<T = any>(path: string, args: object): PromiseLike<T>;
+    upload<T = any>(path: string, args: object): PromiseLike<T>;
 }
 
 export interface ArgumentField<T> {
@@ -25,6 +29,6 @@ export interface ArgumentField<T> {
     description?: string;
 }
 
-export type TypedFields<T, TSource, TContext> = {
-    [P in keyof T]: FieldConfig<TSource, TContext>;
+export type TypedFields<TResolved, TRaw = TResolved> = {
+    [P in keyof TResolved]: FieldConfig<TRaw, {}>;
 };

@@ -5,8 +5,8 @@ import settingsType, { Settings } from './types/settingsType';
 const settings: ArgumentField<{}> = {
     description: 'Fetch the site settings.',
     type: settingsType,
-    resolve: (root, args): PromiseLike<Settings> => (
-        root.get(`/${NS}/settings`, args)
+    resolve: (root, args) => (
+        root.get<Settings>(`/${NS}/settings`, args)
     ),
 };
 

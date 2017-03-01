@@ -9,7 +9,7 @@ import {
 import { openClosedType, OpenOrClosed } from '../../lib/abstract-types/';
 import { namespace as NS } from '../../lib/constants';
 import { ArgumentField } from '../../lib/strongTypes';
-import deletedObjectFactory, { DeletedObject } from '../../lib/type-factories/deletedObjectFactory';
+import deletedObjectFactory, { DeletedUnion } from '../../lib/type-factories/deletedObjectFactory';
 import { postStatusType, Status } from '../post-statuses/types/postStatusType';
 import pageType, { Page } from './types/pageType';
 
@@ -113,8 +113,8 @@ const addPage: ArgumentField<PageMutationOptions> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args): PromiseLike<Page> => (
-        root.post(`/${NS}/pages`, args)
+    resolve: (root, args: PageMutationOptions) => (
+        root.post<Page>(`/${NS}/pages`, args)
     ),
 };
 
@@ -192,8 +192,8 @@ const updatePage: ArgumentField<UpdatePageArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: UpdatePageArgs): PromiseLike<Page> => (
-        root.post(`/${NS}/pages/${id}`, args)
+    resolve: (root, { id, ...args }: UpdatePageArgs) => (
+        root.post<Page>(`/${NS}/pages/${id}`, args)
     ),
 };
 
@@ -228,8 +228,8 @@ const deletePage: ArgumentField<DeletePageArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: DeletePageArgs): PromiseLike<Page|DeletedObject<Page>> => (
-        root.delete(`/${NS}/pages/${id}`, args)
+    resolve: (root, { id, ...args }: DeletePageArgs) => (
+        root.delete<DeletedUnion<Page>>(`/${NS}/pages/${id}`, args)
     ),
 };
 

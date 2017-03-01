@@ -7,6 +7,8 @@ export interface DeletedObject<T> {
     previous: T;
 }
 
+export type DeletedUnion<T> = T | DeletedObject<T>;
+
 export default function deletedObjectFactory<T extends GraphQLObjectType>(type: T): GraphQLObjectType {
     return new GraphQLObjectType({
         name: `Deleted${type.name}`,

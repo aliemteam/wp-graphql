@@ -14,7 +14,7 @@ export const deletedRevisionType: GraphQLObjectType = deletedObjectFactory(revis
 
 export interface DeleteRevisionArgs {
     /** Set internally. Must be true for request to complete. */
-    force: true;
+    force?: true;
     /** ID of the revision being deleted. */
     id: number;
     /** ID of the revisions parent. */
@@ -46,8 +46,8 @@ const deleteRevision: ArgumentField<DeleteRevisionArgs> = {
             defaultValue: 'posts',
         },
     },
-    resolve: (root, { id, parentId, parentType, ...args }): PromiseLike<DeletedObject<Revision>> => (
-        root.delete(`/${NS}/${parentType}/${parentId}/revisions/${id}`, args)
+    resolve: (root, { id, parentId, parentType, ...args }: DeleteRevisionArgs) => (
+        root.delete<DeletedObject<Revision>>(`/${NS}/${parentType}/${parentId}/revisions/${id}`, args)
     ),
 };
 

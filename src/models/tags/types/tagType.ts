@@ -2,12 +2,11 @@ import {
     GraphQLInt,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../../lib/strongTypes';
+import { Meta, TypedFields } from '../../../lib/strongTypes';
 
-export interface Tag<TMeta = { [k: string]: any }> {
+export interface Tag<TMeta = Meta> {
     /** Number of published posts for the term. */
     readonly count: number;
     /** HTML description of the term. */
@@ -26,7 +25,7 @@ export interface Tag<TMeta = { [k: string]: any }> {
     readonly taxonomy: string;
 }
 
-const tagFields: TypedFields<Tag, Tag, {}> = {
+const tagFields: TypedFields<Tag> = {
     count: {
         description: 'Number of published posts for the term.',
         type: GraphQLInt,
@@ -62,7 +61,7 @@ const tagFields: TypedFields<Tag, Tag, {}> = {
     },
 };
 
-export default new GraphQLObjectType(<GraphQLObjectTypeConfig<Tag, {}>>{
+export default new GraphQLObjectType({
     name: 'Tag',
     description: 'A single tag object.',
     fields: () => ({

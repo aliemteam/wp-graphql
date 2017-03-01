@@ -55,8 +55,8 @@ const addCategory: ArgumentField<AddCategoryArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: AddCategoryArgs): PromiseLike<Category> => (
-        root.post(`/${NS}/categories`, args)
+    resolve: (root, args: AddCategoryArgs) => (
+        root.post<Category>(`/${NS}/categories`, args)
     ),
 };
 
@@ -94,8 +94,8 @@ const updateCategory: ArgumentField<UpdateCategoryArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: UpdateCategoryArgs): PromiseLike<Category> => (
-        root.post(`/${NS}/categories/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateCategoryArgs) => (
+        root.post<Category>(`/${NS}/categories/${id}`, args)
     ),
 };
 
@@ -120,8 +120,8 @@ const deleteCategory: ArgumentField<DeleteCategoryArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: DeleteCategoryArgs): PromiseLike<DeletedObject<Category>> => (
-        root.delete(`/${NS}/categories/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteCategoryArgs) => (
+        root.delete<DeletedObject<Category>>(`/${NS}/categories/${id}`, args)
     ),
 };
 

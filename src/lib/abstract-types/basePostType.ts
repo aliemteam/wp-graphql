@@ -3,7 +3,7 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../strongTypes';
+import { Meta, TypedFields } from '../strongTypes';
 import { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
 
 export interface SharedFields<TMeta> {
@@ -52,14 +52,14 @@ export interface RawBasePost extends SharedFields<object> {
     };
 }
 
-export interface BasePost<TMeta> extends SharedFields<TMeta> {
+export interface BasePost<TMeta = Meta> extends SharedFields<TMeta> {
     /** The globally unique identifier for the object. */
     readonly guid: string;
     /** The title for the object. */
     title: string;
 }
 
-export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
+export const basePost: TypedFields<BasePost, RawBasePost> = {
     author: {
         description: 'The ID for the author of the object.',
         type: GraphQLInt,

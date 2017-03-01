@@ -20,7 +20,7 @@ export interface MediaSize {
     width: number;
 }
 
-const mediaSizeFields: TypedFields<MediaSize, MediaSize, any> = {
+const mediaSizeFields: TypedFields<MediaSize> = {
     file: {
         description: 'File name including extension.',
         type: GraphQLString,

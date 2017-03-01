@@ -32,7 +32,7 @@ const taxonomies: ArgumentField<TaxonomiesArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: TaxonomiesArgs): PromiseLike<Taxonomy[]> => (
+    resolve: (root, args: TaxonomiesArgs) => (
         root.get(`/${NS}/taxonomies`, args).then(transformTaxonomyObject)
     ),
 };
@@ -57,8 +57,8 @@ const taxonomy: ArgumentField<TaxonomyArgs> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (root, { slug, ...args }: TaxonomyArgs): PromiseLike<Taxonomy> => (
-        root.get(`/${NS}/taxonomies/${slug}`, args)
+    resolve: (root, { slug, ...args }: TaxonomyArgs) => (
+        root.get<Taxonomy>(`/${NS}/taxonomies/${slug}`, args)
     ),
 };
 
