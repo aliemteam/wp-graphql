@@ -30,8 +30,8 @@ const revisions: ArgumentField<RevisionsArgs> = {
             defaultValue: 'posts',
         },
     },
-    resolve: (root, { id, postType, ...args }: RevisionsArgs): PromiseLike<Revision[]> => (
-        root.get(`/${NS}/${postType}/${id}/revisions`, args)
+    resolve: (root, { id, postType, ...args }: RevisionsArgs) => (
+        root.get<Revision[]>(`/${NS}/${postType}/${id}/revisions`, args)
     ),
 };
 
@@ -61,8 +61,8 @@ const revision: ArgumentField<RevisionArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, postType, parentId, ...args }: RevisionArgs): PromiseLike<Revision> => (
-        root.get(`/${NS}/${postType}/${parentId}/revisions/${id}`, args)
+    resolve: (root, { id, postType, parentId, ...args }: RevisionArgs) => (
+        root.get<Revision>(`/${NS}/${postType}/${parentId}/revisions/${id}`, args)
     ),
 };
 

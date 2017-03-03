@@ -31,7 +31,7 @@ export interface ImageMeta {
     /** Image title. */
     title: string;
 }
-const imageMetaFields: TypedFields<ImageMeta, ImageMeta, {}> = {
+const imageMetaFields: TypedFields<ImageMeta> = {
     aperture: {
         description: 'Image aperture.',
         type: GraphQLString,

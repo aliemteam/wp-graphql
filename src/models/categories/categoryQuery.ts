@@ -98,8 +98,8 @@ const categories: ArgumentField<CategoriesArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: CategoriesArgs): PromiseLike<Category[]> => (
-        root.get(`/${NS}/categories`, args)
+    resolve: (root, args: CategoriesArgs) => (
+        root.get<Category[]>(`/${NS}/categories`, args)
     ),
 };
 
@@ -123,8 +123,8 @@ const category: ArgumentField<CategoryArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: CategoryArgs): PromiseLike<Category> => (
-        root.get(`/${NS}/categories/${id}`, args)
+    resolve: (root, { id, ...args }: CategoryArgs) => (
+        root.get<Category>(`/${NS}/categories/${id}`, args)
     ),
 };
 

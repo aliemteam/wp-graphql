@@ -35,7 +35,7 @@ export interface MediaDetails extends MediaDetailsBase {
     sizes: MediaSize[];
 }
 
-const mediaDetailsFields: TypedFields<MediaDetails, MediaDetailsRaw, {}> = {
+const mediaDetailsFields: TypedFields<MediaDetails, MediaDetailsRaw> = {
     file: {
         description: '',
         type: GraphQLString,

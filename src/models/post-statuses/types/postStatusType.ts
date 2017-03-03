@@ -39,7 +39,7 @@ export interface SinglePostStatus {
     readonly slug: string;
 }
 
-const singleStatusFields: TypedFields<SinglePostStatus, SinglePostStatus, {}> = {
+const singleStatusFields: TypedFields<SinglePostStatus> = {
     name: {
         description: 'The title for the resource.',
         type: GraphQLString,
@@ -79,7 +79,7 @@ export const singlePostStatusType = new GraphQLObjectType({
 });
 
 export type PostStatusObject = { [k in Status]: SinglePostStatus };
-const postStatusFields: TypedFields<PostStatusObject, PostStatusObject, {}> = {
+const postStatusFields: TypedFields<PostStatusObject> = {
     draft: {
         description: 'PostStatus for type "draft"',
         type: singlePostStatusType,

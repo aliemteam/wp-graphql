@@ -146,8 +146,8 @@ const pages: ArgumentField<PagesArgs> = {
             type: new GraphQLList(postStatusType),
         },
     },
-    resolve: (root, args: PagesArgs): PromiseLike<Page[]> => (
-        root.get(`/${NS}/pages`, args)
+    resolve: (root, args: PagesArgs) => (
+        root.get<Page[]>(`/${NS}/pages`, args)
     ),
 };
 
@@ -176,8 +176,8 @@ const page: ArgumentField<PageArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: PageArgs): PromiseLike<Page> => (
-        root.get(`/${NS}/pages/${id}`, args)
+    resolve: (root, { id, ...args }: PageArgs) => (
+        root.get<Page>(`/${NS}/pages/${id}`, args)
     ),
 };
 

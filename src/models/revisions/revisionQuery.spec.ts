@@ -1,14 +1,16 @@
 import test from 'ava';
 import WPGraphQL from '../../index';
 
-const transport = new WPGraphQL('http://localhost:8080/wp-json', { __INTERNAL_TESTING__: true });
+const transport = new WPGraphQL('http://localhost:8080/wp-json', { auth: { username: 'root', password: 'root' } });
 
 test('/posts/<id>/revisions (using default)', async t => {
     const expected = {
         revisions: [
             {
                 author: 0,
-                title: 'Hello world!',
+                title: {
+                    rendered: 'Hello world!',
+                },
             },
         ],
     };
@@ -16,7 +18,9 @@ test('/posts/<id>/revisions (using default)', async t => {
         {
             revisions(id: 1) {
                 author
-                title
+                title {
+                    rendered
+                }
             }
         }
     `);
@@ -28,7 +32,9 @@ test('/posts/<id>/revisions (without default)', async t => {
         revisions: [
             {
                 author: 0,
-                title: 'Hello world!',
+                title: {
+                    rendered: 'Hello world!',
+                },
             },
         ],
     };
@@ -36,7 +42,9 @@ test('/posts/<id>/revisions (without default)', async t => {
         {
             revisions(id: 1, postType: "posts") {
                 author
-                title
+                title {
+                    rendered
+                }
             }
         }
     `);
@@ -46,7 +54,7 @@ test('/posts/<id>/revisions (without default)', async t => {
 test('/posts/<parentId>/revisions/<id> (using default)', async t => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const month = ('0' + (today.getUTCMonth() + 1)).slice(-2);
     const expected = {
         revision: {
             content: {
@@ -55,7 +63,9 @@ test('/posts/<parentId>/revisions/<id> (using default)', async t => {
             excerpt: {
                 rendered: '',
             },
-            guid: `http://localhost:8080/${year}/${month}/1-revision-v1`,
+            guid: {
+                rendered: `http://localhost:8080/${year}/${month}/1-revision-v1`,
+            },
         },
     };
     const actual = await transport.send(`
@@ -67,7 +77,9 @@ test('/posts/<parentId>/revisions/<id> (using default)', async t => {
                 excerpt {
                     rendered
                 }
-                guid
+                guid {
+                    rendered
+                }
             }
         }
     `);

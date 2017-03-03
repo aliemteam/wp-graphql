@@ -25,8 +25,8 @@ const postStatuses: ArgumentField<PostStatusesArgs> = {
             type: contextType,
         },
     },
-    resolve: (root, args: PostStatusesArgs): PromiseLike<PostStatusObject> => (
-        root.get(`/${NS}/statuses`, args)
+    resolve: (root, args: PostStatusesArgs) => (
+        root.get<PostStatusObject>(`/${NS}/statuses`, args)
     ),
 };
 
@@ -48,8 +48,8 @@ const postStatus: ArgumentField<PostStatusArgs> = {
             type: new GraphQLNonNull(postStatusType),
         },
     },
-    resolve: (root, { status, ...args }: PostStatusArgs): PromiseLike<SinglePostStatus> => (
-        root.get(`/${NS}/statuses/${status}`, args)
+    resolve: (root, { status, ...args }: PostStatusArgs) => (
+        root.get<SinglePostStatus>(`/${NS}/statuses/${status}`, args)
     ),
 };
 

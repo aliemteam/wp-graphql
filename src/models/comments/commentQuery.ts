@@ -147,8 +147,8 @@ const comments: ArgumentField<CommentsArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: CommentsArgs): PromiseLike<Comment[]> => (
-        root.get(`/${NS}/comments`, args)
+    resolve: (root, args: CommentsArgs) => (
+        root.get<Comment[]>(`/${NS}/comments`, args)
     ),
 };
 
@@ -172,8 +172,8 @@ const comment: ArgumentField<CommentArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: CommentArgs): PromiseLike<Comment> => (
-        root.get(`/${NS}/comments/${id}`, args)
+    resolve: (root, { id, ...args }: CommentArgs) => (
+        root.get<Comment>(`/${NS}/comments/${id}`, args)
     ),
 };
 

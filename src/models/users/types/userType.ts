@@ -5,7 +5,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../../lib/strongTypes';
+import { Meta, TypedFields } from '../../../lib/strongTypes';
 
 interface UserAvatarUrlsRaw {
     /** 24x24 avatar url. */
@@ -25,7 +25,7 @@ export interface UserAvatarUrls {
     size96: string;
 }
 
-const avatarFields: TypedFields<UserAvatarUrls, UserAvatarUrlsRaw, {}> = {
+const avatarFields: TypedFields<UserAvatarUrls, UserAvatarUrlsRaw> = {
     size24: {
             description: '24x24 avatar url.',
             type: GraphQLString,
@@ -97,7 +97,7 @@ export interface UserRaw extends UserBase<object> {
     };
 }
 
-export interface User<TMeta = { [k: string]: any }> extends UserBase<TMeta> {
+export interface User<TMeta = Meta> extends UserBase<TMeta> {
     /** All capabilities assigned to the user. */
     capabilities: string[];
     /** Any extra capabilities assigned to the user. */
@@ -106,7 +106,7 @@ export interface User<TMeta = { [k: string]: any }> extends UserBase<TMeta> {
     meta: TMeta;
 }
 
-const userFields: TypedFields<User, UserRaw, {}> = {
+const userFields: TypedFields<User, UserRaw> = {
     avatar_urls: {
         description: 'Avatar URLs for the user.',
         type: avatarObjectType,

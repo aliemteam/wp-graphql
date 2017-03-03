@@ -4,7 +4,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { ContentDescriptor, contentDescriptorType, openClosedType, OpenOrClosed } from '../../../lib/abstract-types/';
-import { TypedFields } from '../../../lib/strongTypes';
+import { Meta, TypedFields } from '../../../lib/strongTypes';
 import mediaDetailsType, { MediaDetails, MediaDetailsRaw } from './mediaDetailsType';
 import mediaKindType, { MediaKind } from './mediaKindType';
 import mediaStatusType, { MediaStatus } from './mediaStatusType';
@@ -61,12 +61,12 @@ export interface MediaRaw extends MediaBase<object> {
     media_details: MediaDetailsRaw;
 }
 
-export interface Media<TMeta = { [k: string]: any }> extends MediaBase<TMeta> {
+export interface Media<TMeta = Meta> extends MediaBase<TMeta> {
     /** Details about the resource file, specific to its type. */
     media_details: MediaDetails;
 }
 
-const mediaFields: TypedFields<MediaRaw, Media, {}> = {
+const mediaFields: TypedFields<Media, MediaRaw> = {
     alt_text: {
         description: 'Alternative text to display when resource is not displayed.',
         type: GraphQLString,

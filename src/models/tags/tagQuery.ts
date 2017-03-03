@@ -99,8 +99,8 @@ const tags: ArgumentField<TagsArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, args: TagsArgs): PromiseLike<Tag[]> => (
-        root.get(`/${NS}/tags`, args)
+    resolve: (root, args: TagsArgs) => (
+        root.get<Tag[]>(`/${NS}/tags`, args)
     ),
 };
 
@@ -124,8 +124,8 @@ const tag: ArgumentField<TagArgs> = {
             type: new GraphQLNonNull(GraphQLInt),
         },
     },
-    resolve: (root, { id, ...args }: TagArgs): PromiseLike<Tag> => (
-        root.get(`/${NS}/tags/${id}`, args)
+    resolve: (root, { id, ...args }: TagArgs) => (
+        root.get<Tag>(`/${NS}/tags/${id}`, args)
     ),
 };
 

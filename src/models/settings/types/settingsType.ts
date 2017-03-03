@@ -40,7 +40,7 @@ export interface Settings {
     use_smilies: boolean;
 }
 
-const settingsFields: TypedFields<Settings, Settings, any> = {
+const settingsFields: TypedFields<Settings> = {
     date_format: {
         description: 'A date format for all date strings.',
         type: GraphQLString,

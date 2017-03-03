@@ -1,13 +1,17 @@
 import {
     GraphQLInt,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
-import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
+import {
+    ContentDescriptor,
+    contentDescriptorType,
+    RawOrRendered,
+    rawOrRenderedType,
+} from '../../../lib/abstract-types';
 import { TypedFields } from '../../../lib/strongTypes';
 
-export interface RevisionBase {
+export interface Revision {
     /** The id for the author of the object. */
     author: number;
     /** Content for the object, as it exists in the database. */
@@ -18,6 +22,8 @@ export interface RevisionBase {
     date_gmt: string;
     /** Excerpt for the object, as it exists in the database. */
     excerpt: ContentDescriptor;
+    /** GUID for the object, as it exists in the database. */
+    readonly guid: RawOrRendered;
     /** Unique identifier for the object. */
     id: number;
     /** The date the object was last modified. */
@@ -28,31 +34,11 @@ export interface RevisionBase {
     parent: number;
     /** An alphanumeric identifier for the object unique to its type. */
     slug: string;
-}
-
-export interface RawRevision extends RevisionBase {
-    /** GUID for the object, as it exists in the database. */
-    guid: {
-        rendered: string;
-    };
     /** Title for the object, as it exists in the database. */
-    title: {
-        rendered: string;
-    };
+    title: RawOrRendered;
 }
 
-export interface Revision extends RevisionBase {
-    /** GUID for the object, as it exists in the database. */
-    guid: string;
-    /** Title for the object, as it exists in the database. */
-    title: string;
-}
-
-type T = RevisionBase & RawRevision;
-type config = GraphQLObjectTypeConfig<T, {}>;
-type fields = TypedFields<T, T, {}>;
-
-const revisionFields: fields = {
+const revisionFields: TypedFields<Revision> = {
     author: {
         description: 'The id for the author of the object.',
         type: GraphQLInt,
@@ -75,8 +61,7 @@ const revisionFields: fields = {
     },
     guid: {
         description: 'GUID for the object, as it exists in the database.',
-        type: GraphQLString,
-        resolve: revision => revision.guid.rendered,
+        type: rawOrRenderedType,
     },
     id: {
         description: 'Unique identifier for the object.',
@@ -100,12 +85,11 @@ const revisionFields: fields = {
     },
     title: {
         description: 'Title for the object, as it exists in the database.',
-        type: GraphQLString,
-        resolve: revision => revision.title.rendered,
+        type: rawOrRenderedType,
     },
 };
 
-export default new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'Revision',
     description: 'A post revision object.',
     fields: () => ({

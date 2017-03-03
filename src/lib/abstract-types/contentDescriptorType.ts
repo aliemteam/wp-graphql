@@ -1,22 +1,41 @@
 import {
     GraphQLBoolean,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
+import { TypedFields } from '../strongTypes';
 
-export interface ContentDescriptor {
-    /** Boolean describing whether or not the content is protected. */
-    protected: boolean;
+export interface RawOrRendered {
     /** The raw text without markup of the content. */
     raw: string;
     /** The raw HTML for the rendered content. */
     rendered: string;
+}
+
+export interface ContentDescriptor extends RawOrRendered {
+    /** Boolean describing whether or not the content is protected. */
+    protected: boolean;
 };
 
-type contentDescriptorConfig = GraphQLObjectTypeConfig<ContentDescriptor, {}>;
+const baseFields: TypedFields<RawOrRendered> = {
+    raw: {
+        description: 'The raw text without markup of the content. (Requires authentication)',
+        type: GraphQLString,
+    },
+    rendered: {
+        description: 'The HTML for the rendered content.',
+        type: GraphQLString,
+    },
+};
 
-export const contentDescriptorType = new GraphQLObjectType(<contentDescriptorConfig>{
+export const rawOrRenderedType = new GraphQLObjectType({
+    name: 'RawOrRendered',
+    fields: () => ({
+        ...baseFields,
+    }),
+});
+
+export const contentDescriptorType = new GraphQLObjectType({
     name: 'ContentDescriptor',
     description: 'Simple descriptor object for post content.',
     fields: () => ({
@@ -24,13 +43,6 @@ export const contentDescriptorType = new GraphQLObjectType(<contentDescriptorCon
             description: 'Boolean describing whether or not the content is protected.',
             type: GraphQLBoolean,
         },
-        raw: {
-            description: 'The raw text without markup of the content.',
-            type: GraphQLString,
-        },
-        rendered: {
-            description: 'The raw HTML for the rendered content.',
-            type: GraphQLString,
-        },
+        ...baseFields,
     }),
 });

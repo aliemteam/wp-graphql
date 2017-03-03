@@ -160,8 +160,8 @@ export function postQueryFactory({ name = 'post', namePlural = 'posts', restBase
                     type: new GraphQLList(GraphQLInt),
                 },
             },
-            resolve: (root, args: PostsArgs): PromiseLike<Post[]> => (
-                root.get(`/${NS}/${restBase}`, args)
+            resolve: (root, args: PostsArgs) => (
+                root.get<Post[]>(`/${NS}/${restBase}`, args)
             ),
         },
         [name]: <ArgumentField<PostArgs>> {
@@ -181,8 +181,8 @@ export function postQueryFactory({ name = 'post', namePlural = 'posts', restBase
                     type: GraphQLString,
                 },
             },
-            resolve: (root, { id, ...args }: PostArgs): PromiseLike<Post> => (
-                root.get(`/${NS}/${restBase}/${id}`, args)
+            resolve: (root, { id, ...args }: PostArgs) => (
+                root.get<Post>(`/${NS}/${restBase}/${id}`, args)
             ),
         },
     };

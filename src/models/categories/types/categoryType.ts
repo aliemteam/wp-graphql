@@ -4,9 +4,9 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../../../lib/strongTypes';
+import { Meta, TypedFields } from '../../../lib/strongTypes';
 
-export interface Category<TMeta = { [k: string]: any }> {
+export interface Category<TMeta = Meta> {
     /** Number of published posts for the term. */
     readonly count: number;
     /** HTML description of the term. */
@@ -27,7 +27,7 @@ export interface Category<TMeta = { [k: string]: any }> {
     taxonomy: 'category'|'post_tag'|'nav_menu'|'link_category'|'post_format';
 }
 
-const categoryFields: TypedFields<Category, Category, {}> = {
+const categoryFields: TypedFields<Category> = {
     count: {
         description: 'Number of published posts for the term.',
         type: GraphQLInt,

@@ -2,7 +2,6 @@ import {
     GraphQLBoolean,
     GraphQLList,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
 import { PostLabels, postLabelsType } from '../../../lib/abstract-types/';
@@ -25,14 +24,14 @@ export interface PostTypeBase<T> {
     taxonomies: string[];
 }
 
-export interface PostTypeRaw<T> extends PostTypeBase<T> {
+export interface PostTypeRaw<T = string> extends PostTypeBase<T> {
     /** All capabilities used by the resource. */
     capabilities: {
         [capabilityName: string]: string;
     };
 }
 
-export interface PostType<T> extends PostTypeBase<T> {
+export interface PostType<T = string> extends PostTypeBase<T> {
     /** All capabilities used by the resource. */
     capabilities: string[];
 }
@@ -44,11 +43,10 @@ export interface PostTypeList {
     page: PostType<'page'>;
     /** WordPress "Attachment" type */
     attachment: PostType<'attachment'>;
-    [postTypeName: string]: PostType<string>;
+    [postTypeName: string]: PostType;
 }
 
-type singleFields = TypedFields<PostTypeRaw<string>, PostTypeRaw<string>, {}>;
-const singlePostTypeFields: singleFields = {
+const singlePostTypeFields: TypedFields<PostType, PostTypeRaw> = {
     capabilities: {
         description: 'All capabilities used by the resource.',
         type: new GraphQLList(GraphQLString),
@@ -84,8 +82,7 @@ const singlePostTypeFields: singleFields = {
     },
 };
 
-type singlePostTypeConfig = GraphQLObjectTypeConfig<PostType<string>, {}>;
-export const postType = new GraphQLObjectType(<singlePostTypeConfig>{
+export const postType = new GraphQLObjectType({
     name: 'PostType',
     description: 'Object containing data for a single post type.',
     fields: () => ({
@@ -93,8 +90,7 @@ export const postType = new GraphQLObjectType(<singlePostTypeConfig>{
     }),
 });
 
-type postTypeListFields = TypedFields<PostTypeList, PostTypeList, {}>;
-const postTypeFields: postTypeListFields = {
+const postTypeFields: TypedFields<PostTypeList> = {
     post: {
         description: 'WordPress "Post" type',
         type: postType,
@@ -109,8 +105,7 @@ const postTypeFields: postTypeListFields = {
     },
 };
 
-type postTypeListConfig = GraphQLObjectTypeConfig<PostTypeList, {}>;
-export const postTypeList = new GraphQLObjectType(<postTypeListConfig>{
+export const postTypeList = new GraphQLObjectType({
     name: 'PostTypeList',
     description: 'Object containing all post types whos key names are the post type slug.',
     fields: () => ({

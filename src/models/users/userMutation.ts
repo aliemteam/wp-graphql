@@ -108,8 +108,8 @@ const addUser: ArgumentField<AddUserArgs> = {
             type: new GraphQLNonNull(GraphQLString),
         },
     },
-    resolve: (root, args: AddUserArgs): PromiseLike<User> => (
-        root.post(`/${NS}/users`, args)
+    resolve: (root, args: AddUserArgs) => (
+        root.post<User>(`/${NS}/users`, args)
     ),
 };
 
@@ -179,14 +179,14 @@ const updateUser: ArgumentField<UpdateUserArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: UpdateUserArgs): PromiseLike<User> => (
-        root.post(`/${NS}/users/${id}`, args)
+    resolve: (root, { id, ...args }: UpdateUserArgs) => (
+        root.post<User>(`/${NS}/users/${id}`, args)
     ),
 };
 
 export interface DeleteUserArgs {
     /** Always set to true internally. Must be true to complete request. */
-    force: true;
+    force?: true;
     /** ID of user being deleted. */
     id: number;
     /** Reassign the deleted user’s posts and links to this user ID. */
@@ -212,8 +212,8 @@ const deleteUser: ArgumentField<DeleteUserArgs> = {
             defaultValue: -1,
         },
     },
-    resolve: (root, { id, ...args }: DeleteUserArgs): PromiseLike<DeletedObject<User>> => (
-        root.delete(`/${NS}/users/${id}`, args)
+    resolve: (root, { id, ...args }: DeleteUserArgs) => (
+        root.delete<DeletedObject<User>>(`/${NS}/users/${id}`, args)
     ),
 };
 

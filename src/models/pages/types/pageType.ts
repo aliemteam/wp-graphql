@@ -1,6 +1,6 @@
 import { GraphQLInt, GraphQLObjectType } from 'graphql';
-import { basePost, BasePost, RawBasePost } from '../../../lib/abstract-types/';
-import { TypedFields } from '../../../lib/strongTypes';
+import { basePost, BasePost } from '../../../lib/abstract-types/';
+import { Meta, TypedFields } from '../../../lib/strongTypes';
 
 export interface UniquePageFields {
     /** The order of the object in relation to other object of its type. */
@@ -9,12 +9,12 @@ export interface UniquePageFields {
     parent: number;
 }
 
-export interface Page<TMeta = { [k: string]: any }> extends BasePost<TMeta>, UniquePageFields {
+export interface Page<TMeta = Meta> extends BasePost<TMeta>, UniquePageFields {
     /** String literal. Will always be "page" for pages. */
     type: 'page';
 }
 
-const pageFields: TypedFields<UniquePageFields, (UniquePageFields & RawBasePost), {}> = {
+const pageFields: TypedFields<UniquePageFields, Page> = {
      menu_order: {
         type: GraphQLInt,
         description: 'The order of the object in relation to other object of its type.',

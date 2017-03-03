@@ -3,10 +3,10 @@ import {
     GraphQLNonNull,
     GraphQLString,
 } from 'graphql';
-import { TypedFields } from '../strongTypes';
-import { ContentDescriptor, contentDescriptorType } from './contentDescriptorType';
+import { Meta, TypedFields } from '../strongTypes';
+import { ContentDescriptor, contentDescriptorType, RawOrRendered, rawOrRenderedType } from './contentDescriptorType';
 
-export interface SharedFields<TMeta> {
+export interface BasePost<TMeta = Meta> {
     /** The ID for the author of the object. */
     author: number;
     /** Whether or not comments are open on the object. */
@@ -21,6 +21,8 @@ export interface SharedFields<TMeta> {
     excerpt: ContentDescriptor;
     /** The ID of the featured media for the object. */
     featured_media: number;
+    /** The globally unique identifier for the object. */
+    readonly guid: RawOrRendered;
     /** The shape of the meta. */
     meta: TMeta;
     /** Unique identifier for the object. */
@@ -39,27 +41,13 @@ export interface SharedFields<TMeta> {
     status: 'publish'|'future'|'draft'|'pending'|'private';
     /** The theme file to use to display the object. Currently unused */
     template: '';
+    /** The title for the object. */
+    title: RawOrRendered;
     /** Type of Post for the object. */
     readonly type: string;
 };
 
-export interface RawBasePost extends SharedFields<object> {
-    guid: {
-        readonly rendered: string;
-    };
-    title: {
-        rendered: string;
-    };
-}
-
-export interface BasePost<TMeta> extends SharedFields<TMeta> {
-    /** The globally unique identifier for the object. */
-    readonly guid: string;
-    /** The title for the object. */
-    title: string;
-}
-
-export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
+export const basePost: TypedFields<BasePost> = {
     author: {
         description: 'The ID for the author of the object.',
         type: GraphQLInt,
@@ -90,8 +78,7 @@ export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
     },
     guid: {
         description: 'The globally unique identifier for the object.',
-        type: GraphQLString,
-        resolve: post => post.guid.rendered,
+        type: rawOrRenderedType,
     },
     id: {
         description: 'Unique identifier for the object.',
@@ -132,8 +119,7 @@ export const basePost: TypedFields<RawBasePost, RawBasePost, {}> = {
     },
     title: {
         description: 'The title for the object.',
-        type: GraphQLString,
-        resolve: post => post.title.rendered,
+        type: rawOrRenderedType,
     },
     type: {
         description: 'Type of Post for the object.',

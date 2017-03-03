@@ -146,8 +146,8 @@ const mediaList: ArgumentField<MediaListArgs> = {
             type: mediaStatusType,
         },
     },
-    resolve: (root, args: MediaListArgs): PromiseLike<Media[]> => (
-        root.get(`/${NS}/media`, args)
+    resolve: (root, args: MediaListArgs) => (
+        root.get<Media[]>(`/${NS}/media`, args)
     ),
 };
 
@@ -177,8 +177,8 @@ const media: ArgumentField<MediaArgs> = {
             type: GraphQLString,
         },
     },
-    resolve: (root, { id, ...args }: MediaArgs): PromiseLike<Media> => (
-        root.get(`/${NS}/media/${id}`, args)
+    resolve: (root, { id, ...args }: MediaArgs) => (
+        root.get<Media>(`/${NS}/media/${id}`, args)
     ),
 };
 

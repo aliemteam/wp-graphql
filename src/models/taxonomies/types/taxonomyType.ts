@@ -2,7 +2,6 @@ import {
     GraphQLBoolean,
     GraphQLList,
     GraphQLObjectType,
-    GraphQLObjectTypeConfig,
     GraphQLString,
 } from 'graphql';
 import { TaxonomyLabels, taxonomyLabelsType } from '../../../lib/abstract-types';
@@ -60,7 +59,7 @@ export interface Taxonomy {
     types: string[];
 }
 
-const taxonomyFields: TypedFields<Taxonomy, Taxonomy, {}> = {
+const taxonomyFields: TypedFields<Taxonomy> = {
     capabilities: {
         description: 'All capabilities used by the taxonomy.',
         type: taxonomyCapabilitiesType,
@@ -99,8 +98,7 @@ const taxonomyFields: TypedFields<Taxonomy, Taxonomy, {}> = {
     },
 };
 
-type config = GraphQLObjectTypeConfig<Taxonomy, {}>;
-export default new GraphQLObjectType(<config>{
+export default new GraphQLObjectType({
     name: 'Taxonomy',
     description: 'A single taxonomy object.',
     fields: () => ({

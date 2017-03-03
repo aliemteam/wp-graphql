@@ -5,7 +5,7 @@ import {
     GraphQLString,
 } from 'graphql';
 import { ContentDescriptor, contentDescriptorType } from '../../../lib/abstract-types';
-import { TypedFields } from '../../../lib/strongTypes';
+import { Meta, TypedFields } from '../../../lib/strongTypes';
 import { avatarObjectType, UserAvatarUrls } from '../../users/types/userType';
 import commentKind, { CommentKind } from './commentKindType';
 
@@ -53,7 +53,7 @@ export interface RawComment extends MutableCommentOptions {
     meta: object;
 }
 
-export interface Comment<TMeta = { [k: string]: any }> extends MutableCommentOptions {
+export interface Comment<TMeta = Meta> extends MutableCommentOptions {
     /** Avatar URLs for the object author. */
     readonly author_avatar_urls: UserAvatarUrls;
     /** User agent for the object author. */
@@ -68,7 +68,7 @@ export interface Comment<TMeta = { [k: string]: any }> extends MutableCommentOpt
     meta: TMeta;
 }
 
-const commentFields: TypedFields<Comment, RawComment, {}> = {
+const commentFields: TypedFields<Comment, RawComment> = {
     author: {
         description: 'The id of the user object, if author was a user.',
         type: GraphQLInt,
