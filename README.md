@@ -1,5 +1,3 @@
-> **Note:** API is unstable and subject to change without warning until `v1.0.0` release. Every change, even those that are breaking, will be a `minor` semver bump until `v1.0.0`.
-
 # wp-graphql [![Build Status](https://travis-ci.org/aliemteam/wp-graphql.svg?branch=master)](https://travis-ci.org/aliemteam/wp-graphql) [![codecov](https://codecov.io/gh/aliemteam/wp-graphql/branch/master/graph/badge.svg)](https://codecov.io/gh/aliemteam/wp-graphql) [![npm](https://img.shields.io/npm/v/wp-graphql.svg)](https://www.npmjs.com/package/wp-graphql)
 
 > Client-side GraphQL convenience wrapper for the WordPress REST API
@@ -15,6 +13,10 @@
 ```
 $ npm install --save wp-graphql
 ```
+
+## [GraphiQL Demo](https://wp-graphql-demo.now.sh)
+
+**Note:** The demo above queries against the public WordPress REST API demo provided by WordPress. Because of this, some queries and _all_ mutations **will not work**.
 
 ## Usage
 
@@ -46,9 +48,9 @@ Once an instance is created, you are able to query and mutate data using standar
 
 import WPGraphQL from 'wp-graphql';
 
-const transport = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
+const gql = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
 
-transport.send(`
+gql.send(`
     query {
         user(id: 1, context: edit) {
             id
@@ -151,9 +153,9 @@ type batch = <TResponse>(gql: string, operationNames: string[], variables?: obje
 ```ts
 import WPGraphQL from 'wp-graphql';
 
-const transport = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
+const gql = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
 
-transport.batch(`
+gql.batch(`
     query first {
         extract: me {
             id
@@ -195,7 +197,7 @@ transport.batch(`
 
 ### Resolvers
 
-The preloaded `queries` and `mutations` are listed below with their **required** parameters where applicable. For a list of **all** available parameters, see the definitions located in the `./src/models/<type>` directory of this repo.
+The preloaded `queries` and `mutations` are listed below with their **required** parameters where applicable.
 
 **Note:** Some of the parameters are `enum` type (e.g. `context`). Do not surround these in quotes when performing your queries/mutations. Additionally, parameters of type `String` must be surrounded in **double quotes** (`"`).
 
@@ -271,7 +273,7 @@ If desired, the fields of each type interface can be narrowed by using TypeScrip
 ```ts
 import WPGraphQL, { User as U, Settings } from 'wp-graphql';
 
-const transport = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
+const gql = new WPGraphQL(AUTH.root, { auth: AUTH.nonce });
 
 interface UserMeta {
     hobby: string;
@@ -286,7 +288,7 @@ interface Response {
     settings: Pick<Settings, 'title'>;
 }
 
-transport.send<Response>(`
+gql.send<Response>(`
     query {
         user(id: 1, context: edit) {
             id
@@ -390,7 +392,7 @@ import WPGraphQL from 'wp-graphql';
 import queries from './customQuery';
 import mutations from './customMutation';
 
-const transport = new WPGraphQL('http://localhost:8080/wp-json', { queries, mutations });
+const gql = new WPGraphQL('http://localhost:8080/wp-json', { queries, mutations });
 ```
 
 ### Generating queries and mutations for custom post types
@@ -400,13 +402,13 @@ Let's assume that your site has a custom post type called `books`. If you'd like
 ```js
 import WPGraphQL from  'wp-graphql';
 
-const transport = new WPGraphQL('http://localhost:8080/wp-json', {
+const gql = new WPGraphQL('http://localhost:8080/wp-json', {
     postTypes: [
         { name: 'book', namePlural: 'books', restBase: 'books' },
     ],
 });
 
-transport.send(`
+gql.send(`
     mutation {
         addBook(title: "My book", content: "My book content") {
             title
@@ -434,17 +436,19 @@ transport.send(`
 
 ### Using default queries, mutations, and schema in your own server side JS codebase
 
-Just import what you need. You don't _have_ to use the `WPGraphQL` library if you don't need it.
-
 ```js
-import express from 'express';
-import graphqlHTTP from 'express-graphql';
-import { schema } from 'wp-graphql';
-import myCustomResolver from './my-custom-resolver';
+import * as express from 'express';
+import * as graphqlHTTP from 'express-graphql';
+import WPGraphQL, { schema } from 'wp-graphql';
 
 const app = express();
 
-app.use('/graphql', graphqlHTTP({ schema, root: myCustomResolver }));
+const gql = new WPGraphQL('https://my-wordpess-site.com/wp-json');
+
+app.use('/', graphqlHTTP({
+  schema,
+  rootValue: gql,
+}));
 
 app.listen(3000);
 ```
