@@ -40,7 +40,9 @@ test('deleteRevision', async t => {
             deleted: true,
             previous: {
                 id: revisionId,
-                title: 'Test post for revisions',
+                title: {
+                    rendered: 'Test post for revisions',
+                },
             },
         },
     };
@@ -50,7 +52,9 @@ test('deleteRevision', async t => {
                 deleted
                 previous {
                     id
-                    title
+                    title {
+                        rendered
+                    }
                 }
             }
         }

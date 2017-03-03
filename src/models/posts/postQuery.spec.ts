@@ -6,14 +6,21 @@ const transport = new WPGraphQL('http://localhost:8080/wp-json', { auth: { usern
 test('/posts with no arguments', async t => {
     const expected = {
         posts: [
-            { id: 1, guid: 'http://localhost:8080/?p=1' },
+            {
+                id: 1,
+                guid: {
+                    rendered: 'http://localhost:8080/?p=1',
+                },
+            },
         ],
     };
     const actual = await transport.send(`
         {
             posts {
                 id
-                guid
+                guid {
+                    rendered
+                }
             }
         }
     `);
@@ -23,7 +30,13 @@ test('/posts with no arguments', async t => {
 test('/posts with several arguments', async t => {
     const expected = {
         posts: [
-            { id: 1, slug: 'hello-world', title: 'Hello world!' },
+            {
+                id: 1,
+                slug: 'hello-world',
+                title: {
+                    rendered: 'Hello world!',
+                },
+            },
         ],
     };
     const actual = await transport.send(`
@@ -31,7 +44,9 @@ test('/posts with several arguments', async t => {
             posts(orderby: id, order: asc, per_page: 1, status: [pending, publish]) {
                 id
                 slug
-                title
+                title {
+                    rendered
+                }
             }
         }
     `);

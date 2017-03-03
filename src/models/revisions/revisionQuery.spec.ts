@@ -8,7 +8,9 @@ test('/posts/<id>/revisions (using default)', async t => {
         revisions: [
             {
                 author: 0,
-                title: 'Hello world!',
+                title: {
+                    rendered: 'Hello world!',
+                },
             },
         ],
     };
@@ -16,7 +18,9 @@ test('/posts/<id>/revisions (using default)', async t => {
         {
             revisions(id: 1) {
                 author
-                title
+                title {
+                    rendered
+                }
             }
         }
     `);
@@ -28,7 +32,9 @@ test('/posts/<id>/revisions (without default)', async t => {
         revisions: [
             {
                 author: 0,
-                title: 'Hello world!',
+                title: {
+                    rendered: 'Hello world!',
+                },
             },
         ],
     };
@@ -36,7 +42,9 @@ test('/posts/<id>/revisions (without default)', async t => {
         {
             revisions(id: 1, postType: "posts") {
                 author
-                title
+                title {
+                    rendered
+                }
             }
         }
     `);
@@ -55,7 +63,9 @@ test('/posts/<parentId>/revisions/<id> (using default)', async t => {
             excerpt: {
                 rendered: '',
             },
-            guid: `http://localhost:8080/${year}/${month}/1-revision-v1`,
+            guid: {
+                rendered: `http://localhost:8080/${year}/${month}/1-revision-v1`,
+            },
         },
     };
     const actual = await transport.send(`
@@ -67,7 +77,9 @@ test('/posts/<parentId>/revisions/<id> (using default)', async t => {
                 excerpt {
                     rendered
                 }
-                guid
+                guid {
+                    rendered
+                }
             }
         }
     `);

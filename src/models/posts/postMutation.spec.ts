@@ -8,7 +8,9 @@ test.serial('addPost', async t => {
     const expected = {
         addPost: {
             id: 0,
-            title: 'Test New Post',
+            title: {
+                raw: 'Test New Post',
+            },
             content: {
                 raw: 'Test post content.',
             },
@@ -19,7 +21,9 @@ test.serial('addPost', async t => {
         mutation {
             addPost(title: "Test New Post", content: "Test post content.") {
                 id
-                title
+                title {
+                    raw
+                }
                 content {
                     raw
                 }
@@ -35,7 +39,9 @@ test.serial('addPost', async t => {
 test.serial('updatePost', async t => {
     const expected = {
         updatePost: {
-            title: 'New post title',
+            title: {
+                raw: 'New post title',
+            },
         },
     };
     const data = {
@@ -45,7 +51,9 @@ test.serial('updatePost', async t => {
     const actual = await transport.send(`
         mutation UpdateSinglePost($id: Int!, $title: String!) {
             updatePost(id: $id, title: $title) {
-                title
+                title {
+                    raw
+                }
             }
         }
     `, data);
@@ -58,7 +66,9 @@ test.serial('deletePost', async t => {
             deleted: true,
             previous: {
                 id: postId,
-                title: 'New post title',
+                title: {
+                    raw: 'New post title',
+                },
             },
         },
     };
@@ -70,7 +80,9 @@ test.serial('deletePost', async t => {
                     deleted
                     previous {
                         id
-                        title
+                        title {
+                            raw
+                        }
                     }
                 }
             }
@@ -91,7 +103,9 @@ test('addPost then deletePost (to trash)', async t => {
     const expected = {
         deletePost: {
             id,
-            title: 'My Post',
+            title: {
+                raw: 'My Post',
+            },
             status: 'trash',
         },
     };
@@ -100,7 +114,9 @@ test('addPost then deletePost (to trash)', async t => {
             deletePost(id: $id) {
                 ... on Post {
                     id
-                    title
+                    title {
+                        raw
+                    }
                     status
                 }
             }

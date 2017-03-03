@@ -8,7 +8,9 @@ test.serial('addPage', async t => {
     const expected = {
         addPage: {
             id: 0,
-            title: 'Test New Page',
+            title: {
+                rendered: 'Test New Page',
+            },
             content: {
                 raw: 'Test page content.',
             },
@@ -21,7 +23,9 @@ test.serial('addPage', async t => {
         mutation {
             addPage(title: "Test New Page", content: "Test page content.") {
                 id
-                title
+                title {
+                    rendered
+                }
                 content {
                     raw
                 }
@@ -39,7 +43,9 @@ test.serial('addPage', async t => {
 test.serial('updatePage', async t => {
     const expected = {
         updatePage: {
-            title: 'New page title',
+            title: {
+                rendered: 'New page title',
+            },
         },
     };
     const data = {
@@ -49,7 +55,9 @@ test.serial('updatePage', async t => {
     const actual = await transport.send(`
         mutation UpdateSinglePage($id: Int!, $title: String!) {
             updatePage(id: $id, title: $title) {
-                title
+                title {
+                    rendered
+                }
             }
         }
     `, data);
@@ -62,7 +70,9 @@ test.serial('deletePage', async t => {
             deleted: true,
             previous: {
                 id: pageId,
-                title: 'New page title',
+                title: {
+                    rendered: 'New page title',
+                },
             },
         },
     };
@@ -74,7 +84,9 @@ test.serial('deletePage', async t => {
                     deleted
                     previous {
                         id
-                        title
+                        title {
+                            rendered
+                        }
                     }
                 }
             }
@@ -95,7 +107,9 @@ test('addPage then deletePage (to trash)', async t => {
     const expected = {
         deletePage: {
             id,
-            title: 'My Page',
+            title: {
+                rendered: 'My Page',
+            },
             status: 'trash',
         },
     };
@@ -104,7 +118,9 @@ test('addPage then deletePage (to trash)', async t => {
             deletePage(id: $id) {
                 ... on Page {
                     id
-                    title
+                    title {
+                        rendered
+                    }
                     status
                 }
             }

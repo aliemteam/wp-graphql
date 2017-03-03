@@ -5,7 +5,7 @@ import {
     GraphQLObjectType,
     GraphQLString,
 } from 'graphql';
-import { basePost, BasePost, RawBasePost } from '../../../lib/abstract-types/';
+import { basePost, BasePost } from '../../../lib/abstract-types/';
 import { Meta, TypedFields } from '../../../lib/strongTypes';
 
 export interface UniquePostFields {
@@ -28,7 +28,7 @@ export interface Post<TMeta = Meta> extends BasePost<TMeta>, UniquePostFields {
     readonly type: 'post';
 }
 
-const postFields: TypedFields<UniquePostFields, (UniquePostFields & RawBasePost)> = {
+const postFields: TypedFields<UniquePostFields, Post> = {
     categories: {
         description: 'The terms assigned to the object in the category taxonomy.',
         type: new GraphQLList(GraphQLInt),
