@@ -2,6 +2,9 @@
 
 > Client-side GraphQL convenience wrapper for the WordPress REST API
 
+## What
+This project is a wrapper for the [WordPres REST API](http://v2.wp-api.org/) that let's you query your site content using [GraphQL](http://graphql.org/) and [TypeScript](https://www.typescriptlang.org/). We like the simplicity and flexibility of GraphQL queries rather than the endless chains of REST queries the traditional API requires. As a bonus, the TypeScript implementation made it easy to integrate into our [React](https://facebook.github.io/react/) frontend. Though the library can be used on the backend as well.
+
 ## Why?
 
 - Declarative data fetching.
